@@ -8,6 +8,7 @@
 		<version>3.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>edu.charlotte</groupId>
 	<artifactId>parser</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -28,11 +29,34 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<antlr4.version>4.7.1</antlr4.version>
+		<java_parser.version>3.24.0</java_parser.version>
+		<junit_suite.version>1.12.2</junit_suite.version>
+		<lombok.version>1.18.36</lombok.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-batch</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4-runtime</artifactId>
+			<version>${antlr4.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.javaparser</groupId>
+			<artifactId>javaparser-core</artifactId>
+			<version>${java_parser.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -45,6 +69,12 @@
 			<artifactId>spring-batch-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-suite-api</artifactId>
+			<version>${junit_suite.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -52,6 +82,41 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr4-maven-plugin</artifactId>
+				<version>${antlr4.version}</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>antlr4</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Build Helper Plugin to mark ANTLR-generated files as source root -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources/antlr4</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
