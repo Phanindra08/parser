@@ -35,6 +35,7 @@ IDENTIFIER_PRIME    : [a-zA-Z][a-zA-Z0-9]* '\'';
 IDENTIFIER  : [a-zA-Z][a-zA-Z0-9]*; // Matches assignment names and identifiers
 NUMBERS     : [0-9]+'.'[0-9]+;
 NON_DET     : '**';
+BOOLEANS    : 'true' | 'false';
 COMPARISON_OPERATORS : '==' | '!=' | '<=' | '>=' | '<' | '>';
 BINARY_EXPRESSION_OPERATORS : '+' | '-' | '*' | '/';
 WS          : [ \t\r\n]+ -> skip;

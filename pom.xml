@@ -29,7 +29,7 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
-		<antlr4.version>4.7.1</antlr4.version>
+		<antlr4.version>4.13.1</antlr4.version>
 		<java_parser.version>3.24.0</java_parser.version>
 		<junit_suite.version>1.12.2</junit_suite.version>
 		<lombok.version>1.18.36</lombok.version>
@@ -38,6 +38,16 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-batch</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.batch</groupId>
+			<artifactId>spring-batch-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 		</dependency>
 
 		<dependency>
@@ -89,6 +99,19 @@
 				<artifactId>antlr4-maven-plugin</artifactId>
 				<version>${antlr4.version}</version>
 				<executions>
+					<execution>
+						<id>antlr-relational-dynamic</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>antlr4</goal>
+						</goals>
+						<configuration>
+							<libDirectory>
+								src/main/antlr4/edu/charlotte/parser/antlr4_parser/grammar/dynamic_differential_logic
+							</libDirectory>
+						</configuration>
+					</execution>
+
 					<execution>
 						<phase>generate-sources</phase>
 						<goals>
