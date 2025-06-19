@@ -20,4 +20,15 @@ public final class Constants {
     public static final String AST_NODE_DL_FORMULA = "Formula";
     public static final String AST_NODE_DL_PROGRAM_CONTEXT = "Program";
     public static final String AST_NODE_DL_BINARY_EXPRESSION = "BinaryExpression";
+
+    public static final String AST_NODE_REL_DL_PROGRAM = "RelationalDLProgram";
+    public static final String AST_NODE_REL_DL_FORMULA = "Relational Formula";
+    public static final String AST_NODE_REL_DL_PROGRAM_CONTEXT = "Relational Program";
+    public static final String AST_NODE_REL_DL_TERM = "Relational Term";
+
+    public static final char PROGRAM_CONSIDERED_L = 'L';
+    public static final char PROGRAM_CONSIDERED_R = 'R';
+    public static final char PROGRAM_CONSIDERED_G = 'G';
+    public static final String LEFT_PROGRAM = "#L";
+    public static final String RIGHT_PROGRAM = "#R";
 }
