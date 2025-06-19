@@ -1,16 +1,14 @@
 package edu.charlotte.parser.listeners;
 
-import edu.charlotte.parser.antlr4_parser.grammar.dynamic_differential_logic.DynamicDifferentialLogicParser;
 import edu.charlotte.parser.antlr4_parser.grammar.relational_dynamic_logic.RelationalDynamicLogicBaseListener;
 import edu.charlotte.parser.antlr4_parser.grammar.relational_dynamic_logic.RelationalDynamicLogicParser;
 import edu.charlotte.parser.nodes.ASTNode;
-import lombok.Getter;
+import edu.charlotte.parser.utils.AstListenerUtils;
+import edu.charlotte.parser.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 @Slf4j
 public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
@@ -20,157 +18,185 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
 
     public RelDlAstListener() {
         this.stack = new Stack<>();
-        identifiers = new HashMap<>();
-        identifiers.put('L', new HashSet<>());
-        identifiers.put('R', new HashSet<>());
-        identifiers.put('G', new HashSet<>());
-        this.programConsidered = 'G';
+        this.identifiers = new HashMap<>();
+        this.identifiers.put(Constants.PROGRAM_CONSIDERED_L, new HashSet<>());
+        this.identifiers.put(Constants.PROGRAM_CONSIDERED_R, new HashSet<>());
+        this.identifiers.put(Constants.PROGRAM_CONSIDERED_G, new HashSet<>());
+        this.programConsidered = Constants.PROGRAM_CONSIDERED_G;
+        log.debug("RelDlAstListener is initialized with the default program considered is '{}'.", this.programConsidered);
     }
 
     // Relation DL Program (root of the file)
     @Override
     public void enterRelDLProgram(RelationalDynamicLogicParser.RelDLProgramContext ctx) {
-        stack.push(new ASTNode("Complete RelationalDLProgram"));
+        log.debug("Entering Relational DL-Program rule: {}", ctx.getText());
+        stack.push(new ASTNode(Constants.AST_NODE_REL_DL_PROGRAM));
     }
 
     @Override
     public void exitRelDLProgram(RelationalDynamicLogicParser.RelDLProgramContext ctx) {
-        List<ASTNode> childNodes = exitGrammarRule(ctx);
-        stack.peek().addChildren(childNodes);
+        log.debug("Exiting Relational DL-Program rule: {}", ctx.getText());
+        List<ASTNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
+        AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_REL_DL_PROGRAM, ctx.getText(), stack);
     }
 
     @Override
     public void enterRelProgram(RelationalDynamicLogicParser.RelProgramContext ctx) {
-        stack.push(new ASTNode("Relational Program"));
+        log.debug("Entering Relational program context rule: {}", ctx.getText());
+        stack.push(new ASTNode(Constants.AST_NODE_REL_DL_PROGRAM_CONTEXT));
     }
 
     @Override
     public void exitRelProgram(RelationalDynamicLogicParser.RelProgramContext ctx) {
-        List<ASTNode> childNodes = exitGrammarRule(ctx);
-        if(ctx.REL_TERNARY_OPERATOR() != null || ctx.REL_ASSIGNMENT_OPERATOR() != null)
+        log.debug("Exiting Relational program context rule: {}", ctx.getText());
+        List<ASTNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
+        if(ctx.REL_TERNARY_OPERATOR() != null || ctx.REL_ASSIGNMENT_OPERATOR() != null) {
+            log.info("The Relational program context contains a ternary or assignment operator. " +
+                    "Adding the ';' symbol as a child node to the AST Node List.");
             childNodes.add(new ASTNode(";"));
-        stack.peek().addChildren(childNodes);
+        }
+        AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_REL_DL_PROGRAM_CONTEXT, ctx.getText(), stack);
     }
 
     @Override
     public void enterRelFormula(RelationalDynamicLogicParser.RelFormulaContext ctx) {
-        stack.push(new ASTNode("Relational Formula"));
+        log.debug("Entering Relational formula rule: {}", ctx.getText());
+        stack.push(new ASTNode(Constants.AST_NODE_REL_DL_FORMULA));
     }
 
     @Override
     public void exitRelFormula(RelationalDynamicLogicParser.RelFormulaContext ctx) {
-        List<ASTNode> childNodes = exitGrammarRule(ctx);
-        stack.peek().addChildren(childNodes);
+        log.debug("Exiting Relational formula rule: {}", ctx.getText());
+        List<ASTNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
+        AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_REL_DL_FORMULA, ctx.getText(), stack);
     }
 
     @Override
     public void enterRelTerm(RelationalDynamicLogicParser.RelTermContext ctx) {
-        stack.push(new ASTNode("Relational Term"));
-        if(ctx.PROGRAM_CONSIDERED().getText().equals("#L"))
+        log.debug("Entering Relational term rule: {}", ctx.getText());
+        stack.push(new ASTNode(Constants.AST_NODE_REL_DL_TERM));
+        if(ctx.PROGRAM_CONSIDERED().getText().equals(Constants.LEFT_PROGRAM))
             this.programConsidered = 'L';
-        else if(ctx.PROGRAM_CONSIDERED().getText().equals("#R"))
+        else if(ctx.PROGRAM_CONSIDERED().getText().equals(Constants.RIGHT_PROGRAM))
             this.programConsidered = 'R';
         else
             this.programConsidered = 'G';
-
+        log.info("Program considered is set to '{}' for current RelTerm context.", this.programConsidered);
     }
 
     @Override
     public void exitRelTerm(RelationalDynamicLogicParser.RelTermContext ctx) {
-        List<ASTNode> childNodes = exitGrammarRule(ctx);
+        log.debug("Exiting Relational term rule: {}", ctx.getText());
+        List<ASTNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
+        AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_REL_DL_TERM, ctx.getText(), stack);
+
         this.programConsidered = 'G';
-        stack.peek().addChildren(childNodes);
+        log.info("Program considered is set to the default value '{}' after exiting RelTerm.", this.programConsidered);
     }
 
     // DL Formula Handling
     @Override
     public void enterFormula(RelationalDynamicLogicParser.FormulaContext ctx) {
-        stack.push(new ASTNode("Formula"));
+        log.debug("Entering DL formula rule '{}' within Relational DL.", ctx.getText());
+        stack.push(new ASTNode(Constants.AST_NODE_DL_FORMULA));
     }
 
     @Override
     public void exitFormula(RelationalDynamicLogicParser.FormulaContext ctx) {
-        List<ASTNode> childNodes = exitGrammarRule(ctx);
-        stack.peek().addChildren(childNodes);
+        log.debug("Exiting DL formula rule '{}' within Relational DL.", ctx.getText());
+        List<ASTNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
+        AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_DL_FORMULA, ctx.getText(), stack);
     }
 
     // DL Program Handling
     @Override
     public void enterProgram(RelationalDynamicLogicParser.ProgramContext ctx) {
-        stack.push(new ASTNode("Program"));
-        if(ctx.IDENTIFIER() != null)
+        log.debug("Entering DL program rule '{}' within Relational DL.", ctx.getText());
+        stack.push(new ASTNode(Constants.AST_NODE_DL_PROGRAM_CONTEXT));
+        if(ctx.IDENTIFIER() != null) {
             this.addIdentifierToSet(ctx.IDENTIFIER().getText());
+            log.debug("Found identifier '{}' in the nested program context.", ctx.IDENTIFIER().getText());
+        }
         if(ctx.IDENTIFIER_PRIME() != null) {
-            String identifier = ctx.IDENTIFIER_PRIME().getText();
-            this.addIdentifierToSet(identifier.substring(0, identifier.indexOf('\'')));
+            String identifierPrime = ctx.IDENTIFIER_PRIME().getText();
+            if (identifierPrime.endsWith("'")) {
+                String identifier = identifierPrime.substring(0, identifierPrime.length() - 1);
+                this.addIdentifierToSet(identifier);
+                log.debug("Found primed identifier '{}' in the nested program context.", identifierPrime);
+            } else {
+                log.warn("Identifier prime '{}' does not end with a prime(') character as expected. Adding full text to the identifiers Array.", identifierPrime);
+                this.addIdentifierToSet(identifierPrime);
+            }
         }
     }
 
     @Override
     public void exitProgram(RelationalDynamicLogicParser.ProgramContext ctx) {
-        List<ASTNode> childNodes = exitGrammarRule(ctx);
-        stack.peek().addChildren(childNodes);
+        log.debug("Exiting DL program rule '{}' within Relational DL.", ctx.getText());
+        List<ASTNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
+        AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_DL_PROGRAM_CONTEXT, ctx.getText(), stack);
     }
 
     @Override
     public void enterAssignmentIdentifier(RelationalDynamicLogicParser.AssignmentIdentifierContext ctx) {
-        if(ctx.IDENTIFIER() != null)
-            this.addIdentifierToSet(ctx.IDENTIFIER().getText());
+        log.debug("Entering Assignment Identifier rule '{}' within Relational DL.", ctx.getText());
+        if(ctx.IDENTIFIER() != null) {
+            String identifier = ctx.IDENTIFIER().getText();
+            this.addIdentifierToSet(identifier);
+            log.debug("Found the identifier '{}' in the Assignment Identifier rule.", identifier);
+        }
     }
 
     @Override
     public void enterBinaryExpr(RelationalDynamicLogicParser.BinaryExprContext ctx) {
-        stack.push(new ASTNode("BinaryExpression"));
+        log.debug("Entering Binary Expression rule '{}' within Relational DL.", ctx.getText());
+        stack.push(new ASTNode(Constants.AST_NODE_DL_BINARY_EXPRESSION));
     }
 
     @Override
     public void exitBinaryExpr(RelationalDynamicLogicParser.BinaryExprContext ctx) {
-        List<ASTNode> childNodes = exitGrammarRule(ctx);
-        stack.peek().addChildren(childNodes);
+        log.debug("Exiting Binary Expression rule '{}' within Relational DL.", ctx.getText());
+        List<ASTNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
+        AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_DL_BINARY_EXPRESSION, ctx.getText(), stack);
     }
 
     @Override
     public void visitTerminal(TerminalNode node) {
+        log.debug("Visiting terminal '{}' within Relational DL.", node.getText());
         stack.push(new ASTNode(node.getText()));
     }
 
-    private List<ASTNode> exitGrammarRule(ParserRuleContext ctx) {
-        List<ASTNode> grammarRuleChildNodes = new ArrayList<>();
-        for(int index = ctx.getChildCount() - 1; index >= 0; index--)
-            grammarRuleChildNodes.addFirst(stack.pop());
-        return grammarRuleChildNodes;
-    }
-
     private void addIdentifierToSet(String identifier) {
-        if (identifier != null && !identifier.isEmpty())
-            identifiers.get(this.programConsidered).add(identifier);
-//            switch (this.programConsidered) {
-//                case 'L' -> this.leftProgramIdentifiersSet.add(identifier);
-//                case 'R' -> this.rightProgramIdentifiersSet.add(identifier);
-//                case 'G' -> this.remainingProgramIdentifiersSet.add(identifier);
-//            }
+        if (identifier == null || identifier.trim().isEmpty()) {
+            log.warn("Attempted to add a null or empty identifier.");
+            return;
+        }
+
+        // Ensuring the programConsidered key exists in the map
+        Set<String> targetSet = identifiers.get(this.programConsidered);
+        if (targetSet == null) {
+            log.error("Identifier set for the programConsidered '{}' is null. Initializing a new set.", this.programConsidered);
+            targetSet = new HashSet<>();
+            identifiers.put(this.programConsidered, targetSet);
+        }
+        targetSet.add(identifier);
+        log.debug("Added identifier '{}' to the program considered '{}'.", identifier, this.programConsidered);
     }
 
     // Return the final AST root node
     public ASTNode getAST() {
+        if(stack.size() > 1)
+            log.warn("Stack contains more than one element after AST generation. The might be a possible issue in listener logic. " +
+                    "Stack size is: {} and the contents are: {}", stack.size(), stack);
         return stack.isEmpty() ? null : stack.pop();
     }
 
     // Return the final Set of Identifiers
     public Map<Character, Set<String>> getIdentifiers() {
-//        log.info("Left Program Identifiers are: {}", this.leftProgramIdentifiersSet);
-//        log.info("Right Program Identifiers are: {}", this.rightProgramIdentifiersSet);
-//        log.info("Remaining Program Identifiers are: {}", this.remainingProgramIdentifiersSet);
-//        if(this.leftProgramIdentifiersSet.isEmpty() &&
-//                this.rightProgramIdentifiersSet.isEmpty() &&
-//                this.remainingProgramIdentifiersSet.isEmpty())
-//            return null;
-//        else {
-//            Set<String> identifiersSet = new HashSet<>();
-//            Stream.of(this.leftProgramIdentifiersSet, this.rightProgramIdentifiersSet, this.remainingProgramIdentifiersSet)
-//                    .forEach(identifiersSet::addAll);
-//            return identifiersSet;
-//        }
-        return identifiers.isEmpty()? null : this.identifiers;
+        Map<Character, Set<String>> unmodifiableMap = new HashMap<>();
+        for (Map.Entry<Character, Set<String>> entry : this.identifiers.entrySet()) {
+            unmodifiableMap.put(entry.getKey(), Collections.unmodifiableSet(entry.getValue()));
+        }
+        return Collections.unmodifiableMap(unmodifiableMap);
     }
 }
