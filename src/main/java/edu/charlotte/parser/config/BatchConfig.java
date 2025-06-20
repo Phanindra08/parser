@@ -26,6 +26,7 @@ public class BatchConfig implements ApplicationRunner {
     private final Job loadDlAstGenerationJob;
     private final Job loadRelDLASTGenerationJob;
     private final Job loadDLToKeYMaeraXConversionJob;
+    private final Job loadRelDlToKeYMaeraXConversionJob;
     private final JobLauncher jobLauncher;
     private final String outputFilePath;
 
@@ -34,11 +35,13 @@ public class BatchConfig implements ApplicationRunner {
             Job loadDlAstGenerationJob,
             Job loadRelDLASTGenerationJob,
             Job loadDLToKeYMaeraXConversionJob,
+            Job loadRelDlToKeYMaeraXConversionJob,
             JobLauncher jobLauncher,
             @Value("${dl-output}") String outputFilePath) {
         this.loadDlAstGenerationJob = loadDlAstGenerationJob;
         this.loadRelDLASTGenerationJob = loadRelDLASTGenerationJob;
         this.loadDLToKeYMaeraXConversionJob = loadDLToKeYMaeraXConversionJob;
+        this.loadRelDlToKeYMaeraXConversionJob = loadRelDlToKeYMaeraXConversionJob;
         this.jobLauncher = jobLauncher;
         this.outputFilePath = outputFilePath;
     }
@@ -117,6 +120,7 @@ public class BatchConfig implements ApplicationRunner {
                 case DL_AST_GENERATION -> jobLauncher.run(loadDlAstGenerationJob, jobParameters);
                 case DL_TO_KEYMAERAX_OUTPUT_CONVERSION -> jobLauncher.run(loadDLToKeYMaeraXConversionJob, jobParameters);
                 case REL_DL_AST_GENERATION -> jobLauncher.run(loadRelDLASTGenerationJob, jobParameters);
+                case REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION -> jobLauncher.run(loadRelDlToKeYMaeraXConversionJob, jobParameters);
             }
         } catch (IllegalArgumentException e) {
             // To catch the invalid job name identified by the enum's getJobType method.
