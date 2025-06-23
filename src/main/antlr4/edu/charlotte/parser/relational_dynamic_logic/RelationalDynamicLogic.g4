@@ -1,7 +1,7 @@
 grammar RelationalDynamicLogic;
 import DynamicDifferentialLogic;
 
-relDLProgram
+relDlProgram
     : relFormula EOF
     ;
 
