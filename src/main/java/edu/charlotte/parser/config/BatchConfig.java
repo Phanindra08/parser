@@ -24,8 +24,8 @@ public class BatchConfig implements ApplicationRunner {
 
     // Using final as dependencies are injected via constructor
     private final Job loadDlAstGenerationJob;
-    private final Job loadRelDLASTGenerationJob;
-    private final Job loadDLToKeYMaeraXConversionJob;
+    private final Job loadRelDlAstGenerationJob;
+    private final Job loadDlToKeYMaeraXConversionJob;
     private final Job loadRelDlToKeYMaeraXConversionJob;
     private final JobLauncher jobLauncher;
     private final String outputFilePath;
@@ -33,17 +33,18 @@ public class BatchConfig implements ApplicationRunner {
     // Constructor injection for all dependencies
     public BatchConfig(
             Job loadDlAstGenerationJob,
-            Job loadRelDLASTGenerationJob,
-            Job loadDLToKeYMaeraXConversionJob,
+            Job loadRelDlAstGenerationJob,
+            Job loadDlToKeYMaeraXConversionJob,
             Job loadRelDlToKeYMaeraXConversionJob,
             JobLauncher jobLauncher,
             @Value("${dl-output}") String outputFilePath) {
         this.loadDlAstGenerationJob = loadDlAstGenerationJob;
-        this.loadRelDLASTGenerationJob = loadRelDLASTGenerationJob;
-        this.loadDLToKeYMaeraXConversionJob = loadDLToKeYMaeraXConversionJob;
+        this.loadRelDlAstGenerationJob = loadRelDlAstGenerationJob;
+        this.loadDlToKeYMaeraXConversionJob = loadDlToKeYMaeraXConversionJob;
         this.loadRelDlToKeYMaeraXConversionJob = loadRelDlToKeYMaeraXConversionJob;
         this.jobLauncher = jobLauncher;
         this.outputFilePath = outputFilePath;
+        log.debug("Batch Config is initialized.");
     }
 
     @Override
@@ -118,8 +119,8 @@ public class BatchConfig implements ApplicationRunner {
 
             switch (type) {
                 case DL_AST_GENERATION -> jobLauncher.run(loadDlAstGenerationJob, jobParameters);
-                case DL_TO_KEYMAERAX_OUTPUT_CONVERSION -> jobLauncher.run(loadDLToKeYMaeraXConversionJob, jobParameters);
-                case REL_DL_AST_GENERATION -> jobLauncher.run(loadRelDLASTGenerationJob, jobParameters);
+                case DL_TO_KEYMAERAX_OUTPUT_CONVERSION -> jobLauncher.run(loadDlToKeYMaeraXConversionJob, jobParameters);
+                case REL_DL_AST_GENERATION -> jobLauncher.run(loadRelDlAstGenerationJob, jobParameters);
                 case REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION -> jobLauncher.run(loadRelDlToKeYMaeraXConversionJob, jobParameters);
             }
         } catch (IllegalArgumentException e) {

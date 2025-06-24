@@ -31,4 +31,9 @@ public final class Constants {
     public static final char PROGRAM_CONSIDERED_G = 'G';
     public static final String LEFT_PROGRAM = "#L";
     public static final String RIGHT_PROGRAM = "#R";
+
+    public static final String AST_GENERATION_PROCESS_SUFFIX = " Ast Generation Process";
+    public static final String DIFFERENTIAL_DYNAMIC_LOGIC = "Differential Dynamic Logic";
+    public static final String RELATIONAL_DYNAMIC_LOGIC = "Relational Dynamic Logic";
+    public static final String KEYMAERAX_OUTPUT_CONVERSION_SUFFIX = " to KeYMaeraX Output Conversion Process";
 }
