@@ -1,4 +1,4 @@
-package edu.charlotte.parser.jobs.reader_writer_jobs;
+package edu.charlotte.parser.jobs.io;
 
 import edu.charlotte.parser.utils.Constants;
 import lombok.extern.slf4j.Slf4j;

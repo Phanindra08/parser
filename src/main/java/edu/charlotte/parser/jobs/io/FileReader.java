@@ -1,4 +1,4 @@
-package edu.charlotte.parser.jobs.reader_writer_jobs;
+package edu.charlotte.parser.jobs.io;
 
 import edu.charlotte.parser.exceptions.FileReadingException;
 import edu.charlotte.parser.utils.Constants;
@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 
 @Configuration
 @Slf4j
-public class FileReader {
+public final class FileReader {
 
     @Bean
     @StepScope
