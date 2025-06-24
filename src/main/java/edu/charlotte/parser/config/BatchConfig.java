@@ -82,7 +82,7 @@ public class BatchConfig implements ApplicationRunner {
         log.info("Job Name to be parsed: {}, Input File to be parsed: {}", jobName, inputFile);
     }
 
-    private JobParameters createJobParams(String inputFile, String fileExtension) {
+    private JobParameters createJobParams(String jobName, String inputFile, String fileExtension) {
         File input = new File(inputFile);
         if (!input.exists() || !input.isFile()) {
             log.error("Input file ({}) does not exist or is not a file.", inputFile);
@@ -96,6 +96,7 @@ public class BatchConfig implements ApplicationRunner {
 
         // Add a unique run.id parameter to ensure job parameters are always unique which helps in preventing JobInstanceAlreadyCompleteException on subsequent runs with same file.
         JobParameters params = new JobParametersBuilder()
+                .addString(Constants.JOB_NAME, jobName)
                 .addString(Constants.INPUT_FILE, inputFile)
                 .addString(Constants.OUTPUT_FILE, outputPath)
                 .addLong("run.id", System.currentTimeMillis())
@@ -115,7 +116,7 @@ public class BatchConfig implements ApplicationRunner {
         JobParameters jobParameters;
         try {
             JobType type = JobType.getJobType(jobName);
-            jobParameters = createJobParams(inputFile, type.getFileExtension());
+            jobParameters = createJobParams(jobName, inputFile, type.getFileExtension());
 
             switch (type) {
                 case DL_AST_GENERATION -> jobLauncher.run(loadDlAstGenerationJob, jobParameters);

@@ -10,8 +10,9 @@ public final class Constants {
     public static final String AST_GENERATION_EXTENSION = "_AST.txt";
     public static final String KEYMAERAX_EXTENSION = ".kyx";
 
-    public static final String INPUT_FILE = "inputFile";
-    public static final String OUTPUT_FILE = "outputFile";
+    public static final String INPUT_FILE = "input.file";
+    public static final String OUTPUT_FILE = "output.file";
+    public static final String JOB_NAME = "job.name";
 
     public static final String ERROR_MESSAGE_FOR_MISSING_JOB_PARAMETERS = "Missing required job parameters. " +
             "Use --job.name=<jobName> and --input.file=<inputFile>";
@@ -33,7 +34,8 @@ public final class Constants {
     public static final String RIGHT_PROGRAM = "#R";
 
     public static final String AST_GENERATION_PROCESS_SUFFIX = " Ast Generation Process";
+    public static final String KEYMAERAX_OUTPUT_CONVERSION_SUFFIX = " to KeYMaeraX Output Conversion Process";
+
     public static final String DIFFERENTIAL_DYNAMIC_LOGIC = "Differential Dynamic Logic";
     public static final String RELATIONAL_DYNAMIC_LOGIC = "Relational Dynamic Logic";
-    public static final String KEYMAERAX_OUTPUT_CONVERSION_SUFFIX = " to KeYMaeraX Output Conversion Process";
 }
