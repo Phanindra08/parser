@@ -1,20 +1,20 @@
-package edu.charlotte.parser.ast_generation;
+package edu.charlotte.parser.ast.generation;
 
-import edu.charlotte.parser.listeners.ast_listeners.RelDlAstListener;
-import edu.charlotte.parser.nodes.ASTNode;
-import edu.charlotte.parser.parser_for_grammars.GenerateASTForRelDL;
+import edu.charlotte.parser.listeners.ast.RelDlAstListener;
+import edu.charlotte.parser.ast.nodes.AstNode;
+import edu.charlotte.parser.grammars.GenerateAstForRelDl;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RelDLAstGenerationProcess extends AbstractAstGenerationProcess<GenerateASTForRelDL, RelDlAstListener> {
+public class RelDlAstGenerationProcess extends AbstractAstGenerationProcess<GenerateAstForRelDl, RelDlAstListener> {
 
-    public RelDLAstGenerationProcess(GenerateASTForRelDL generateASTForRelDL) {
-        super(generateASTForRelDL);
-        log.debug("RelDLAstGenerationProcess is initialized.");
+    public RelDlAstGenerationProcess(GenerateAstForRelDl generateAstForRelDl) {
+        super(generateAstForRelDl);
+        log.debug("RelDlAstGenerationProcess is initialized.");
     }
 
     @Override
-    protected ASTNode getAstRootFromListener(RelDlAstListener listener) {
-        return listener.getAST();
+    protected AstNode getAstRootFromListener(RelDlAstListener listener) {
+        return listener.getAst();
     }
 }
