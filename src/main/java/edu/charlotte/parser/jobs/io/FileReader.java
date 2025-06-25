@@ -14,14 +14,15 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 @Configuration
 @Slf4j
-public final class FileReader {
+public class FileReader {
 
     @Bean
     @StepScope
-    public ItemReader<String> inputFileReader(@Value("#{jobParameters['" + Constants.INPUT_FILE + "']}") String inputFile) {
+    public SingleFileContentReader inputFileReader(@Value("#{jobParameters['" + Constants.INPUT_FILE + "']}") String inputFile) {
         if (inputFile == null || inputFile.trim().isEmpty()) {
             log.error("Input file path parameter is null or empty. Parameter value: {}", Constants.INPUT_FILE);
             throw new IllegalArgumentException("Input file path cannot be null or empty.");
@@ -51,8 +52,9 @@ public final class FileReader {
         private boolean hasFileReadingCompleted;
 
         public SingleFileContentReader(Path inputFilePath) {
-            this.inputFilePath = inputFilePath;
+            this.inputFilePath = Objects.requireNonNull(inputFilePath, "Input file path for SingleFileContentReader cannot be null.");
             this.hasFileReadingCompleted = false;
+            log.debug("SingleFileContentReader initialized for file: '{}'.", inputFilePath);
         }
 
         @Override
