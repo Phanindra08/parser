@@ -1,10 +1,10 @@
-package edu.charlotte.parser.parser_conversions.dl_to_keymaerax_conversion;
+package edu.charlotte.parser.conversions.dl.keymaerax;
 
 import edu.charlotte.parser.listeners.ast.DlAstListener;
 import edu.charlotte.parser.ast.nodes.AstNode;
-import edu.charlotte.parser.parser_conversions.AbstractKeYMaeraXConversionProcess;
-import edu.charlotte.parser.parser_conversions.GenerateKeYMaeraXOutput;
-import edu.charlotte.parser.parser_for_grammars.GenerateASTForDL;
+import edu.charlotte.parser.conversions.common.AbstractKeYMaeraXConversionProcess;
+import edu.charlotte.parser.conversions.common.GenerateKeYMaeraXOutput;
+import edu.charlotte.parser.grammars.GenerateAstForDl;
 import edu.charlotte.parser.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,21 +12,21 @@ import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
-public class DLToKeyMaeraXConversionProcess extends AbstractKeYMaeraXConversionProcess<GenerateASTForDL, DlAstListener, Set<String>> {
+public class DlToKeyMaeraXConversionProcess extends AbstractKeYMaeraXConversionProcess<GenerateAstForDl, DlAstListener, Set<String>> {
 
-    private final DLToKeYMaeraXConverter dlToKeYMaeraXConverter;
+    private final DlToKeYMaeraXConverter dlToKeYMaeraXConverter;
 
-    public DLToKeyMaeraXConversionProcess(GenerateASTForDL generateASTForDL, GenerateKeYMaeraXOutput generateKeYMaeraXOutput,
-                                          DLToKeYMaeraXConverter dlToKeYMaeraXConverter) {
-        super(generateASTForDL, Constants.DIFFERENTIAL_DYNAMIC_LOGIC, generateKeYMaeraXOutput);
+    public DlToKeyMaeraXConversionProcess(GenerateAstForDl generateAstForDl, GenerateKeYMaeraXOutput generateKeYMaeraXOutput,
+                                          DlToKeYMaeraXConverter dlToKeYMaeraXConverter) {
+        super(generateAstForDl, Constants.DIFFERENTIAL_DYNAMIC_LOGIC, generateKeYMaeraXOutput);
         this.dlToKeYMaeraXConverter = dlToKeYMaeraXConverter;
-        log.debug("DLToKeyMaeraXConversionProcess is initialized.");
+        log.debug("DlToKeyMaeraXConversionProcess is initialized.");
     }
 
     @Override
     protected AstNode getAstRootFromListener(DlAstListener listener) {
         Objects.requireNonNull(listener, "DlAstListener cannot be null when retrieving AST root.");
-        return listener.getAST();
+        return listener.getAst();
     }
 
     @Override
@@ -42,6 +42,6 @@ public class DLToKeyMaeraXConversionProcess extends AbstractKeYMaeraXConversionP
 
         this.identifiers.addAll(identifierData);
         log.debug("There are {} identifiers in the DL program.", this.identifiers.size());
-        return this.dlToKeYMaeraXConverter.convertDLToKeYMaeraX(astRoot);
+        return this.dlToKeYMaeraXConverter.convertDlToKeYMaeraX(astRoot);
     }
 }

@@ -1,4 +1,4 @@
-package edu.charlotte.parser.parser_conversions.dl_to_keymaerax_conversion;
+package edu.charlotte.parser.conversions.dl.keymaerax;
 
 import edu.charlotte.parser.ast.nodes.AstNode;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Slf4j
 @Component
-public class DLToKeYMaeraXConverter {
+public class DlToKeYMaeraXConverter {
     private static final Map<String, String> DL_TO_KEYMAERAX_VALUES_MAPPING = new HashMap<>();
 
     static {
@@ -21,11 +21,11 @@ public class DLToKeYMaeraXConverter {
         DL_TO_KEYMAERAX_VALUES_MAPPING.put(">>", ">");
         DL_TO_KEYMAERAX_VALUES_MAPPING.put("**", "*");
         DL_TO_KEYMAERAX_VALUES_MAPPING.put("<EOF>", "");
-        log.info("DLToKeYMaeraXConverter static mapping initialized with {} entries.", DL_TO_KEYMAERAX_VALUES_MAPPING.size());
+        log.info("DlToKeYMaeraXConverter static mapping initialized with {} entries.", DL_TO_KEYMAERAX_VALUES_MAPPING.size());
     }
 
-    public DLToKeYMaeraXConverter() {
-        log.info("DLToKeYMaeraXConverter instance is created.");
+    public DlToKeYMaeraXConverter() {
+        log.info("DlToKeYMaeraXConverter instance is created.");
     }
 
     private void convertNodeValues(AstNode node) {
@@ -48,7 +48,7 @@ public class DLToKeYMaeraXConverter {
 
     private void appendKeYMaeraXOutput(AstNode node, StringBuilder keYMaeraXOutputBuilder) {
         if (node == null) {
-            log.debug("Attempted to append a null ASTNode to KeYMaeraX output.");
+            log.debug("Attempted to append a null AstNode to KeYMaeraX output.");
             return;
         }
 
@@ -61,8 +61,8 @@ public class DLToKeYMaeraXConverter {
         }
     }
 
-    public String convertDLToKeYMaeraX(AstNode astRoot) {
-        Objects.requireNonNull(astRoot, "AST root node cannot be null for conversion.");
+    public String convertDlToKeYMaeraX(AstNode astRoot) {
+        Objects.requireNonNull(astRoot, "Ast root node cannot be null for conversion.");
         log.info("Starting the conversion of AST from DL to KeYMaeraX format.");
 
         convertNodeValues(astRoot);
