@@ -27,13 +27,14 @@ formula
 
 term
     : IDENTIFIER   # AssignmentIdentifier
-    | NUMBERS      # IntegerLiteral
+    | NUMBER      # IntegerLiteral
     | term BINARY_EXPRESSION_OPERATORS term # BinaryExpr
+    | '(' term ')' # ParenthesesTerm
     ;
 
 IDENTIFIER_PRIME    : [a-zA-Z][a-zA-Z0-9]* '\'';
 IDENTIFIER  : [a-zA-Z][a-zA-Z0-9]*; // Matches assignment names and identifiers
-NUMBERS     : [0-9]+'.'[0-9]+;
+NUMBER     : [0-9]+'.'[0-9]+;
 NON_DET     : '**';
 BOOLEANS    : 'true' | 'false';
 COMPARISON_OPERATORS : '==' | '!=' | '<=' | '>=' | '<' | '>';
