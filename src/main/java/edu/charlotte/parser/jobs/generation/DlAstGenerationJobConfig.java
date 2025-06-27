@@ -1,8 +1,8 @@
-package edu.charlotte.parser.jobs.ast_generation_config;
+package edu.charlotte.parser.jobs.generation;
 
-import edu.charlotte.parser.listeners.JobLoggingListener;
+import edu.charlotte.parser.listeners.common.JobLoggingListener;
 import edu.charlotte.parser.ast.generation.DlAstGenerationProcess;
-import edu.charlotte.parser.parser_for_grammars.GenerateASTForDL;
+import edu.charlotte.parser.grammars.GenerateAstForDl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -20,34 +20,34 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @Slf4j
-public class DLASTGenerationJobConfig {
+public class DlAstGenerationJobConfig {
 
     private final PlatformTransactionManager transactionManager;
     private final JobRepository jobRepository;
     private final int chunkSize;
 
-    public DLASTGenerationJobConfig(
+    public DlAstGenerationJobConfig(
             PlatformTransactionManager transactionManager,
             JobRepository jobRepository,
             @Value("${chunk-size:10}") int chunkSize) {
         this.transactionManager = transactionManager;
         this.jobRepository = jobRepository;
         this.chunkSize = chunkSize;
-        log.info("Initialized DLASTGenerationJobConfig with chunk size: {}", this.chunkSize);
+        log.info("Initialized DlAstGenerationJobConfig with chunk size: {}", this.chunkSize);
     }
 
     @Bean
     @StepScope
-    public GenerateASTForDL generateASTForDL() {
-        log.debug("Creating step-scoped GenerateASTForDL bean.");
-        return new GenerateASTForDL();
+    public GenerateAstForDl generateAstForDl() {
+        log.debug("Creating step-scoped GenerateAstForDl bean.");
+        return new GenerateAstForDl();
     }
 
     @Bean
     @StepScope
-    public DlAstGenerationProcess dlAstGenerationProcessor(GenerateASTForDL generateASTForDL) {
+    public DlAstGenerationProcess dlAstGenerationProcessor(GenerateAstForDl generateAstForDl) {
         log.debug("Creating step-scoped DlAstGenerationProcess bean.");
-        return new DlAstGenerationProcess(generateASTForDL);
+        return new DlAstGenerationProcess(generateAstForDl);
     }
 
     @Bean

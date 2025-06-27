@@ -1,4 +1,4 @@
-package edu.charlotte.parser.listeners;
+package edu.charlotte.parser.listeners.common;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
