@@ -1,6 +1,6 @@
 package edu.charlotte.parser.utils;
 
-import edu.charlotte.parser.nodes.ASTNode;
+import edu.charlotte.parser.ast.nodes.AstNode;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -9,7 +9,7 @@ import java.util.*;
 @Slf4j
 public class AstListenerUtils {
     private AstListenerUtils() {}
-    public static List<ASTNode> exitGrammarRule(ParserRuleContext ctx, Stack<ASTNode> stack) {
+    public static List<AstNode> exitGrammarRule(ParserRuleContext ctx, Stack<AstNode> stack) {
         int expectedChildrenCount = ctx.getChildCount();
         if (stack.size() < expectedChildrenCount) {
             log.error("Stack underflow: Expected {} children for the rule '{}', but the stack has only {} elements.",
@@ -17,7 +17,7 @@ public class AstListenerUtils {
             throw new IllegalStateException("Critical AST construction error for the rule: " + ctx.getText());
         }
 
-        List<ASTNode> grammarRuleChildNodes = new ArrayList<>(expectedChildrenCount);
+        List<AstNode> grammarRuleChildNodes = new ArrayList<>(expectedChildrenCount);
         for (int index = 0; index < expectedChildrenCount; index++)
             grammarRuleChildNodes.add(stack.pop());
         log.debug("Popped all the {} children from stack for rule '{}'.", expectedChildrenCount, ctx.getText());
@@ -25,7 +25,7 @@ public class AstListenerUtils {
         return grammarRuleChildNodes;
     }
 
-    public static void addChildrenToLastNodeInStack(List<ASTNode> childNodes, String grammarNodeName, String contextText, Stack<ASTNode> stack) {
+    public static void addChildrenToLastNodeInStack(List<AstNode> childNodes, String grammarNodeName, String contextText, Stack<AstNode> stack) {
         if (childNodes == null) {
             log.warn("Attempted to add a null list as children to the node on top of the stack for the rule '{}' (context: '{}')",
                     grammarNodeName, contextText);

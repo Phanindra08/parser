@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
@@ -53,10 +54,17 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
     public void exitRelProgram(RelationalDynamicLogicParser.RelProgramContext ctx) {
         log.debug("Exiting Relational program context rule: {}", ctx.getText());
         List<AstNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
-        if(hasKeYMaeraXConversion && (ctx.REL_DL_TERNARY_OPERATOR() != null || ctx.REL_DL_ASSIGNMENT_OPERATOR() != null)) {
-            log.info("The Relational program context contains a ternary or assignment operator. " +
-                    "Adding the ';' symbol as a child node to the AST Node List.");
-            childNodes.add(new AstNode(";"));
+        if(hasKeYMaeraXConversion) {
+            if(ctx.REL_DL_TERNARY_OPERATOR() != null) {
+                log.info("The Relational program context contains a ternary operator. " +
+                        "Adding the ';' symbol as a child node to the AST Node List for Converting to KeyMaeraX.");
+                childNodes.add(new AstNode(";"));
+            } else if(ctx.REL_DL_ASSIGNMENT_OPERATOR() != null) {
+                log.info("The Relational program context contains a assignment operator. " +
+                        "Expanding the relational assignment operator into equivalent DL assignment nodes for Converting to KeYMaeraX.");
+                childNodes = expandRelationalAssignmentOperator(childNodes);
+                log.debug("Expanded the relational assignment operator {}.", ctx.getText());
+            }
         }
         AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_REL_DL_PROGRAM_CONTEXT, ctx.getText(), stack);
     }
@@ -78,13 +86,16 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
     public void enterRelTerm(RelationalDynamicLogicParser.RelTermContext ctx) {
         log.debug("Entering Relational term rule: {}", ctx.getText());
         stack.push(new AstNode(Constants.AST_NODE_REL_DL_TERM));
-        if(ctx.PROGRAM_CONSIDERED().getText().equals(Constants.LEFT_PROGRAM))
-            this.programConsidered = Constants.PROGRAM_CONSIDERED_L;
-        else if(ctx.PROGRAM_CONSIDERED().getText().equals(Constants.RIGHT_PROGRAM))
-            this.programConsidered = Constants.PROGRAM_CONSIDERED_R;
-        else
-            this.programConsidered = Constants.PROGRAM_CONSIDERED_G;
-        log.info("Program considered is set to '{}' for current RelTerm context.", this.programConsidered);
+        if(ctx.PROGRAM_CONSIDERED() != null) {
+            if (ctx.PROGRAM_CONSIDERED().getText().equals(Constants.LEFT_PROGRAM))
+                this.programConsidered = Constants.PROGRAM_CONSIDERED_L;
+            else if (ctx.PROGRAM_CONSIDERED().getText().equals(Constants.RIGHT_PROGRAM))
+                this.programConsidered = Constants.PROGRAM_CONSIDERED_R;
+            else
+                this.programConsidered = Constants.PROGRAM_CONSIDERED_G;
+            log.info("Program considered is set to '{}' for current RelTerm context.", this.programConsidered);
+        } else
+            log.error("No specific program considered token found in the RelTerm context.");
     }
 
     @Override
@@ -94,7 +105,7 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
         AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_REL_DL_TERM, ctx.getText(), stack);
 
         this.programConsidered = Constants.PROGRAM_CONSIDERED_G;
-        log.info("Program considered is set to the default value '{}' after exiting RelTerm.", this.programConsidered);
+        log.info("Program considered is reset to the default value '{}' after exiting RelTerm.", this.programConsidered);
     }
 
     // DL Formula Handling
@@ -127,7 +138,7 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
                 this.addIdentifierToSet(identifier);
                 log.debug("Found primed identifier '{}' in the nested program context.", identifierPrime);
             } else {
-                log.warn("Identifier prime '{}' does not end with a prime(') character as expected. Adding full text to the identifiers Array.", identifierPrime);
+                log.warn("Identifier prime '{}' does not end with a prime(') character as expected. Adding full text to the identifiers array.", identifierPrime);
                 this.addIdentifierToSet(identifierPrime);
             }
         }
@@ -184,25 +195,68 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
 
     private void addIdentifierToSet(String identifier) {
         if (identifier == null || identifier.trim().isEmpty()) {
-            log.warn("Attempted to add a null or empty identifier.");
+            log.warn("Attempted to add a null or empty identifier to the identifiers set.");
             return;
         }
 
-        // Ensuring the programConsidered key exists in the map
-        Set<String> targetSet = identifiers.get(this.programConsidered);
-        if (targetSet == null) {
-            log.error("Identifier set for the programConsidered '{}' is null. Initializing a new set.", this.programConsidered);
-            targetSet = new HashSet<>();
-            identifiers.put(this.programConsidered, targetSet);
-        }
+        Set<String> targetSet = identifiers.computeIfAbsent(this.programConsidered, k -> {
+            log.error("Identifier set for programConsidered '{}' was null. Initializing a new set.", this.programConsidered);
+            return new HashSet<>();
+        });
         targetSet.add(identifier);
         log.debug("Added identifier '{}' to the program considered '{}'.", identifier, this.programConsidered);
+    }
+
+    private List<AstNode> expandRelationalAssignmentOperator(List<AstNode> childNodes) {
+        List<AstNode> newChildNodes = new ArrayList<>();
+        if (childNodes.size() != 3) {
+            log.error("Invalid number of child nodes for relational assignment operator. Expected 3 child nodes, but got {}." +
+                    "Cannot perform KeYMaeraX conversion for this Relational DL Program.", childNodes.size());
+            return childNodes;
+        }
+
+        AstNode leftTerm = childNodes.get(0);
+        AstNode operator = childNodes.get(1);
+        AstNode rightTerm = childNodes.get(2);
+
+        if (!operator.getValue().equals(Constants.REL_DL_ASSIGNMENT_OPERATOR)) {
+            log.error("Expected relational assignment operator ({}) at index 1, but found '{}' in the child nodes. Cannot expand the relational assignment operator.",
+                    Constants.REL_DL_ASSIGNMENT_OPERATOR, operator.getValue());
+            return childNodes;
+        }
+
+        newChildNodes.add(new AstNode(Constants.REL_DL_OPEN_BRACKETS));
+        newChildNodes.add(createAssignmentProgramNode(leftTerm, rightTerm));
+        newChildNodes.add(new AstNode(Constants.REL_DL_COMMA));
+        newChildNodes.add(createAssignmentProgramNode(leftTerm, rightTerm));
+        newChildNodes.add(new AstNode(Constants.REL_DL_CLOSE_BRACKETS));
+        return newChildNodes;
+    }
+
+    private List<AstNode> createNewChildNodes(List<AstNode> childNodes) {
+        log.debug("Creating new child nodes from the existing child nodes.");
+        return childNodes.stream()
+                .map(child -> new AstNode(child.getValue(), createNewChildNodes(child.getChildren())))
+                .collect(Collectors.toList());
+    }
+
+    private AstNode createAssignmentProgramNode(AstNode leftTerm, AstNode rightTerm) {
+        log.debug("Creating assignment program nodes for the left term '{}' and the right term '{}' as part of expansion for the " +
+                "Relational assignment operator.", leftTerm.getValue(), rightTerm.getValue());
+        AstNode assignmentProgram = new AstNode(Constants.AST_NODE_DL_PROGRAM_CONTEXT);
+        assignmentProgram.addChildren(Arrays.asList(
+                new AstNode(leftTerm.getValue()),
+                new AstNode(Constants.DL_ASSIGNMENT_OPERATOR),
+                new AstNode(rightTerm.getValue(), createNewChildNodes(rightTerm.getChildren())),
+                new AstNode(Constants.DL_SEMI_COLON)
+        ));
+        return assignmentProgram;
     }
 
     // Return the final Ast root node
     public AstNode getAst() {
         if(stack.size() > 1)
-            log.warn("Stack contains more than one element after AST generation. The might be a possible issue in listener logic. " +
+            log.warn("Stack contains more than one element after AST generation. There might be a possible issue in listener logic. " +
                     "Stack size is: {} and the contents are: {}", stack.size(), stack);
         return stack.isEmpty() ? null : stack.pop();
     }
