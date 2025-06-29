@@ -1,0 +1,14 @@
+Generated AST is:
+└── DLProgram
+    ├── Formula
+    │   ├── Formula
+    │   │   ├── testing1Variable
+    │   │   ├── >
+    │   │   └── 7.5
+    │   ├── ||
+    │   └── Formula
+    │       ├── 0.567
+    │       ├── <
+    │       └── 7.0894
+    └── <EOF>
+

@@ -1,0 +1,81 @@
+Generated AST is:
+└── RelationalDLProgram
+    ├── Relational Formula
+    │   ├── Relational Formula
+    │   │   ├── Relational Term
+    │   │   │   ├── TermWithParentheses
+    │   │   │   │   ├── (
+    │   │   │   │   ├── BinaryExpression
+    │   │   │   │   │   ├── x
+    │   │   │   │   │   ├── +
+    │   │   │   │   │   └── z
+    │   │   │   │   └── )
+    │   │   │   └── @L
+    │   │   ├── <=#
+    │   │   └── Relational Term
+    │   │       ├── TermWithParentheses
+    │   │       │   ├── (
+    │   │       │   ├── BinaryExpression
+    │   │       │   │   ├── x
+    │   │       │   │   ├── -
+    │   │       │   │   └── z
+    │   │       │   └── )
+    │   │       └── @R
+    │   ├── <->#
+    │   └── Relational Formula
+    │       ├── [#
+    │       ├── Relational Program
+    │       │   ├── Relational Program
+    │       │   │   ├── Relational Program
+    │       │   │   │   ├── y
+    │       │   │   │   ├── :=#
+    │       │   │   │   └── 0.0
+    │       │   │   ├── ;#
+    │       │   │   └── Relational Program
+    │       │   │       ├── (#
+    │       │   │       ├── Program
+    │       │   │       │   ├── z
+    │       │   │       │   ├── :=
+    │       │   │       │   ├── BinaryExpression
+    │       │   │       │   │   ├── 2.0
+    │       │   │       │   │   ├── *
+    │       │   │       │   │   └── x
+    │       │   │       │   └── ;
+    │       │   │       ├── ,#
+    │       │   │       ├── Program
+    │       │   │       │   ├── z
+    │       │   │       │   ├── :=
+    │       │   │       │   ├── x
+    │       │   │       │   └── ;
+    │       │   │       └── )#
+    │       │   ├── ;#
+    │       │   └── Relational Program
+    │       │       ├── (#
+    │       │       ├── Program
+    │       │       │   ├── y
+    │       │       │   ├── :=
+    │       │       │   ├── BinaryExpression
+    │       │       │   │   ├── 2.0
+    │       │       │   │   ├── *
+    │       │       │   │   └── y
+    │       │       │   └── ;
+    │       │       ├── ,#
+    │       │       ├── Program
+    │       │       │   ├── ?
+    │       │       │   ├── Formula
+    │       │       │   │   ├── z
+    │       │       │   │   ├── <=
+    │       │       │   │   └── 0.0
+    │       │       │   └── ;
+    │       │       └── )#
+    │       ├── ]#
+    │       └── Relational Formula
+    │           ├── Relational Term
+    │           │   ├── y
+    │           │   └── @L
+    │           ├── ==#
+    │           └── Relational Term
+    │               ├── y
+    │               └── @R
+    └── <EOF>
+

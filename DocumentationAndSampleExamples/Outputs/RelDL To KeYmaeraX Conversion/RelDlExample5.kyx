@@ -1,0 +1,20 @@
+ArchiveEntry "Converted Relational Dynamic Logic to KeYmaeraX format with Id as e066a633-5627-4fd9-a57e-c76944d24684"
+	Description "Converted Relational Dynamic Logic to KeYmaeraX format with Id as e066a633-5627-4fd9-a57e-c76944d24684".
+ 	Title "Converted Relational Dynamic Logic to KeYmaeraX format with Id as e066a633-5627-4fd9-a57e-c76944d24684".
+
+ProgramVariables
+	Real v;
+	Real z1;
+	Real x;
+	Real y1;
+	Real y;
+	Real x1;
+	Real z;
+	Real v1;
+End.
+
+Problem
+	( x + y ) != ( x1 + z1 ) -> [ { x' = y & ! y != v } ; { x1' = z1 & ! y1 >= v1 } ] ( y + v ) <= ( y1 + v1 )
+End.
+
+End.

@@ -1,0 +1,40 @@
+Generated AST is:
+└── DLProgram
+    ├── Formula
+    │   ├── <<
+    │   ├── Program
+    │   │   ├── ?
+    │   │   ├── Formula
+    │   │   │   ├── Formula
+    │   │   │   │   ├── Array1Index1
+    │   │   │   │   ├── >=
+    │   │   │   │   └── index
+    │   │   │   ├── <->
+    │   │   │   └── Formula
+    │   │   │       ├── index234
+    │   │   │       ├── ==
+    │   │   │       └── 5.984576
+    │   │   └── ;
+    │   ├── >>
+    │   └── Formula
+    │       ├── [
+    │       ├── Program
+    │       │   ├── ?
+    │       │   ├── Formula
+    │       │   │   ├── index1ForArray
+    │       │   │   ├── !=
+    │       │   │   └── 0.00002
+    │       │   └── ;
+    │       ├── ]
+    │       └── Formula
+    │           ├── BinaryExpression
+    │           │   ├── Value1
+    │           │   ├── /
+    │           │   └── index1Resources1
+    │           ├── ==
+    │           └── BinaryExpression
+    │               ├── x
+    │               ├── +
+    │               └── y
+    └── <EOF>
+

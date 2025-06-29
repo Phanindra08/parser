@@ -1,0 +1,18 @@
+ArchiveEntry "Converted Relational Dynamic Logic to KeYmaeraX format with Id as 876eb8b2-30ca-45b4-b9ef-e2d2828290be"
+	Description "Converted Relational Dynamic Logic to KeYmaeraX format with Id as 876eb8b2-30ca-45b4-b9ef-e2d2828290be".
+ 	Title "Converted Relational Dynamic Logic to KeYmaeraX format with Id as 876eb8b2-30ca-45b4-b9ef-e2d2828290be".
+
+ProgramVariables
+	Real z1;
+	Real x;
+	Real y1;
+	Real y;
+	Real x1;
+	Real z;
+End.
+
+Problem
+	( x + z ) <= ( x1 - z1 ) <-> [ y := 0.0 ; ; y1 := 0.0 ; ; z := 2.0 * x ; ; z1 := x1 ; ; y := 2.0 * y ; ; ? z1 <= 0.0 ; ] y = y1
+End.
+
+End.

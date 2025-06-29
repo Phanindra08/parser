@@ -1,0 +1,13 @@
+ArchiveEntry "Converted Differential Dynamic Logic to KeYmaeraX format with Id as 8ab42479-afde-452e-9820-8a010d0ea823"
+	Description "Converted Differential Dynamic Logic to KeYmaeraX format with Id as 8ab42479-afde-452e-9820-8a010d0ea823".
+ 	Title "Converted Differential Dynamic Logic to KeYmaeraX format with Id as 8ab42479-afde-452e-9820-8a010d0ea823".
+
+ProgramVariables
+	Real testing1Variable;
+End.
+
+Problem
+	testing1Variable > 7.5 | 0.567 < 7.0894
+End.
+
+End.

@@ -1,0 +1,14 @@
+ArchiveEntry "Converted Relational Dynamic Logic to KeYmaeraX format with Id as a14c925d-d393-492b-bbdd-8ed1b66de740"
+	Description "Converted Relational Dynamic Logic to KeYmaeraX format with Id as a14c925d-d393-492b-bbdd-8ed1b66de740".
+ 	Title "Converted Relational Dynamic Logic to KeYmaeraX format with Id as a14c925d-d393-492b-bbdd-8ed1b66de740".
+
+ProgramVariables
+	Real value1;
+	Real value11;
+End.
+
+Problem
+	value1 <= value11 | ! 0.567 > 0.656
+End.
+
+End.

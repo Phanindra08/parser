@@ -1,0 +1,20 @@
+ArchiveEntry "Converted Differential Dynamic Logic to KeYmaeraX format with Id as ec5f0519-100f-44a9-bc4c-addf1d05dffa"
+	Description "Converted Differential Dynamic Logic to KeYmaeraX format with Id as ec5f0519-100f-44a9-bc4c-addf1d05dffa".
+ 	Title "Converted Differential Dynamic Logic to KeYmaeraX format with Id as ec5f0519-100f-44a9-bc4c-addf1d05dffa".
+
+ProgramVariables
+	Real index1Resources1;
+	Real Array1Index1;
+	Real index234;
+	Real x;
+	Real index;
+	Real y;
+	Real Value1;
+	Real index1ForArray;
+End.
+
+Problem
+	< ? Array1Index1 >= index <-> index234 = 5.984576 ; > [ ? index1ForArray != 0.00002 ; ] Value1 / index1Resources1 = x + y
+End.
+
+End.

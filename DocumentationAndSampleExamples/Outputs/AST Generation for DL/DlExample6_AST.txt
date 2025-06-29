@@ -1,0 +1,18 @@
+Generated AST is:
+└── DLProgram
+    ├── Formula
+    │   ├── Formula
+    │   │   ├── value1
+    │   │   ├── !=
+    │   │   └── 5.984576
+    │   ├── ->
+    │   └── Formula
+    │       ├── !
+    │       └── Formula
+    │           ├── !
+    │           └── Formula
+    │               ├── Array1Index1
+    │               ├── ==
+    │               └── valUe8OfArray
+    └── <EOF>
+
