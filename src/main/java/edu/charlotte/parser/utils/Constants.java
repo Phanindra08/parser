@@ -21,6 +21,7 @@ public final class Constants {
     public static final String AST_NODE_DL_FORMULA = "Formula";
     public static final String AST_NODE_DL_PROGRAM_CONTEXT = "Program";
     public static final String AST_NODE_DL_BINARY_EXPRESSION = "BinaryExpression";
+    public static final String AST_NODE_DL_TERM_WITH_PARENTHESES = "TermWithParentheses";
 
     public static final String AST_NODE_REL_DL_PROGRAM = "RelationalDLProgram";
     public static final String AST_NODE_REL_DL_FORMULA = "Relational Formula";
@@ -30,11 +31,19 @@ public final class Constants {
     public static final char PROGRAM_CONSIDERED_L = 'L';
     public static final char PROGRAM_CONSIDERED_R = 'R';
     public static final char PROGRAM_CONSIDERED_G = 'G';
-    public static final String LEFT_PROGRAM = "#L";
-    public static final String RIGHT_PROGRAM = "#R";
+    public static final String LEFT_PROGRAM = "@L";
+    public static final String RIGHT_PROGRAM = "@R";
+
+    public static final String REL_DL_OPEN_BRACKETS = "(#";
+    public static final String REL_DL_CLOSE_BRACKETS = ")#";
+    public static final String REL_DL_COMMA = ",#";
+    public static final String REL_DL_ASSIGNMENT_OPERATOR = ":=#";
+
+    public static final String DL_ASSIGNMENT_OPERATOR = ":=";
+    public static final String DL_SEMI_COLON = ";";
 
     public static final String AST_GENERATION_PROCESS_SUFFIX = " Ast Generation Process";
-    public static final String KEYMAERAX_OUTPUT_CONVERSION_SUFFIX = " to KeYMaeraX Output Conversion Process";
+    public static final String KEYMAERAX_OUTPUT_CONVERSION_SUFFIX = " to KeYmaeraX Output Conversion Process";
 
     public static final String DIFFERENTIAL_DYNAMIC_LOGIC = "Differential Dynamic Logic";
     public static final String RELATIONAL_DYNAMIC_LOGIC = "Relational Dynamic Logic";
