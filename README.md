@@ -4,11 +4,11 @@
 
 Before you start, make sure you have the appropriate tools which are listed below.:
 
-| 🛠 Tools            | 🔢 Version | 🔗 Link                                                                       |
-|---------------------|------------|-------------------------------------------------------------------------------|
-| ☕ **Java**          | `21`       | [Java Downloads](https://www.oracle.com/java/technologies/downloads/#java21/) |
-| 🛠 **Apache Maven** | `3.8.4+`   | [Apache Maven](https://maven.apache.org/download.cgi)                         |
-| **IntelliJ IDEA**   | `Latest`   | [IntelliJ IDEA Download](https://www.jetbrains.com/idea/download/)            |
+| 🛠 Tools            | 🔢 Version | 🔗 Link                                                                      |
+|---------------------|------------|------------------------------------------------------------------------------|
+| ☕ **Java**          | `21`       | [Java Downloads](https://www.oracle.com/java/technologies/downloads/#java21) |
+| 🛠 **Apache Maven** | `3.8.4+`   | [Apache Maven](https://maven.apache.org/download.cgi)                        |
+| **IntelliJ IDEA**   | `Latest`   | [IntelliJ IDEA Download](https://www.jetbrains.com/idea/download/)           |
 
 Please find below the list of important maven dependencies used in this project.
 ## Maven Dependencies
