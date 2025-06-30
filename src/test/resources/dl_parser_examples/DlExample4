@@ -1,0 +1,2 @@
+// Test Cases for Valid formula for DL of form << program >> formula
+<< ? <<? [valUe8OfArray := **;] Value1 + testing1Variable > 7.5 || 0.567 < 7.0894; >> [{index := Z1 / x;}** ; value9 := **;] Array1Index1 >= index <-> index234 == 5.984576; >> <<{index := **; ; value1 := Array1AtIndex1;}**>> array2AtIndex1 >= Value

@@ -1,0 +1,2 @@
+// Test Cases for Valid formula for DL of form [program] formula
+[index1 := value1 + 1.0;] !indexResources1 - value1 != index2Resources2 / Value2 || index2 <= 2.543 * 2.00 -> 7.5789 == 7.57890

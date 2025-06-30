@@ -1,0 +1,61 @@
+Generated AST is:
+└── RelationalDLProgram
+    ├── Relational Formula
+    │   ├── Relational Formula
+    │   │   ├── Relational Term
+    │   │   │   ├── x
+    │   │   │   └── @L
+    │   │   ├── ==#
+    │   │   └── Relational Term
+    │   │       ├── x
+    │   │       └── @R
+    │   ├── <->#
+    │   └── Relational Formula
+    │       ├── [#
+    │       ├── Relational Program
+    │       │   ├── Relational Program
+    │       │   │   ├── (#
+    │       │   │   ├── Program
+    │       │   │   │   ├── x
+    │       │   │   │   ├── :=
+    │       │   │   │   ├── BinaryExpression
+    │       │   │   │   │   ├── y
+    │       │   │   │   │   ├── +
+    │       │   │   │   │   └── 1.0
+    │       │   │   │   └── ;
+    │       │   │   ├── ,#
+    │       │   │   ├── Program
+    │       │   │   │   ├── x
+    │       │   │   │   ├── :=
+    │       │   │   │   ├── BinaryExpression
+    │       │   │   │   │   ├── y
+    │       │   │   │   │   ├── +
+    │       │   │   │   │   └── 1.0
+    │       │   │   │   └── ;
+    │       │   │   └── )#
+    │       │   ├── ++#
+    │       │   └── Relational Program
+    │       │       ├── (#
+    │       │       ├── Program
+    │       │       │   ├── y
+    │       │       │   ├── :=
+    │       │       │   ├── **
+    │       │       │   └── ;
+    │       │       ├── ,#
+    │       │       ├── Program
+    │       │       │   ├── y
+    │       │       │   ├── :=
+    │       │       │   ├── **
+    │       │       │   └── ;
+    │       │       └── )#
+    │       ├── ]#
+    │       └── Relational Formula
+    │           ├── Relational Term
+    │           │   ├── y
+    │           │   └── @L
+    │           ├── ==#
+    │           └── Relational Term
+    │               ├── y
+    │               └── @R
+    └── <EOF>
+

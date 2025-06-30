@@ -1,0 +1,79 @@
+Generated AST is:
+└── RelationalDLProgram
+    ├── Relational Formula
+    │   ├── Relational Formula
+    │   │   ├── Relational Term
+    │   │   │   ├── TermWithParentheses
+    │   │   │   │   ├── (
+    │   │   │   │   ├── BinaryExpression
+    │   │   │   │   │   ├── x
+    │   │   │   │   │   ├── +
+    │   │   │   │   │   └── y
+    │   │   │   │   └── )
+    │   │   │   └── @L
+    │   │   ├── !=#
+    │   │   └── Relational Term
+    │   │       ├── TermWithParentheses
+    │   │       │   ├── (
+    │   │       │   ├── BinaryExpression
+    │   │       │   │   ├── x
+    │   │       │   │   ├── +
+    │   │       │   │   └── z
+    │   │       │   └── )
+    │   │       └── @R
+    │   ├── ->#
+    │   └── Relational Formula
+    │       ├── [#
+    │       ├── Relational Program
+    │       │   ├── (#
+    │       │   ├── Program
+    │       │   │   ├── {
+    │       │   │   ├── x'
+    │       │   │   ├── =
+    │       │   │   ├── y
+    │       │   │   ├── &&
+    │       │   │   ├── Formula
+    │       │   │   │   ├── !
+    │       │   │   │   └── Formula
+    │       │   │   │       ├── y
+    │       │   │   │       ├── !=
+    │       │   │   │       └── v
+    │       │   │   └── }
+    │       │   ├── ,#
+    │       │   ├── Program
+    │       │   │   ├── {
+    │       │   │   ├── x'
+    │       │   │   ├── =
+    │       │   │   ├── z
+    │       │   │   ├── &&
+    │       │   │   ├── Formula
+    │       │   │   │   ├── !
+    │       │   │   │   └── Formula
+    │       │   │   │       ├── y
+    │       │   │   │       ├── >=
+    │       │   │   │       └── v
+    │       │   │   └── }
+    │       │   └── )#
+    │       ├── ]#
+    │       └── Relational Formula
+    │           ├── Relational Term
+    │           │   ├── TermWithParentheses
+    │           │   │   ├── (
+    │           │   │   ├── BinaryExpression
+    │           │   │   │   ├── y
+    │           │   │   │   ├── +
+    │           │   │   │   └── v
+    │           │   │   └── )
+    │           │   └── @L
+    │           ├── <=#
+    │           └── Relational Term
+    │               ├── TermWithParentheses
+    │               │   ├── (
+    │               │   ├── BinaryExpression
+    │               │   │   ├── y
+    │               │   │   ├── +
+    │               │   │   └── v
+    │               │   └── )
+    │               └── @R
+    └── <EOF>
+

@@ -1,0 +1,14 @@
+ArchiveEntry "Converted Differential Dynamic Logic to KeYmaeraX format with Id as 07f0ff9a-fb43-4c57-8910-e04e0f7c7067"
+	Description "Converted Differential Dynamic Logic to KeYmaeraX format with Id as 07f0ff9a-fb43-4c57-8910-e04e0f7c7067".
+ 	Title "Converted Differential Dynamic Logic to KeYmaeraX format with Id as 07f0ff9a-fb43-4c57-8910-e04e0f7c7067".
+
+ProgramVariables
+	Real value;
+	Real index1ForArray;
+End.
+
+Problem
+	[ index1ForArray := 0.00002 ; ; value := * ; ] true
+End.
+
+End.

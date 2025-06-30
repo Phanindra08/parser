@@ -1,0 +1,12 @@
+Generated AST is:
+└── DLProgram
+    ├── Formula
+    │   ├── Formula
+    │   │   ├── 0.567
+    │   │   ├── <
+    │   │   └── 7.5
+    │   ├── &&
+    │   └── Formula
+    │       └── true
+    └── <EOF>
+
