@@ -33,6 +33,7 @@
 		<java_parser.version>3.24.0</java_parser.version>
 		<junit_suite.version>1.12.2</junit_suite.version>
 		<lombok.version>1.18.36</lombok.version>
+		<maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -95,6 +96,17 @@
 			</plugin>
 
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven.jar.plugin.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*.properties</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
 				<groupId>org.antlr</groupId>
 				<artifactId>antlr4-maven-plugin</artifactId>
 				<version>${antlr4.version}</version>
@@ -107,8 +119,8 @@
 						</goals>
 						<configuration>
 							<libDirectory>
-								src/main/antlr4/edu/charlotte/parser/antlr4_parser/grammar/dynamic_differential_logic
-							</libDirectory>
+                                src/main/antlr4/edu/charlotte/parser/dynamic_differential_logic
+                            </libDirectory>
 						</configuration>
 					</execution>
 
