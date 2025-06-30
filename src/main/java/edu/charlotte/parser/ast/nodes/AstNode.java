@@ -26,6 +26,11 @@ public class AstNode {
         this.children = new ArrayList<>();
     }
 
+    public AstNode(String value, List<AstNode> children) {
+        this.value = Objects.requireNonNull(value, "AstNode value cannot be null upon construction.");
+        this.children = Objects.requireNonNull(children, "AstNode children cannot be null upon construction.");
+    }
+
     public void addChildren(List<AstNode> childrenNodes) {
         Objects.requireNonNull(childrenNodes, "List of children nodes to be added cannot be null.");
         this.children.addAll(childrenNodes);
