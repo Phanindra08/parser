@@ -1,0 +1,2 @@
+// Test Cases for Valid formula for DL of form [program] formula
+[ ? <<value := 7.5; ++ {index := Z1 / x;}** ; value9 := **;>> value1 > IndexOfArray -> value4 < index1OfArray1 ;] << ? Array1Index1 >= index <-> index234 == 5.984576; >>  Value1 / index1Resources1 == x + y

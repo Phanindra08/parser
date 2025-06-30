@@ -1,4 +1,4 @@
-package edu.charlotte.parser.parser_conversions;
+package edu.charlotte.parser.conversions.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -9,34 +9,34 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-public class GenerateKeYMaeraXOutput {
-    public String createFileContent(String typeName, Set<String> identifiersSet, String keYMaeraXOutputContent) {
-        Objects.requireNonNull(typeName, "Type name cannot be null for KeYMaeraX output.");
-        Objects.requireNonNull(keYMaeraXOutputContent, "KeYMaeraX problem content cannot be null.");
+public class GenerateKeYmaeraXOutput {
+    public String createFileContent(String typeName, Set<String> identifiersSet, String keYmaeraXOutputContent) {
+        Objects.requireNonNull(typeName, "Type name cannot be null for KeYmaeraX output.");
+        Objects.requireNonNull(keYmaeraXOutputContent, "KeYmaeraX problem content cannot be null.");
 
         StringBuilder outputBuilder = new StringBuilder();
         this.appendFileHeader(outputBuilder, typeName);
         this.appendProgramVariable(outputBuilder, identifiersSet);
-        this.appendProblemSection(outputBuilder, keYMaeraXOutputContent);
+        this.appendProblemSection(outputBuilder, keYmaeraXOutputContent);
         outputBuilder.append("End.");
 
-        log.info("KeYMaeraX output content successfully generated for the type: {}.", typeName);
+        log.info("KeYmaeraX output content successfully generated for the type: {}.", typeName);
         return outputBuilder.toString();
     }
 
     private void appendFileHeader(StringBuilder outputBuilder, String typeName) {
         String uniqueID = UUID.randomUUID().toString();
-        log.info("Generating KeYMaeraX output content with the unique ID: {}.", uniqueID);
+        log.info("Generating KeYmaeraX output content with the unique ID: {}.", uniqueID);
         log.debug("Type name for the header is '{}''.", typeName);
 
-        outputBuilder.append("ArchiveEntry \"Converted ").append(typeName).append(" to KeYMaeraX format with Id as ")
+        outputBuilder.append("ArchiveEntry \"Converted ").append(typeName).append(" to KeYmaeraX format with Id as ")
                 .append(uniqueID).append("\"\n")
-                .append("\tDescription \"Converted ").append(typeName).append(" to KeYMaeraX format with Id as ")
+                .append("\tDescription \"Converted ").append(typeName).append(" to KeYmaeraX format with Id as ")
                 .append(uniqueID).append("\".\n")
-                .append(" \tTitle \"Converted ").append(typeName).append(" to KeYMaeraX format with Id as ")
+                .append(" \tTitle \"Converted ").append(typeName).append(" to KeYmaeraX format with Id as ")
                 .append(uniqueID).append("\".\n")
                 .append("\n");
-        log.info("Successfully appended file header for KeYMaeraX output content.");
+        log.info("Successfully appended file header for KeYmaeraX output content.");
     }
 
     private void appendProgramVariable(StringBuilder outputBuilder, Set<String> identifiersSet) {
@@ -53,14 +53,14 @@ public class GenerateKeYMaeraXOutput {
             log.debug("No identifiers provided for the ProgramVariables section.");
         outputBuilder.append("End.\n")
                 .append("\n");
-        log.info("Successfully appended program variables for KeYMaeraX output content.");
+        log.info("Successfully appended program variables for KeYmaeraX output content.");
     }
 
-    private void appendProblemSection(StringBuilder outputBuilder, String keYMaeraXOutputContent) {
+    private void appendProblemSection(StringBuilder outputBuilder, String keYmaeraXOutputContent) {
         outputBuilder.append("Problem\n")
-                .append("\t").append(keYMaeraXOutputContent).append("\n")
+                .append("\t").append(keYmaeraXOutputContent).append("\n")
                 .append("End.\n")
                 .append("\n");
-        log.info("Successfully appended problem section for KeYMaeraX output content.");
+        log.info("Successfully appended problem section for KeYmaeraX output content.");
     }
 }

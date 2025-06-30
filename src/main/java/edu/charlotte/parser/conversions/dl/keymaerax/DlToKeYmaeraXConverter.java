@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Slf4j
 @Component
-public class DlToKeYMaeraXConverter {
+public class DlToKeYmaeraXConverter {
     private static final Map<String, String> DL_TO_KEYMAERAX_VALUES_MAPPING = new HashMap<>();
 
     static {
@@ -21,11 +21,11 @@ public class DlToKeYMaeraXConverter {
         DL_TO_KEYMAERAX_VALUES_MAPPING.put(">>", ">");
         DL_TO_KEYMAERAX_VALUES_MAPPING.put("**", "*");
         DL_TO_KEYMAERAX_VALUES_MAPPING.put("<EOF>", "");
-        log.info("DlToKeYMaeraXConverter static mapping initialized with {} entries.", DL_TO_KEYMAERAX_VALUES_MAPPING.size());
+        log.info("DlToKeYmaeraXConverter static mapping initialized with {} entries.", DL_TO_KEYMAERAX_VALUES_MAPPING.size());
     }
 
-    public DlToKeYMaeraXConverter() {
-        log.info("DlToKeYMaeraXConverter instance is created.");
+    public DlToKeYmaeraXConverter() {
+        log.info("DlToKeYmaeraXConverter instance is created.");
     }
 
     private void convertNodeValues(AstNode node) {
@@ -46,31 +46,31 @@ public class DlToKeYMaeraXConverter {
             this.convertNodeValues(childNode);
     }
 
-    private void appendKeYMaeraXOutput(AstNode node, StringBuilder keYMaeraXOutputBuilder) {
+    private void appendKeYmaeraXOutput(AstNode node, StringBuilder keYmaeraXOutputBuilder) {
         if (node == null) {
-            log.debug("Attempted to append a null AstNode to KeYMaeraX output.");
+            log.debug("Attempted to append a null AstNode to KeYmaeraX output.");
             return;
         }
 
         if (node.getChildren().isEmpty() && node.getValue() != null && !node.getValue().trim().isEmpty()) {
-            keYMaeraXOutputBuilder.append(node.getValue()).append(" ");
-            log.debug("Appended the node value '{}' to KeYMaeraX output.", node.getValue());
+            keYmaeraXOutputBuilder.append(node.getValue()).append(" ");
+            log.debug("Appended the node value '{}' to KeYmaeraX output.", node.getValue());
         } else {
             for (AstNode childNode : node.getChildren())
-                this.appendKeYMaeraXOutput(childNode, keYMaeraXOutputBuilder);
+                this.appendKeYmaeraXOutput(childNode, keYmaeraXOutputBuilder);
         }
     }
 
-    public String convertDlToKeYMaeraX(AstNode astRoot) {
+    public String convertDlToKeYmaeraX(AstNode astRoot) {
         Objects.requireNonNull(astRoot, "Ast root node cannot be null for conversion.");
-        log.info("Starting the conversion of AST from DL to KeYMaeraX format.");
+        log.info("Starting the conversion of AST from DL to KeYmaeraX format.");
 
         convertNodeValues(astRoot);
-        log.debug("AST node values are converted to KeYMaeraX values.");
+        log.debug("AST node values are converted to KeYmaeraX values.");
 
-        StringBuilder keYMaeraXOutputBuilder = new StringBuilder();
-        appendKeYMaeraXOutput(astRoot, keYMaeraXOutputBuilder);
-        log.info("KeYMaeraX output string is generated.");
-        return keYMaeraXOutputBuilder.toString().trim();
+        StringBuilder keYmaeraXOutputBuilder = new StringBuilder();
+        appendKeYmaeraXOutput(astRoot, keYmaeraXOutputBuilder);
+        log.info("KeYmaeraX output string is generated.");
+        return keYmaeraXOutputBuilder.toString().trim();
     }
 }
