@@ -13,11 +13,11 @@ import org.antlr.v4.runtime.tree.ParseTree;
 public class GenerateAstForRelDl extends AbstractAstGenerator<RelationalDynamicLogicLexer,
         RelationalDynamicLogicParser, RelDlAstListener> {
 
-    private final boolean hasKeYMaeraXConversion;
+    private final boolean hasKeYmaeraXConversion;
 
-    public GenerateAstForRelDl(boolean hasKeYMaeraXConversion) {
+    public GenerateAstForRelDl(boolean hasKeYmaeraXConversion) {
         super();
-        this.hasKeYMaeraXConversion = hasKeYMaeraXConversion;
+        this.hasKeYmaeraXConversion = hasKeYmaeraXConversion;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class GenerateAstForRelDl extends AbstractAstGenerator<RelationalDynamicL
 
     @Override
     protected RelDlAstListener createAstListenerInstance() {
-        return new RelDlAstListener(this.hasKeYMaeraXConversion);
+        return new RelDlAstListener(this.hasKeYmaeraXConversion);
     }
 
     @Override

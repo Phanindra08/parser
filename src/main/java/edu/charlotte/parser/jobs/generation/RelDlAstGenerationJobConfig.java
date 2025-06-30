@@ -40,10 +40,10 @@ public class RelDlAstGenerationJobConfig {
     @Bean
     @StepScope
     public GenerateAstForRelDl generateAstForRelDl(@Value("#{jobParameters['" + Constants.JOB_NAME + "']}") String jobName) {
-        boolean hasKeYMaeraXConversion = jobName.equalsIgnoreCase(Constants.JOBNAME_REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION);
-        log.debug("The job '{}' requires KeYMaeraX conversion: {}", jobName, hasKeYMaeraXConversion);
-        log.info("GenerateASTForRelDL will be instantiated with hasKeYMaeraXConversion set to: {}", hasKeYMaeraXConversion);
-        return new GenerateAstForRelDl(hasKeYMaeraXConversion);
+        boolean hasKeYmaeraXConversion = jobName.equalsIgnoreCase(Constants.JOBNAME_REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION);
+        log.debug("The job '{}' requires KeYmaeraX conversion: {}", jobName, hasKeYmaeraXConversion);
+        log.info("GenerateASTForRelDL will be instantiated with hasKeYmaeraXConversion set to: {}", hasKeYmaeraXConversion);
+        return new GenerateAstForRelDl(hasKeYmaeraXConversion);
     }
 
     @Bean

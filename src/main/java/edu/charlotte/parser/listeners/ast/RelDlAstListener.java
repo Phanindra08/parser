@@ -15,19 +15,19 @@ import java.util.stream.Collectors;
 public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
     private final Stack<AstNode> stack;
     private final Map<Character, Set<String>> identifiers;
-    private final boolean hasKeYMaeraXConversion;
+    private final boolean hasKeYmaeraXConversion;
     private char programConsidered;
 
-    public RelDlAstListener(boolean hasKeYMaeraXConversion) {
+    public RelDlAstListener(boolean hasKeYmaeraXConversion) {
         this.stack = new Stack<>();
         this.identifiers = new HashMap<>();
         this.identifiers.put(Constants.PROGRAM_CONSIDERED_L, new HashSet<>());
         this.identifiers.put(Constants.PROGRAM_CONSIDERED_R, new HashSet<>());
         this.identifiers.put(Constants.PROGRAM_CONSIDERED_G, new HashSet<>());
         this.programConsidered = Constants.PROGRAM_CONSIDERED_G;
-        this.hasKeYMaeraXConversion = hasKeYMaeraXConversion;
-        log.debug("RelDlAstListener is initialized with the default program considered is '{}'. KeYMaeraX conversion enabled: {}.",
-                this.programConsidered, this.hasKeYMaeraXConversion);
+        this.hasKeYmaeraXConversion = hasKeYmaeraXConversion;
+        log.debug("RelDlAstListener is initialized with the default program considered is '{}'. KeYmaeraX conversion enabled: {}.",
+                this.programConsidered, this.hasKeYmaeraXConversion);
     }
 
     // Relation DL Program (root of the file)
@@ -54,14 +54,14 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
     public void exitRelProgram(RelationalDynamicLogicParser.RelProgramContext ctx) {
         log.debug("Exiting Relational program context rule: {}", ctx.getText());
         List<AstNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
-        if(hasKeYMaeraXConversion) {
+        if(hasKeYmaeraXConversion) {
             if(ctx.REL_DL_TERNARY_OPERATOR() != null) {
                 log.info("The Relational program context contains a ternary operator. " +
-                        "Adding the ';' symbol as a child node to the AST Node List for Converting to KeyMaeraX.");
+                        "Adding the ';' symbol as a child node to the AST Node List for Converting to KeYmaeraX.");
                 childNodes.add(new AstNode(";"));
             } else if(ctx.REL_DL_ASSIGNMENT_OPERATOR() != null) {
                 log.info("The Relational program context contains a assignment operator. " +
-                        "Expanding the relational assignment operator into equivalent DL assignment nodes for Converting to KeYMaeraX.");
+                        "Expanding the relational assignment operator into equivalent DL assignment nodes for Converting to KeYmaeraX.");
                 childNodes = expandRelationalAssignmentOperator(childNodes);
                 log.debug("Expanded the relational assignment operator {}.", ctx.getText());
             }
@@ -211,7 +211,7 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
         List<AstNode> newChildNodes = new ArrayList<>();
         if (childNodes.size() != 3) {
             log.error("Invalid number of child nodes for relational assignment operator. Expected 3 child nodes, but got {}." +
-                    "Cannot perform KeYMaeraX conversion for this Relational DL Program.", childNodes.size());
+                    "Cannot perform KeYmaeraX conversion for this Relational DL Program.", childNodes.size());
             return childNodes;
         }
 
