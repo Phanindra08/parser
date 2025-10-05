@@ -6,6 +6,7 @@ public final class Constants {
     public static final String JOBNAME_DL_TO_KEYMAERAX_OUTPUT_CONVERSION = "DL_TO_KEYMAERAX_OUTPUT";
     public static final String JOBNAME_REL_DL_AST_GENERATION = "REL_DL_AST_GENERATION";
     public static final String JOBNAME_REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION = "REL_DL_TO_KEYMAERAX_OUTPUT";
+    public static final String JOBNAME_D_REAL_AST_GENERATION = "D_REAL_AST_GENERATION";
 
     public static final String AST_GENERATION_EXTENSION = "_AST.txt";
     public static final String KEYMAERAX_EXTENSION = ".kyx";
