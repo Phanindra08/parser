@@ -48,4 +48,5 @@ public final class Constants {
 
     public static final String DIFFERENTIAL_DYNAMIC_LOGIC = "Differential Dynamic Logic";
     public static final String RELATIONAL_DYNAMIC_LOGIC = "Relational Dynamic Logic";
+    public static final String D_REAL = "dReal";
 }

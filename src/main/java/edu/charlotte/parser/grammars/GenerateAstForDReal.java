@@ -39,6 +39,6 @@ public class GenerateAstForDReal extends AbstractAstGenerator<DRealLexer,
 
     @Override
     public String getTypeName() {
-        return Constants.RELATIONAL_DYNAMIC_LOGIC;
+        return Constants.D_REAL;
     }
 }
