@@ -28,6 +28,7 @@ public class BatchConfig implements ApplicationRunner {
     private final Job loadDRealAstGenerationJob;
     private final Job loadDlToKeYmaeraXConversionJob;
     private final Job loadRelDlToKeYmaeraXConversionJob;
+    private final Job loadRelDlToDRealConversionJob;
     private final JobLauncher jobLauncher;
     private final String outputFilePath;
 
@@ -38,6 +39,7 @@ public class BatchConfig implements ApplicationRunner {
             Job loadDRealAstGenerationJob,
             Job loadDlToKeYmaeraXConversionJob,
             Job loadRelDlToKeYmaeraXConversionJob,
+            Job loadRelDlToDRealConversionJob,
             JobLauncher jobLauncher,
             @Value("${dl-output}") String outputFilePath) {
         this.loadDlAstGenerationJob = loadDlAstGenerationJob;
@@ -45,6 +47,7 @@ public class BatchConfig implements ApplicationRunner {
         this.loadDRealAstGenerationJob = loadDRealAstGenerationJob;
         this.loadDlToKeYmaeraXConversionJob = loadDlToKeYmaeraXConversionJob;
         this.loadRelDlToKeYmaeraXConversionJob = loadRelDlToKeYmaeraXConversionJob;
+        this.loadRelDlToDRealConversionJob = loadRelDlToDRealConversionJob;
         this.jobLauncher = jobLauncher;
         this.outputFilePath = outputFilePath;
         log.debug("Batch Config is initialized.");
@@ -127,6 +130,7 @@ public class BatchConfig implements ApplicationRunner {
                 case REL_DL_AST_GENERATION -> jobLauncher.run(loadRelDlAstGenerationJob, jobParameters);
                 case REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION -> jobLauncher.run(loadRelDlToKeYmaeraXConversionJob, jobParameters);
                 case D_REAL_AST_GENERATION -> jobLauncher.run(loadDRealAstGenerationJob, jobParameters);
+                case REL_DL_TO_D_REAL_OUTPUT_CONVERSION -> jobLauncher.run(loadRelDlToDRealConversionJob, jobParameters);
             }
         } catch (IllegalArgumentException e) {
             // To catch the invalid job name identified by the enum's getJobType method.
