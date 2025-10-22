@@ -19,7 +19,7 @@ import java.util.Set;
 
 @StepScope
 @Slf4j
-public abstract class AbstractKeYmaeraXConversionProcess<
+public abstract class AbstractConversionProcess<
         TGenerator extends AbstractAstGenerator<?, ?, TListener>,
         TListener extends ParseTreeListener, TIdentifiersData>
         implements ItemProcessor<String, String>, StepExecutionListener {
@@ -29,7 +29,7 @@ public abstract class AbstractKeYmaeraXConversionProcess<
     private final GenerateKeYmaeraXOutput generateKeYmaeraXOutput;
     protected final Set<String> identifiers;
 
-    public AbstractKeYmaeraXConversionProcess(TGenerator astGenerator, String processorName, GenerateKeYmaeraXOutput generateKeYmaeraXOutput) {
+    public AbstractConversionProcess(TGenerator astGenerator, String processorName, GenerateKeYmaeraXOutput generateKeYmaeraXOutput) {
         this.astGenerator = Objects.requireNonNull(astGenerator, "AST Generator cannot be null");
         this.processorName = Objects.requireNonNull(processorName, "Processor name cannot be null");
         this.generateKeYmaeraXOutput = Objects.requireNonNull(generateKeYmaeraXOutput, "KeYmaeraX Output generator cannot be null");

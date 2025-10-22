@@ -2,7 +2,7 @@ package edu.charlotte.parser.conversions.reldl.keymaerax;
 
 import edu.charlotte.parser.listeners.ast.RelDlAstListener;
 import edu.charlotte.parser.ast.nodes.AstNode;
-import edu.charlotte.parser.conversions.common.AbstractKeYmaeraXConversionProcess;
+import edu.charlotte.parser.conversions.common.AbstractConversionProcess;
 import edu.charlotte.parser.conversions.dl.keymaerax.DlToKeYmaeraXConverter;
 import edu.charlotte.parser.conversions.common.GenerateKeYmaeraXOutput;
 import edu.charlotte.parser.conversions.reldl.dl.RelDlToDlConverter;
@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
-public class RelDlToKeYmaeraXConversionProcess extends AbstractKeYmaeraXConversionProcess<GenerateAstForRelDl, RelDlAstListener, Map<Character, Set<String>>> {
+public class RelDlToKeYmaeraXConversionProcess extends AbstractConversionProcess<GenerateAstForRelDl, RelDlAstListener, Map<Character, Set<String>>> {
 
     private final DlToKeYmaeraXConverter dlToKeYmaeraXConverter;
 
