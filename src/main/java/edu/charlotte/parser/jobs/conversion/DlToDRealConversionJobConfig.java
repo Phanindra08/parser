@@ -3,8 +3,6 @@ package edu.charlotte.parser.jobs.conversion;
 import edu.charlotte.parser.conversions.common.GenerateDRealOutput;
 import edu.charlotte.parser.conversions.dl.dreal.DlToDRealConversionProcess;
 import edu.charlotte.parser.conversions.dl.dreal.DlToDRealConverter;
-import edu.charlotte.parser.conversions.dl.keymaerax.DlToKeYmaeraXConversionProcess;
-import edu.charlotte.parser.conversions.reldl.dreal.dlToDRealConversionProcess;
 import edu.charlotte.parser.grammars.GenerateAstForDl;
 import edu.charlotte.parser.listeners.common.JobLoggingListener;
 import lombok.extern.slf4j.Slf4j;
@@ -42,16 +40,16 @@ public class DlToDRealConversionJobConfig {
 
     @Bean
     @StepScope
-    public DlToDRealConversionProcess dlToDRealConversionProcess(GenerateAstForDl generateAstForDl,
-                                                                 GenerateDRealOutput generateDRealOutput,
-                                                                 DlToDRealConverter dlToDRealConverter) {
+    public edu.charlotte.parser.conversions.dl.dreal.DlToDRealConversionProcess dlToDRealConversionProcess(GenerateAstForDl generateAstForDl,
+                                                                                                           GenerateDRealOutput generateDRealOutput,
+                                                                                                           DlToDRealConverter dlToDRealConverter) {
         log.debug("Creating step-scoped dlToDRealConversionProcess bean.");
-        return new DlToDRealConversionProcess(generateAstForDl, generateDRealOutput, dlToDRealConverter);
+        return new edu.charlotte.parser.conversions.dl.dreal.DlToDRealConversionProcess(generateAstForDl, generateDRealOutput, dlToDRealConverter);
     }
 
     @Bean
     public Step dlToDRealConversionStep(ItemReader<String> inputFileReader,
-                                        dlToDRealConversionProcess dlToDRealConversionProcess,
+                                        DlToDRealConversionProcess dlToDRealConversionProcess,
                                         FlatFileItemWriter<String> outputFileWriter) {
         log.info("Configuring dlToDRealConversionStep with chunk size: {}", this.chunkSize);
         return new StepBuilder("dlToDRealConversionStep", jobRepository)
