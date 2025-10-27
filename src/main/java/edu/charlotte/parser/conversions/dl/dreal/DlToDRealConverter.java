@@ -1,7 +1,6 @@
 package edu.charlotte.parser.conversions.dl.dreal;
 
 import edu.charlotte.parser.ast.nodes.AstNode;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +11,6 @@ import java.util.*;
 public class DlToDRealConverter {
     private static final Map<String, String> DL_TO_D_REAL_VALUES_MAPPING = new HashMap<>();
     private static final List<String> DL_OPERATORS_WITH_TWO_OPERANDS = new ArrayList<>();
-    @Getter
-    private final Set<String> identifiers;
     private int numberOfSpaces = 1;
 
     static {
@@ -38,7 +35,6 @@ public class DlToDRealConverter {
     }
 
     public DlToDRealConverter() {
-        this.identifiers = new HashSet<>();
         log.info("DlToDRealConverter instance is created.");
     }
 

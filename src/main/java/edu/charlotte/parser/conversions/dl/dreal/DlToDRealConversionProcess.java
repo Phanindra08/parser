@@ -99,12 +99,8 @@ public class DlToDRealConversionProcess implements ItemProcessor<String, String>
         Objects.requireNonNull(astRoot, "Ast root cannot be null for DL to DReal conversion.");
         Objects.requireNonNull(identifierData, "Identifiers data cannot be null for DL to DReal conversion.");
 
-        DlToDRealConverter dlToDRealConverter = new DlToDRealConverter();
-        dlToDRealConverter.convertDlToDReal(astRoot);
-
-        this.identifiers.addAll(dlToDRealConverter.getIdentifiers());
-        log.debug("There are {} identifiers after DL to DReal conversion.", dlToDRealConverter.getIdentifiers().size());
-
+        this.identifiers.addAll(identifierData);
+        log.debug("There are {} identifiers in the DL program.", this.identifiers.size());
         return this.dlToDRealConverter.convertDlToDReal(astRoot);
     }
 
