@@ -102,8 +102,8 @@ public class DlToDRealConversionProcess implements ItemProcessor<String, String>
         DlToDRealConverter dlToDRealConverter = new DlToDRealConverter();
         dlToDRealConverter.convertDlToDReal(astRoot);
 
-//        this.identifiers.addAll(dlToDRealConverter.getIdentifiers());
-//        log.debug("There are {} identifiers after DL to DReal conversion.", dlToDRealConverter.getIdentifiers().size());
+        this.identifiers.addAll(dlToDRealConverter.getIdentifiers());
+        log.debug("There are {} identifiers after DL to DReal conversion.", dlToDRealConverter.getIdentifiers().size());
 
         return this.dlToDRealConverter.convertDlToDReal(astRoot);
     }

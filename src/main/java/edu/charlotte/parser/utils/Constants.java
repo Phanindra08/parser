@@ -7,9 +7,11 @@ public final class Constants {
     public static final String JOBNAME_REL_DL_AST_GENERATION = "REL_DL_AST_GENERATION";
     public static final String JOBNAME_REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION = "REL_DL_TO_KEYMAERAX_OUTPUT";
     public static final String JOBNAME_D_REAL_AST_GENERATION = "D_REAL_AST_GENERATION";
+    public static final String JOBNAME_REL_DL_TO_D_REAL_OUTPUT_CONVERSION = "REL_DL_TO_D_REAL_OUTPUT";
 
     public static final String AST_GENERATION_EXTENSION = "_AST.txt";
     public static final String KEYMAERAX_EXTENSION = ".kyx";
+    public static final String SMT_EXTENSION = ".kyx";
 
     public static final String INPUT_FILE = "input.file";
     public static final String OUTPUT_FILE = "output.file";
@@ -29,6 +31,11 @@ public final class Constants {
     public static final String AST_NODE_REL_DL_PROGRAM_CONTEXT = "Relational Program";
     public static final String AST_NODE_REL_DL_TERM = "Relational Term";
 
+    public static final String AST_NODE_D_REAL_PROGRAM = "DRealProgram";
+    public static final String AST_NODE_D_REAL_COMMAND = "DReal Command";
+    public static final String AST_NODE_D_REAL_RESPONSE = "DReal Response";
+    public static final String AST_NODE_D_REAL_SCRIPT = "DReal Script";
+
     public static final char PROGRAM_CONSIDERED_L = 'L';
     public static final char PROGRAM_CONSIDERED_R = 'R';
     public static final char PROGRAM_CONSIDERED_G = 'G';
@@ -45,6 +52,7 @@ public final class Constants {
 
     public static final String AST_GENERATION_PROCESS_SUFFIX = " Ast Generation Process";
     public static final String KEYMAERAX_OUTPUT_CONVERSION_SUFFIX = " to KeYmaeraX Output Conversion Process";
+    public static final String D_REAL_OUTPUT_CONVERSION_SUFFIX = " to DReal Output Conversion Process";
 
     public static final String DIFFERENTIAL_DYNAMIC_LOGIC = "Differential Dynamic Logic";
     public static final String RELATIONAL_DYNAMIC_LOGIC = "Relational Dynamic Logic";
