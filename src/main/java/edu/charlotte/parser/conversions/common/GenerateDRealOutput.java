@@ -46,9 +46,7 @@ public class GenerateDRealOutput {
     }
 
     private void appendProgramOutput(StringBuilder outputBuilder, String dRealOutputContent) {
-        outputBuilder.append("(assert\n")
-                .append("\t").append(dRealOutputContent).append("\n")
-                .append(")\n");
+        outputBuilder.append(dRealOutputContent).append("\n");
         log.info("Successfully appended output to the dReal output content.");
     }
 
