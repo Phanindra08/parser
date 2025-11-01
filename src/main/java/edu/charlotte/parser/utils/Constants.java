@@ -49,6 +49,7 @@ public final class Constants {
 
     public static final String DL_ASSIGNMENT_OPERATOR = ":=";
     public static final String DL_SEMI_COLON = ";";
+    public static final String DL_NOT_EQUAL_OPERATOR = "!=";
 
     public static final String AST_GENERATION_PROCESS_SUFFIX = " Ast Generation Process";
     public static final String KEYMAERAX_OUTPUT_CONVERSION_SUFFIX = " to KeYmaeraX Output Conversion Process";
@@ -57,4 +58,6 @@ public final class Constants {
     public static final String DIFFERENTIAL_DYNAMIC_LOGIC = "Differential Dynamic Logic";
     public static final String RELATIONAL_DYNAMIC_LOGIC = "Relational Dynamic Logic";
     public static final String D_REAL = "dReal";
+
+    public static final String NOT_FOR_D_REAL = "not";
 }
