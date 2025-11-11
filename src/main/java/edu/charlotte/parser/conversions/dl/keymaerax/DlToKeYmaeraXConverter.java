@@ -1,6 +1,7 @@
 package edu.charlotte.parser.conversions.dl.keymaerax;
 
 import edu.charlotte.parser.ast.nodes.AstNode;
+import edu.charlotte.parser.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -56,6 +57,10 @@ public class DlToKeYmaeraXConverter {
             keYmaeraXOutputBuilder.append(node.getValue()).append(" ");
             log.debug("Appended the node value '{}' to KeYmaeraX output.", node.getValue());
         } else {
+            if(node.getChildren().size() == Constants.DL_NOT_FORMULA_SIZE && node.getChildren().getFirst().getValue().equals(Constants.DL_NOT_OPERATOR)) {
+                node.getChildren().get(1).setValue("");
+                node.getChildren().get(Constants.DL_NOT_FORMULA_SIZE - 1).setValue("");
+            }
             for (AstNode childNode : node.getChildren())
                 this.appendKeYmaeraXOutput(childNode, keYmaeraXOutputBuilder);
         }
