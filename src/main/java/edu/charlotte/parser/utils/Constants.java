@@ -47,6 +47,8 @@ public final class Constants {
     public static final String REL_DL_COMMA = ",#";
     public static final String REL_DL_ASSIGNMENT_OPERATOR = ":=#";
 
+    public static final String DL_OPEN_BRACKETS = "(";
+    public static final String DL_CLOSE_BRACKETS = ")";
     public static final String DL_ASSIGNMENT_OPERATOR = ":=";
     public static final String DL_SEMI_COLON = ";";
     public static final String DL_NOT_EQUAL_OPERATOR = "!=";
@@ -63,5 +65,8 @@ public final class Constants {
     public static final String D_REAL = "dReal";
 
     public static final String NOT_FOR_D_REAL = "not";
+    public static final String OR_FOR_D_REAL = "or";
+    public static final String TERNARY_FOR_D_REAL = "?";
     public static final String DREAL_IMPLICATION_OPERATOR = "=>";
+    public static final String BOX_MODALITY_OPENING_BRACKET_FOR_DREAL = "[";
 }
