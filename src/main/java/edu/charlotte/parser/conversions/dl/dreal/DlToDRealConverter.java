@@ -26,6 +26,8 @@ public class DlToDRealConverter {
         DL_TO_D_REAL_VALUES_MAPPING.put("->", "=>");
         DL_TO_D_REAL_VALUES_MAPPING.put("<->", "=");
         DL_TO_D_REAL_VALUES_MAPPING.put("==", "=");
+        DL_TO_D_REAL_VALUES_MAPPING.put("<<", "<");
+        DL_TO_D_REAL_VALUES_MAPPING.put(">>", ">");
         DL_TO_D_REAL_VALUES_MAPPING.put("<EOF>", "");
         log.info("DlToDRealConverter static mapping for operand conversion initialized with {} entries.", DL_TO_D_REAL_VALUES_MAPPING.size());
 
@@ -87,12 +89,16 @@ public class DlToDRealConverter {
                 this.identifiers.add(node.getValue());
         } else if (childNodes.size() == 3 && DL_OPERATORS_WITH_TWO_OPERANDS.contains(childNodes.get(1).getValue()))
             this.convertToDRealOutputForTwoOperands(dRealOutputBuilder, childNodes);
-        else if (childNodes.size() == 3 && Constants.DREAL_IMPLICATION_OPERATOR.equals(childNodes.get(1).getValue()))
+        else if (childNodes.size() == 3 && Constants.IMPLICATION_OPERATOR_FOR_D_REAL.equals(childNodes.get(1).getValue()))
             this.convertToDRealOutputForImplicationOperand(dRealOutputBuilder, childNodes);
         else if (childNodes.size() == 4 && childNodes.get(0).getValue().equals(Constants.NOT_FOR_D_REAL))
             this.convertToDRealOutputForNotOperand(dRealOutputBuilder, childNodes);
-        else if (childNodes.size() == 4 && childNodes.get(0).getValue().equals(Constants.BOX_MODALITY_OPENING_BRACKET_FOR_DREAL))
+        else if (childNodes.size() == 4 && childNodes.get(0).getValue().equals(Constants.DL_BOX_MODALITY_OPENING_BRACKET))
             this.convertToDRealOutputForBoxModalityOperator(dRealOutputBuilder, childNodes);
+        else if(childNodes.size() == 4 && childNodes.get(0).getValue().equals(Constants.ANGULAR_MODALITY_OPENING_BRACKET_FOR_D_REAL))
+            this.convertToDRealAstNodesForAngularModalityOperator(dRealOutputBuilder, node);
+        else if(childNodes.size() == 3 && childNodes.get(0).getValue().equals(Constants.ANGULAR_MODALITY_OPENING_BRACKET_FOR_D_REAL))
+            this.convertToDRealOutputForAngularModalityOperator(dRealOutputBuilder, childNodes);
         else {
             for (AstNode childNode : node.getChildren())
                 dRealOutputBuilder.append(this.convertToDRealOutput(childNode));
@@ -155,15 +161,19 @@ public class DlToDRealConverter {
     private void convertToDRealOutputForNotOperand(StringBuilder dRealOutputBuilder, List<AstNode> childNodes) {
         List<AstNode> childNodesOfOperator = childNodes.get(2).getChildren();
         if(childNodesOfOperator.size() == 3 && DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS.containsKey(childNodesOfOperator.get(1).getValue())) {
-            if(childNodesOfOperator.get(1).getValue().equals(Constants.DREAL_IMPLICATION_OPERATOR)) {
-                childNodesOfOperator.set(0, formNewAstNode(childNodesOfOperator.getFirst()));
+            if(childNodesOfOperator.get(1).getValue().equals(Constants.IMPLICATION_OPERATOR_FOR_D_REAL)) {
                 childNodesOfOperator.get(1).setValue(DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS.get(childNodesOfOperator.get(1).getValue()));
+                childNodesOfOperator.set(2, formNewAstNode(childNodesOfOperator.get(2)));
             } else {
                 childNodesOfOperator.set(0, formNewAstNode(childNodesOfOperator.get(0)));
                 childNodesOfOperator.get(1).setValue(DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS.get(childNodesOfOperator.get(1).getValue()));
                 childNodesOfOperator.set(2, formNewAstNode(childNodesOfOperator.get(2)));
             }
             dRealOutputBuilder.append(this.convertToDRealOutput(childNodes.get(2)));
+        } else if(childNodesOfOperator.size() == 4 && childNodesOfOperator.get(0).getValue().equals(Constants.NOT_FOR_D_REAL)) {
+            dRealOutputBuilder.append(this.convertToDRealOutput(childNodesOfOperator.get(2)));
+        } else if(childNodesOfOperator.size() == 4 && childNodesOfOperator.getFirst().getValue().equals(Constants.DL_BOX_MODALITY_OPENING_BRACKET)) {
+
         } else {
             dRealOutputBuilder.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
             this.numberOfSpaces++;
@@ -197,6 +207,30 @@ public class DlToDRealConverter {
         if (dRealOutputBuilder.indexOf("\n", 1) != -1)
             dRealOutputBuilder.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
         dRealOutputBuilder.append(")");
+    }
+
+    private void convertToDRealOutputForAngularModalityOperator(StringBuilder dRealOutputBuilder, List<AstNode> childNodes) {
+        dRealOutputBuilder.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
+        this.numberOfSpaces++;
+        dRealOutputBuilder.append(Constants.DL_OPEN_BRACKETS).append(childNodes.getFirst().getValue());
+        this.convertToDRealOutputForProgram(dRealOutputBuilder, childNodes.get(1).getChildren());
+        this.numberOfSpaces--;
+        if (dRealOutputBuilder.indexOf("\n", 1) != -1)
+            dRealOutputBuilder.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
+        dRealOutputBuilder.append(childNodes.getLast().getValue()).append(Constants.DL_CLOSE_BRACKETS);
+    }
+
+    private void convertToDRealAstNodesForAngularModalityOperator(StringBuilder dRealOutputBuilder, AstNode node) {
+        List<AstNode> childNodes = node.getChildren();
+        AstNode newNode = new AstNode(Constants.PROGRAM_IN_FORMULA_FOR_DL_IN_D_REAL);
+        newNode.getChildren().add(childNodes.getFirst());
+        newNode.getChildren().add(childNodes.get(1));
+        newNode.getChildren().add(childNodes.get(2));
+        childNodes.set(0, newNode);
+        newNode = new AstNode(Constants.AND_FOR_D_REAL);
+        childNodes.set(1, newNode);
+        childNodes.remove(2);
+        dRealOutputBuilder.append(this.convertToDRealOutput(node));
     }
 
     private void convertToDRealOutputForProgram(StringBuilder dRealOutputBuilder, List<AstNode> childNodes) {
