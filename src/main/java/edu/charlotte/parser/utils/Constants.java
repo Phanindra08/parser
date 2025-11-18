@@ -50,11 +50,11 @@ public final class Constants {
     public static final String DL_OPEN_BRACKETS = "(";
     public static final String DL_CLOSE_BRACKETS = ")";
     public static final String DL_BOX_MODALITY_OPENING_BRACKET = "[";
-    public static final String DL_BOX_MODALITY_CLOSING_BRACKET = "]";
     public static final String DL_ASSIGNMENT_OPERATOR = ":=";
     public static final String DL_SEMI_COLON = ";";
     public static final String DL_NOT_EQUAL_OPERATOR = "!=";
     public static final String DL_NOT_OPERATOR = "!";
+    public static final String DL_TERNARY_OPERATOR = "?";
     public static final String DL_IDENTIFIERS_REGEX = "[a-zA-Z][a-zA-Z0-9]*";
     public static final int DL_NOT_FORMULA_SIZE = 4;
 
@@ -69,7 +69,6 @@ public final class Constants {
     public static final String NOT_FOR_D_REAL = "not";
     public static final String OR_FOR_D_REAL = "or";
     public static final String AND_FOR_D_REAL = "and";
-    public static final String TERNARY_FOR_D_REAL = "?";
     public static final String IMPLICATION_OPERATOR_FOR_D_REAL = "=>";
     public static final String ANGULAR_MODALITY_OPENING_BRACKET_FOR_D_REAL = "<";
     public static final String ANGULAR_MODALITY_CLOSING_BRACKET_FOR_D_REAL = ">";
