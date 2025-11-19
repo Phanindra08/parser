@@ -94,9 +94,10 @@ public class DlToDRealConverter {
             this.convertToDRealOutputForTwoOperands(dRealOutputBuilder, childNodes);
         else if (childNodes.size() == 3 && Constants.IMPLICATION_OPERATOR_FOR_D_REAL.equals(childNodes.get(1).getValue()))
             this.convertToDRealOutputForImplicationOperand(dRealOutputBuilder, childNodes);
-        else if (childNodes.size() == 4 && childNodes.get(0).getValue().equals(Constants.ANGULAR_MODALITY_OPENING_BRACKET_FOR_D_REAL))
-            this.convertToDRealAstNodesForAngularModalityOperator(dRealOutputBuilder, node);
-        else {
+        else if (childNodes.size() == 4 && childNodes.get(0).getValue().equals(Constants.ANGULAR_MODALITY_OPENING_BRACKET_FOR_D_REAL)) {
+            AstNode newNode = this.convertToDRealAstNodesForAngularModalityOperator(node);
+            dRealOutputBuilder.append(this.convertToDRealOutput(newNode));
+        } else {
             for (AstNode childNode : node.getChildren())
                 dRealOutputBuilder.append(this.convertToDRealOutput(childNode));
         }
@@ -179,7 +180,7 @@ public class DlToDRealConverter {
                 dRealOutputBuilder.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
                 this.numberOfSpaces++;
                 dRealOutputBuilder.append("(").append(Constants.NOT_FOR_D_REAL);
-                dRealOutputBuilder.append(this.convertToDRealOutput(childNodesOfOperator.getFirst()));
+                dRealOutputBuilder.append(this.convertToDRealOutput(node));
                 this.numberOfSpaces--;
                 if (dRealOutputBuilder.indexOf("\n", 1) != -1)
                     dRealOutputBuilder.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
@@ -201,103 +202,81 @@ public class DlToDRealConverter {
         }
     }
 
-    private void convertToDRealOutputForTernaryOperands(StringBuilder dRealOutputBuilder, List<AstNode> childNodes) {
-        dRealOutputBuilder.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
-        this.numberOfSpaces++;
-        dRealOutputBuilder.append("(").append(childNodes.get(0).getValue());
-        dRealOutputBuilder.append(this.convertToDRealOutput(childNodes.get(1)));
-    }
+//    private void convertToDRealOutputForTernaryOperands(List<AstNode> programNodes, List<AstNode> childNodes) {
+//        dRealOutputBuilder.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
+//        this.numberOfSpaces++;
+//        dRealOutputBuilder.append("(").append(childNodes.get(0).getValue());
+//        dRealOutputBuilder.append(this.convertToDRealOutput(childNodes.get(1)));
+//    }
 
     private void convertToDRealAstNodesForBoxModalityOperator(AstNode node) {
         node.getChildren().getFirst().setValue(Constants.ANGULAR_MODALITY_OPENING_BRACKET_FOR_D_REAL);
         node.getChildren().get(2).setValue(Constants.ANGULAR_MODALITY_CLOSING_BRACKET_FOR_D_REAL);
+
+        AstNode newNode = new AstNode(Constants.AST_NODE_DL_FORMULA);
+        newNode.getChildren().add(new AstNode(Constants.NOT_FOR_D_REAL));
+        newNode.getChildren().add(new AstNode(Constants.DL_OPEN_BRACKETS));
+        newNode.getChildren().add(node.getChildren().getLast());
+        newNode.getChildren().add(new AstNode(Constants.DL_CLOSE_BRACKETS));
+        node.getChildren().removeLast();
+        node.getChildren().add(newNode);
     }
 
-//    private AstNode convertToDRealAstNodesForBoxModalityOperator(AstNode node) {
-//        List<AstNode> childNodes = node.getChildren();
-//        AstNode newNode = new AstNode(Constants.AST_NODE_DL_FORMULA);
-//        newNode.getChildren().add(new AstNode(Constants.NOT_FOR_D_REAL));
-//        newNode.getChildren().add(new AstNode(Constants.DL_OPEN_BRACKETS));
-//
-//        AstNode newChildNode = new AstNode(Constants.PROGRAM_IN_FORMULA_FOR_DL_IN_D_REAL);
-//        childNodes.getFirst().setValue(Constants.ANGULAR_MODALITY_OPENING_BRACKET_FOR_D_REAL);
-//        newChildNode.getChildren().add(childNodes.getFirst());
-//        newChildNode.getChildren().add(childNodes.get(1));
-//        childNodes.get(2).setValue(Constants.ANGULAR_MODALITY_CLOSING_BRACKET_FOR_D_REAL);
-//        newChildNode.getChildren().add(childNodes.get(2));
-//        childNodes.set(0, newChildNode);
-//        newChildNode = new AstNode(Constants.OR_FOR_D_REAL);
-//        childNodes.set(1, newChildNode);
-//        childNodes.remove(2);
-//
-//        newChildNode = new AstNode(Constants.AST_NODE_DL_FORMULA);
-//        newNode.getChildren().add(new AstNode(Constants.NOT_FOR_D_REAL));
-//        newNode.getChildren().add(new AstNode(Constants.DL_OPEN_BRACKETS));
-//        newNode.getChildren().add(childNodes.getLast());
-//        newNode.getChildren().add(new AstNode(Constants.DL_CLOSE_BRACKETS));
-//
-//        childNodes.set(2, newChildNode);
-//        newNode.getChildren().add(node);
-//        newNode.getChildren().add(new AstNode(Constants.DL_CLOSE_BRACKETS));
-//        return newNode;
-//    }
-
-    private void convertToDRealOutputForAngularModalityOperator(StringBuilder dRealOutputBuilder, List<AstNode> childNodes) {
-        dRealOutputBuilder.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
-        this.numberOfSpaces++;
-        dRealOutputBuilder.append(Constants.DL_OPEN_BRACKETS).append(childNodes.getFirst().getValue());
-        this.convertToDRealOutputForProgram(dRealOutputBuilder, childNodes.get(1).getChildren());
-        this.numberOfSpaces--;
-        if (dRealOutputBuilder.indexOf("\n", 1) != -1)
-            dRealOutputBuilder.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
-        dRealOutputBuilder.append(childNodes.getLast().getValue()).append(Constants.DL_CLOSE_BRACKETS);
+    private AstNode convertToDRealAstNodesForAngularModalityOperator(AstNode node) {
+        List<AstNode> programNodes = new ArrayList<>();
+        this.convertToDRealOutputForProgram(programNodes, node.getChildren().get(1).getChildren());
+        programNodes.add(node.getChildren().getLast());
+        return this.convertNodesToTree(programNodes);
     }
 
-    private void convertToDRealAstNodesForAngularModalityOperator(StringBuilder dRealOutputBuilder, AstNode node) {
-        List<AstNode> childNodes = node.getChildren();
-        AstNode newNode = new AstNode(Constants.PROGRAM_IN_FORMULA_FOR_DL_IN_D_REAL);
-        newNode.getChildren().add(childNodes.getFirst());
-        newNode.getChildren().add(childNodes.get(1));
-        newNode.getChildren().add(childNodes.get(2));
-        childNodes.set(0, newNode);
-        newNode = new AstNode(Constants.AND_FOR_D_REAL);
-        childNodes.set(1, newNode);
-        childNodes.remove(2);
-        dRealOutputBuilder.append(this.convertToDRealOutput(node));
+    private AstNode convertNodesToTree(List<AstNode> programNodes) {
+        AstNode prevNode = programNodes.getFirst();
+        AstNode headNode = programNodes.getFirst();
+        for(int index = 0; index < programNodes.size() - 1; index++) {
+            AstNode node;
+            if(index == 0) {
+                node = new AstNode(Constants.PROGRAM_IN_D_REAL);
+                node.getChildren().add(programNodes.get(index));
+                node.getChildren().add(new AstNode(Constants.AND_FOR_D_REAL));
+                headNode = node;
+            } else {
+                node = new AstNode(Constants.PROGRAM_IN_D_REAL);
+                node.getChildren().add(programNodes.get(index));
+                node.getChildren().add(new AstNode(Constants.AND_FOR_D_REAL));
+                prevNode.getChildren().add(node);
+            }
+            if(index == programNodes.size() - 2)
+                node.getChildren().add(programNodes.get(index + 1));
+            prevNode = node;
+        }
+        return headNode;
     }
 
-    private void convertToDRealOutputForProgram(StringBuilder dRealOutputBuilder, List<AstNode> childNodes) {
+    private void convertToDRealOutputForProgram(List<AstNode> programNodes, List<AstNode> childNodes) {
         Map<String, Integer> variablesMapping = new HashMap<>();
         if (childNodes.get(1).getValue().equals(":="))
-            dRealOutputBuilder.append(this.convertToDRealOutputForProgramAssignments(variablesMapping, childNodes));
+            this.convertToDRealOutputForProgramAssignments(programNodes, childNodes, variablesMapping);
         else if (childNodes.get(1).getValue().equals(";")) {
-            dRealOutputBuilder.append("(").append("and");
-            this.convertToDRealOutputForProgram(dRealOutputBuilder, childNodes.getFirst().getChildren());
-            this.convertToDRealOutputForProgram(dRealOutputBuilder, childNodes.get(2).getChildren());
-        } else if (childNodes.get(0).getValue().equals(Constants.DL_TERNARY_OPERATOR)) {
-            this.convertToDRealOutputForTernaryOperands(dRealOutputBuilder, childNodes);
+            this.convertToDRealOutputForProgram(programNodes, childNodes.getFirst().getChildren());
+            this.convertToDRealOutputForProgram(programNodes, childNodes.get(2).getChildren());
         }
-        this.numberOfSpaces--;
-        if (dRealOutputBuilder.indexOf("\n", 1) != -1)
-            dRealOutputBuilder.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
-        dRealOutputBuilder.append(")");
+//        else if (childNodes.get(0).getValue().equals(Constants.DL_TERNARY_OPERATOR)) {
+//            this.convertToDRealOutputForTernaryOperands(programNodes, childNodes);
+//        }
     }
 
-    private StringBuilder convertToDRealOutputForProgramAssignments(Map<String, Integer> variablesMapping, List<AstNode> childNodes) {
-        StringBuilder dRealOutputForAssignment = new StringBuilder();
+    private void convertToDRealOutputForProgramAssignments(List<AstNode> programNodes, List<AstNode> childNodes, Map<String, Integer> variablesMapping) {
         Set<String> variablesTransformed = new HashSet<>();
-        dRealOutputForAssignment.append(this.transformVariables(childNodes.getFirst(), variablesTransformed, variablesMapping, false));
-        dRealOutputForAssignment.append(this.transformVariables(childNodes.get(2), variablesTransformed, variablesMapping, true));
-        dRealOutputForAssignment.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
-        this.numberOfSpaces++;
-        dRealOutputForAssignment.append("(").append("=").append(" ");
-        dRealOutputForAssignment.append(childNodes.getFirst().getValue()).append(" ");
-        dRealOutputForAssignment.append(childNodes.get(2).getValue()).append(")");
-        this.numberOfSpaces--;
-        return dRealOutputForAssignment;
+        this.transformVariables(programNodes, childNodes.getFirst(), variablesTransformed, variablesMapping, false);
+        if(childNodes.get(1).getValue().equals(":="))
+            childNodes.get(1).setValue("=");
+        this.transformVariables(programNodes, childNodes.get(2), variablesTransformed, variablesMapping, true);
+        childNodes.removeLast();
+        AstNode newNode = new AstNode(Constants.FORMULA_IN_D_REAL, childNodes);
+        programNodes.add(newNode);
     }
 
-    private StringBuilder transformVariables(AstNode node, Set<String> variablesTransformed,
+    private StringBuilder transformVariables(List<AstNode> programNodes, AstNode node, Set<String> variablesTransformed,
                                              Map<String, Integer> variablesMapping, boolean isRightSide) {
         StringBuilder dRealOutputForVariableTransformation = new StringBuilder();
         if (node.getChildren().isEmpty() && node.getValue().matches(Constants.DL_IDENTIFIERS_REGEX)) {
@@ -312,22 +291,18 @@ public class DlToDRealConverter {
                 variablesTransformed.add(value);
                 String newValue = value + variablesMapping.get(value) + "'";
                 node.setValue(value + variablesMapping.get(value) + "'");
-                this.identifiers.add(newValue);
+                this.identifiers.add(newValue.substring(0, newValue.length() - 1));
             }
             if (isRightSide) {
-                dRealOutputForVariableTransformation.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
-                this.numberOfSpaces++;
-                dRealOutputForVariableTransformation.append("(").append("and");
-                dRealOutputForVariableTransformation.append("\n").append("\t".repeat(Math.max(0, this.numberOfSpaces)));
-                this.numberOfSpaces++;
-                dRealOutputForVariableTransformation.append("(").append("=").append(" ");
-                dRealOutputForVariableTransformation.append(node.getValue()).append(" ");
-                dRealOutputForVariableTransformation.append(value).append(")");
-                this.numberOfSpaces--;
+                AstNode newNode = new AstNode(Constants.FORMULA_IN_D_REAL);
+                newNode.getChildren().add(new AstNode(node.getValue()));
+                newNode.getChildren().add(new AstNode(Constants.D_REAL_ASSIGNMENT_OPERATOR));
+                newNode.getChildren().add(new AstNode(node.getValue().substring(0, node.getValue().length() - 1)));
+                programNodes.add(newNode);
             }
         } else if (!node.getChildren().isEmpty()) {
             for (int index = 0; index < node.getChildren().size(); index++) {
-                dRealOutputForVariableTransformation.append(this.transformVariables(node.getChildren().get(index),
+                dRealOutputForVariableTransformation.append(this.transformVariables(programNodes, node.getChildren().get(index),
                         variablesTransformed, variablesMapping, isRightSide));
             }
         }
