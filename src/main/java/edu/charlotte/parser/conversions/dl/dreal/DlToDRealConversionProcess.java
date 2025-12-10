@@ -62,7 +62,8 @@ public class DlToDRealConversionProcess implements ItemProcessor<String, String>
                     log.error("{}", nullAstError);
                     return nullAstError;
                 }
-                String dRealOutput = performDRealConversionAndCollectIdentifiers(astRoot, getIdentifiersDataFromListener(listener));
+                String dRealOutput = performDRealConversion(astRoot, getIdentifiersDataFromListener(listener));
+                this.identifiers.addAll(this.dlToDRealConverter.getIdentifiers());
 
                 if (dRealOutput == null) {
                     log.warn("dReal conversion returned null output for the item: {}. Skipping the item.",
@@ -95,13 +96,10 @@ public class DlToDRealConversionProcess implements ItemProcessor<String, String>
         return listener.getIdentifiers();
     }
 
-    protected String performDRealConversionAndCollectIdentifiers(AstNode astRoot, Set<String> identifierData) {
+    protected String performDRealConversion(AstNode astRoot, Set<String> identifierData) {
         Objects.requireNonNull(astRoot, "Ast root cannot be null for DL to DReal conversion.");
         Objects.requireNonNull(identifierData, "Identifiers data cannot be null for DL to DReal conversion.");
-
-        this.identifiers.addAll(identifierData);
-        log.debug("There are {} identifiers in the DL program.", this.identifiers.size());
-        return this.dlToDRealConverter.convertDlToDReal(astRoot);
+        return this.dlToDRealConverter.convertDlToDRealAndLoadIdentifiers(astRoot);
     }
 
     protected String getDisplayName() {
