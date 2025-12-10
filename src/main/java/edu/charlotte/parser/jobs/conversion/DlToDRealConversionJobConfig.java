@@ -40,11 +40,11 @@ public class DlToDRealConversionJobConfig {
 
     @Bean
     @StepScope
-    public edu.charlotte.parser.conversions.dl.dreal.DlToDRealConversionProcess dlToDRealConversionProcess(GenerateAstForDl generateAstForDl,
-                                                                                                           GenerateDRealOutput generateDRealOutput,
-                                                                                                           DlToDRealConverter dlToDRealConverter) {
+    public DlToDRealConversionProcess dlToDRealConversionProcess(GenerateAstForDl generateAstForDl,
+                                                                 GenerateDRealOutput generateDRealOutput,
+                                                                 DlToDRealConverter dlToDRealConverter) {
         log.debug("Creating step-scoped dlToDRealConversionProcess bean.");
-        return new edu.charlotte.parser.conversions.dl.dreal.DlToDRealConversionProcess(generateAstForDl, generateDRealOutput, dlToDRealConverter);
+        return new DlToDRealConversionProcess(generateAstForDl, generateDRealOutput, dlToDRealConverter);
     }
 
     @Bean

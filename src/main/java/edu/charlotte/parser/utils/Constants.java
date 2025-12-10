@@ -56,6 +56,7 @@ public final class Constants {
     public static final String DL_NOT_OPERATOR = "!";
     public static final String DL_TERNARY_OPERATOR = "?";
     public static final String DL_IDENTIFIERS_REGEX = "[a-zA-Z][a-zA-Z0-9]*";
+    public static final String DL_NUMBERS_REGEX = "[0-9]+'.'[0-9]+";
     public static final int DL_NOT_FORMULA_SIZE = 4;
 
     public static final String AST_GENERATION_PROCESS_SUFFIX = " Ast Generation Process";
@@ -72,6 +73,8 @@ public final class Constants {
     public static final String IMPLICATION_OPERATOR_FOR_D_REAL = "=>";
     public static final String ANGULAR_MODALITY_OPENING_BRACKET_FOR_D_REAL = "<";
     public static final String ANGULAR_MODALITY_CLOSING_BRACKET_FOR_D_REAL = ">";
-    public static final String PROGRAM_IN_FORMULA_FOR_DL_IN_D_REAL = "Program_In_DReal";
+    public static final String PROGRAM_IN_D_REAL = "Program_In_DReal";
+    public static final String FORMULA_IN_D_REAL = "Formula_In_DReal";
+    public static final String D_REAL_ASSIGNMENT_OPERATOR = "=";
 
 }
