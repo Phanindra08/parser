@@ -18,7 +18,7 @@ relProgram
 
 relFormula
     : relTerm REL_DL_COMPARISON_OPERATORS relTerm
-    | REL_DL_NOT_OPERATOR relFormula
+    | REL_DL_NOT_OPERATOR REL_DL_OPEN_BRACKETS relFormula REL_DL_CLOSE_BRACKETS
     | relFormula REL_DL_AND_OPERATOR relFormula
     | relFormula REL_DL_OR_OPERATOR relFormula
     | relFormula REL_DL_IMPLICATION_OPERATOR relFormula

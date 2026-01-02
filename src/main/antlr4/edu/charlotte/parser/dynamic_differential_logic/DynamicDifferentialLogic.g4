@@ -17,7 +17,7 @@ program
 formula
     : term COMPARISON_OPERATORS term
     | BOOLEANS
-    | '!'formula
+    | '!' DL_OPEN_BRACKETS formula DL_CLOSE_BRACKETS
     | formula '&&' formula
     | formula '||' formula
     | formula '->' formula
@@ -30,7 +30,7 @@ term
     : IDENTIFIER   # AssignmentIdentifier
     | NUMBER      # IntegerLiteral
     | term BINARY_EXPRESSION_OPERATORS term # BinaryExpr
-    | '(' term ')' # ParenthesesTerm
+    | DL_OPEN_BRACKETS term DL_CLOSE_BRACKETS # ParenthesesTerm
     ;
 
 BOOLEANS    : 'true' | 'false';
@@ -40,5 +40,7 @@ NUMBER     : [0-9]+'.'[0-9]+;
 NON_DET     : '**';
 COMPARISON_OPERATORS : '==' | '!=' | '<=' | '>=' | '<' | '>';
 BINARY_EXPRESSION_OPERATORS : '+' | '-' | '*' | '/';
+DL_OPEN_BRACKETS : '(';
+DL_CLOSE_BRACKETS : ')';
 WS          : [ \t\r\n]+ -> skip;
 LINE_COMMENT: '//' ~[\r\n]* -> skip;

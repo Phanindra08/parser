@@ -2,7 +2,7 @@ package edu.charlotte.parser.conversions.dl.keymaerax;
 
 import edu.charlotte.parser.listeners.ast.DlAstListener;
 import edu.charlotte.parser.ast.nodes.AstNode;
-import edu.charlotte.parser.conversions.common.AbstractKeYmaeraXConversionProcess;
+import edu.charlotte.parser.conversions.common.AbstractConversionProcess;
 import edu.charlotte.parser.conversions.common.GenerateKeYmaeraXOutput;
 import edu.charlotte.parser.grammars.GenerateAstForDl;
 import edu.charlotte.parser.utils.Constants;
@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
-public class DlToKeYmaeraXConversionProcess extends AbstractKeYmaeraXConversionProcess<GenerateAstForDl, DlAstListener, Set<String>> {
+public class DlToKeYmaeraXConversionProcess extends AbstractConversionProcess<GenerateAstForDl, DlAstListener, Set<String>> {
 
     private final DlToKeYmaeraXConverter dlToKeYmaeraXConverter;
 
