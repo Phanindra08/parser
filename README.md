@@ -64,6 +64,7 @@ Choose from the following job names based on your desired operation:
 | DL_TO_KEYMAERAX_OUTPUT     | Converting DL Input File to KeYmaeraX output     |
 | REL_DL_AST_GENERATION      | Generating AST for Rel DL Input Files            |
 | REL_DL_TO_KEYMAERAX_OUTPUT | Converting Rel DL Input File to KeYmaeraX output |
+| DL_TO_D_REAL_OUTPUT        | Converting DL Input File to dReal output         |
 
 ## 📝 Notes
 - <b>Sample Input and Output Files: </b> When referring to the sample input and output files, check out the [Inputs](./DocumentationAndSampleExamples/Inputs) and [Outputs](./DocumentationAndSampleExamples/Outputs) folders. Keep in mind that if you use the sample input files to generate KeYmaeraX output, the resulting output file will be nearly identical, except for a <b>unique ID</b> on the first three lines. This ID changes each time you run the application.
