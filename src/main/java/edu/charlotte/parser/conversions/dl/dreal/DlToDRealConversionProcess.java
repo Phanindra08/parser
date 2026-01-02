@@ -99,7 +99,7 @@ public class DlToDRealConversionProcess implements ItemProcessor<String, String>
     protected String performDRealConversion(AstNode astRoot, Set<String> identifierData) {
         Objects.requireNonNull(astRoot, "Ast root cannot be null for DL to DReal conversion.");
         Objects.requireNonNull(identifierData, "Identifiers data cannot be null for DL to DReal conversion.");
-        return this.dlToDRealConverter.convertDlToDRealAndLoadIdentifiers(astRoot);
+        return this.dlToDRealConverter.convertDlToDReal(astRoot);
     }
 
     protected String getDisplayName() {
