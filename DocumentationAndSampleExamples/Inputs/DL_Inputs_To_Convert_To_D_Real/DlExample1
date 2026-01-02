@@ -1,0 +1,1 @@
+!(testing1Variable >= 7.5 && testing2Variable > 7.0894) || testing < testing3Variable
