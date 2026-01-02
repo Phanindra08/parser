@@ -17,6 +17,7 @@ public class DlToDRealConverter {
     private int numberOfSpaces = 1;
     private boolean isChildOfFirstParentNode = true;
     private final Set<String> identifiers;
+    private final StringBuilder differentialEquation;
 
     static {
         DL_TO_D_REAL_VALUES_MAPPING.put("!", "not");
@@ -52,6 +53,7 @@ public class DlToDRealConverter {
     public DlToDRealConverter() {
         this.identifiers = new HashSet<>();
         this.variablesMapping = new HashMap<>();
+        this.differentialEquation = new StringBuilder();
         log.info("DlToDRealConverter instance is created.");
     }
 
@@ -253,6 +255,10 @@ public class DlToDRealConverter {
         } else if (childNodes.get(0).getValue().equals(Constants.DL_TERNARY_OPERATOR)) {
             this.convertToDRealOutputForTernaryOperands(childNodes.get(1));
             programNodes.add(childNodes.get(1));
+        } else if (childNodes.size() == 7 && childNodes.get(2).getValue().equals(Constants.DL_DIFFERENTIAL_EQUATION_ASSIGNMENT_OPERATOR)) {
+            programNodes.add(this.createTimeNodeForIntegrationLimit(Constants.DL_GREATER_THAN_OPERATOR, "0.0"));
+            programNodes.add(this.createTimeNodeForIntegrationLimit(Constants.DL_LESS_THAN_AND_EQUAL_TO_OPERATOR, "5.0"));
+            this.convertToDRealOutputForDifferentialEquation(programNodes, childNodes);
         }
     }
 
@@ -265,6 +271,57 @@ public class DlToDRealConverter {
         childNodes.removeLast();
         AstNode newNode = new AstNode(Constants.FORMULA_IN_D_REAL, childNodes);
         programNodes.add(newNode);
+    }
+
+    private void convertToDRealOutputForTernaryOperands(AstNode node) {
+        Set<String> variablesTransformed = new HashSet<>();
+        this.convertToDRealOutputForFormula(node, variablesTransformed, true);
+    }
+
+    private AstNode createTimeNodeForIntegrationLimit(String operator, String value) {
+        AstNode node = new AstNode(Constants.FORMULA_IN_D_REAL);
+        node.getChildren().add(new AstNode(Constants.TIME));
+        node.getChildren().add(new AstNode(operator));
+        node.getChildren().add(new AstNode(value));
+        return node;
+    }
+
+    private void convertToDRealOutputForFormula(AstNode node, Set<String> variablesTransformed, boolean canTheVariableBeTransformed) {
+        if(node.getChildren().getFirst().getValue().equals(Constants.AST_NODE_DL_FORMULA)) {
+            if(node.getChildren().size() == 3) {
+                this.convertToDRealOutputForTernaryOperands(node.getChildren().getFirst());
+                this.convertToDRealOutputForTernaryOperands(node.getChildren().getLast());
+            } else if(node.getChildren().size() == 4 && node.getChildren().getFirst().getValue().equals(Constants.NOT_FOR_D_REAL))
+                this.convertToDRealOutputForTernaryOperands(node.getChildren().get(2));
+        } else {
+            this.transformVariables(node.getChildren().getFirst(), variablesTransformed, canTheVariableBeTransformed);
+            this.transformVariables(node.getChildren().getLast(), variablesTransformed, false);
+        }
+    }
+
+    private void convertToDRealOutputForDifferentialEquation(List<AstNode> programNodes, List<AstNode> childNodes) {
+        Set<String> variablesTransformed = new HashSet<>();
+        this.convertToDRealOutputForFormula(childNodes.get(5), variablesTransformed, false);
+        programNodes.add(childNodes.get(5));
+
+        String differentialEquationVariable = childNodes.get(1).getValue().substring(0, childNodes.get(1).getValue().length() - 1);
+        AstNode node = new AstNode(Constants.PROGRAM_IN_D_REAL);
+        AstNode firstChildNode = new AstNode(differentialEquationVariable);
+        this.transformVariables(firstChildNode, variablesTransformed, true);
+        firstChildNode.setValue("[" + firstChildNode.getValue() + "]");
+        node.getChildren().add(firstChildNode);
+        node.getChildren().add(new AstNode(Constants.EQUAL_OPERATOR_FOR_D_REAL));
+        String integrationValue = "(integral 0. " + Constants.TIME +
+                " [" + differentialEquationVariable +
+                (this.variablesMapping.get(differentialEquationVariable) - 1) + "] " + Constants.DIFFERENTIAL_EQUATION + ")";
+        node.getChildren().add(new AstNode(integrationValue));
+        programNodes.add(node);
+
+        this.transformVariables(childNodes.get(3), variablesTransformed, false);
+        differentialEquation.append("(define-ode ").append(Constants.DIFFERENTIAL_EQUATION)
+                .append(" (\n\t(= d/dt[").append(differentialEquationVariable).append("] ")
+                .append(childNodes.get(3).getValue()).append(")\n))\n\n");
+        this.identifiers.add(differentialEquationVariable);
     }
 
     private StringBuilder transformVariables(AstNode node, Set<String> variablesTransformed,
@@ -285,9 +342,9 @@ public class DlToDRealConverter {
                 if (isLeftSide) {
                     variablesMapping.put(value, variablesMapping.get(value) + 1);
                     variablesTransformed.add(value);
+                    this.identifiers.add(value + variablesMapping.get(value));
                 }
                 node.setValue(value + variablesMapping.get(value));
-                this.identifiers.add(value + variablesMapping.get(value));
             }
         } else if (!node.getChildren().isEmpty()) {
             for (int index = 0; index < node.getChildren().size(); index++) {
@@ -296,20 +353,7 @@ public class DlToDRealConverter {
             }
         }
         return dRealOutputForVariableTransformation;
-    }
-
-    private void convertToDRealOutputForTernaryOperands(AstNode node) {
-        Set<String> variablesTransformed = new HashSet<>();
-        if(node.getChildren().getFirst().getValue().equals(Constants.AST_NODE_DL_FORMULA)) {
-            if(node.getChildren().size() == 3) {
-                this.convertToDRealOutputForTernaryOperands(node.getChildren().getFirst());
-                this.convertToDRealOutputForTernaryOperands(node.getChildren().getLast());
-            } else if(node.getChildren().size() == 4 && node.getChildren().getFirst().getValue().equals(Constants.NOT_FOR_D_REAL))
-                this.convertToDRealOutputForTernaryOperands(node.getChildren().get(2));
-        } else {
-            this.transformVariables(node.getChildren().getFirst(), variablesTransformed, true);
-            this.transformVariables(node.getChildren().getLast(), variablesTransformed, false);
-        }
+        // Check the else-if part in the future, I think it does not have any significance
     }
 
     private AstNode formNewAstNode(AstNode node) {
@@ -330,7 +374,7 @@ public class DlToDRealConverter {
 
         String outputBuilder = "(assert" + convertToDRealOutput(astRoot) + "\n)";
         log.info("dReal output string is generated.");
-        return outputBuilder.trim();
+        return this.differentialEquation.toString() + outputBuilder.trim();
     }
 
     public List<String> getIdentifiers() {

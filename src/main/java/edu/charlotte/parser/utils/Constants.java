@@ -53,6 +53,9 @@ public final class Constants {
     public static final String DL_ANGULAR_MODALITY_OPENING_BRACKET = "<<";
     public static final String DL_ANGULAR_MODALITY_CLOSING_BRACKET = ">>";
     public static final String DL_ASSIGNMENT_OPERATOR = ":=";
+    public static final String DL_GREATER_THAN_OPERATOR = ">";
+    public static final String DL_LESS_THAN_AND_EQUAL_TO_OPERATOR = "<=";
+    public static final String DL_DIFFERENTIAL_EQUATION_ASSIGNMENT_OPERATOR = "=";
     public static final String DL_SEMI_COLON = ";";
     public static final String DL_SEQUENTIAL_COMPOSITION = ";";
     public static final String DL_NOT_EQUAL_OPERATOR = "!=";
@@ -78,6 +81,8 @@ public final class Constants {
     public static final String ANGULAR_MODALITY_CLOSING_BRACKET_FOR_D_REAL = ">";
     public static final String PROGRAM_IN_D_REAL = "Program_In_DReal";
     public static final String FORMULA_IN_D_REAL = "Formula_In_DReal";
+    public static final String TIME = "time";
+    public static final String DIFFERENTIAL_EQUATION = "flow_1";
 
     public static final String LOG_MESSAGE_FOR_APPENDING_NODE_VALUE_TO_D_REAL_OUTPUT = "Appended the node value '{}' to dReal output.";
 }
