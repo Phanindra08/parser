@@ -14,8 +14,7 @@
 * [Available Jobs](#available-job-names)
 * [Documentation & Samples](#documentation--samples)
 
-<a id="prerequisites"></a>
-## 🔧 Prerequisites
+## 🔧 Prerequisites <a id="prerequisites"></a>
 
 Ensure your system has the following installed before proceeding:
 
@@ -27,8 +26,7 @@ Ensure your system has the following installed before proceeding:
 
 > **🔍 Verification:** Run `java -version` and `mvn -version` in your terminal to verify installations.
 
-<a id="tech-stack"></a>
-## 🛠 Tech Stack
+## 🛠 Tech Stack <a id="tech-stack"></a>
 
 Key libraries and frameworks driving the transformation engine:
 
@@ -41,8 +39,7 @@ Key libraries and frameworks driving the transformation engine:
 
 > **💡 IDEA Tip:** For the best development experience, install the **ANTLR v4** and **Lombok** plugins in IntelliJ.
 
-<a id="build-instructions"></a>
-## 📦 Build Instructions
+## 📦 Build Instructions <a id="build-instructions"></a>
 
 To build the project and generate the executable JAR, run the following command in the project root:
 
@@ -51,7 +48,7 @@ mvn clean package
 ```
 > Upon success, the artifact will be generated in the **/target** directory (e.g., **parser-0.0.1-SNAPSHOT.jar**).
 
-## 🚀 Running the Application<a id="running-the-application"></a>
+## 🚀 Running the Application <a id="running-the-application"></a>
 
 ### 1. Prepare the Package Directory
 Locate the existing `Package` folder in the project directory.
@@ -80,7 +77,7 @@ java -jar parser-0.0.1-SNAPSHOT.jar \
 
 > **Note:** The `--spring.config.location` argument ensures the application reads the configuration file located in your `Package` directory, not the one embedded inside the JAR.
 
-## ⚙️ Available Job Names<a id="available-job-names"></a>
+## ⚙️ Available Job Names <a id="available-job-names"></a>
 
 Select the appropriate `job.name` argument based on the transformation you need:
 
@@ -92,7 +89,7 @@ Select the appropriate `job.name` argument based on the transformation you need:
 | **`REL_DL_TO_KEYMAERAX_OUTPUT`** | Convert **RDDL** files into KeYmaeraX-compatible format. |
 | **`DL_TO_D_REAL_OUTPUT`** | Convert **dL** files into dReal solver format. |
 
-## 📚 Documentation & Samples<a id="documentation--samples"></a>
+## 📚 Documentation & Samples <a id="documentation--samples"></a>
 
 * **Sample Data:**
     * 📂 **[Input Examples](./DocumentationAndSampleExamples/Inputs)**
