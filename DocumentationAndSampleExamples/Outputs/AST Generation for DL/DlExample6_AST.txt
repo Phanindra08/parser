@@ -8,11 +8,15 @@ Generated AST is:
     │   ├── ->
     │   └── Formula
     │       ├── !
-    │       └── Formula
-    │           ├── !
-    │           └── Formula
-    │               ├── Array1Index1
-    │               ├── ==
-    │               └── valUe8OfArray
+    │       ├── (
+    │       ├── Formula
+    │       │   ├── !
+    │       │   ├── (
+    │       │   ├── Formula
+    │       │   │   ├── Array1Index1
+    │       │   │   ├── ==
+    │       │   │   └── valUe8OfArray
+    │       │   └── )
+    │       └── )
     └── <EOF>
 
