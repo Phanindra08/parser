@@ -23,6 +23,7 @@ public final class Constants {
     public static final String AST_NODE_DL_PROGRAM = "DLProgram";
     public static final String AST_NODE_DL_FORMULA = "Formula";
     public static final String AST_NODE_DL_PROGRAM_CONTEXT = "Program";
+    public static final String AST_NODE_DIFFERENTIAL_EQUATION = "DifferentialEquation";
     public static final String AST_NODE_DL_BINARY_EXPRESSION = "BinaryExpression";
     public static final String AST_NODE_DL_TERM_WITH_PARENTHESES = "TermWithParentheses";
 
@@ -77,8 +78,6 @@ public final class Constants {
     public static final String AND_FOR_D_REAL = "and";
     public static final String EQUAL_OPERATOR_FOR_D_REAL = "=";
     public static final String IMPLICATION_OPERATOR_FOR_D_REAL = "=>";
-    public static final String ANGULAR_MODALITY_OPENING_BRACKET_FOR_D_REAL = "<";
-    public static final String ANGULAR_MODALITY_CLOSING_BRACKET_FOR_D_REAL = ">";
     public static final String PROGRAM_IN_D_REAL = "Program_In_DReal";
     public static final String FORMULA_IN_D_REAL = "Formula_In_DReal";
     public static final String TIME = "time";
