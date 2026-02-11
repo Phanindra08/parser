@@ -23,7 +23,7 @@ public final class Constants {
     public static final String AST_NODE_DL_PROGRAM = "DLProgram";
     public static final String AST_NODE_DL_FORMULA = "Formula";
     public static final String AST_NODE_DL_PROGRAM_CONTEXT = "Program";
-    public static final String AST_NODE_DIFFERENTIAL_EQUATION = "DifferentialEquation";
+    public static final String AST_NODE_DL_DIFFERENTIAL_EQUATION = "DifferentialEquation";
     public static final String AST_NODE_DL_BINARY_EXPRESSION = "BinaryExpression";
     public static final String AST_NODE_DL_TERM_WITH_PARENTHESES = "TermWithParentheses";
 

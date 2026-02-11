@@ -70,7 +70,7 @@ public class DlAstListener extends DynamicDifferentialLogicBaseListener {
     @Override
     public void enterDifferentialEquation(DynamicDifferentialLogicParser.DifferentialEquationContext ctx) {
         log.debug("Entering differential equation rule: {}", ctx.getText());
-        stack.push(new AstNode(Constants.AST_NODE_DIFFERENTIAL_EQUATION));
+        stack.push(new AstNode(Constants.AST_NODE_DL_DIFFERENTIAL_EQUATION));
         if (ctx.IDENTIFIER_PRIME() != null) {
             String identifierPrime = ctx.IDENTIFIER_PRIME().getText();
             if (identifierPrime.endsWith("'")) {
