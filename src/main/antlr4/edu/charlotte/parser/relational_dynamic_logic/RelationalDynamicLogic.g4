@@ -12,7 +12,7 @@ relProgram
     | relProgram REL_DL_UNION_OPERATOR relProgram
     | REL_DL_OPEN_CURLY_BRACKETS relProgram REL_DL_CLOSE_CURLY_BRACKETS NON_DET
     | REL_DL_TERNARY_OPERATOR relFormula
-    | REL_DL_OPEN_CURLY_BRACKETS relDifferentialEquation (REL_DL_COMMA relDifferentialEquation)* REL_DL_AND_OPERATOR relFormula REL_DL_CLOSE_CURLY_BRACKETS
+    | REL_DL_OPEN_CURLY_BRACKETS relDifferentialEquation (DL_COMMA relDifferentialEquation)* REL_DL_AND_OPERATOR relFormula REL_DL_CLOSE_CURLY_BRACKETS
     | REL_DL_OPEN_BRACKETS program REL_DL_COMMA program REL_DL_CLOSE_BRACKETS
     ;
 
