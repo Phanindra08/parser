@@ -1,7 +1,9 @@
 package edu.charlotte.parser.utils;
 
 public final class Constants {
-    private Constants() {}
+    private Constants() {
+    }
+
     public static final String JOBNAME_DL_AST_GENERATION = "DL_AST_GENERATION";
     public static final String JOBNAME_DL_TO_KEYMAERAX_OUTPUT_CONVERSION = "DL_TO_KEYMAERAX_OUTPUT";
     public static final String JOBNAME_REL_DL_AST_GENERATION = "REL_DL_AST_GENERATION";
@@ -84,4 +86,6 @@ public final class Constants {
     public static final String DIFFERENTIAL_EQUATION = "flow_1";
 
     public static final String LOG_MESSAGE_FOR_APPENDING_NODE_VALUE_TO_D_REAL_OUTPUT = "Appended the node value '{}' to dReal output.";
+    public static final String VERIFICATION_FAILED = "failed";
+    public static final String VERIFICATION_FALSE = "false";
 }
