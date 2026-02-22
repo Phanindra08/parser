@@ -10,17 +10,26 @@ public final class Constants {
     public static final String JOBNAME_REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION = "REL_DL_TO_KEYMAERAX_OUTPUT";
     public static final String JOBNAME_D_REAL_AST_GENERATION = "D_REAL_AST_GENERATION";
     public static final String JOBNAME_DL_TO_D_REAL_OUTPUT_CONVERSION = "DL_TO_D_REAL_OUTPUT";
+    public static final String JOBNAME_REL_DL_TWO_FILES_COMBINING = "REL_DL_TWO_FILES_COMBINING";
 
     public static final String AST_GENERATION_EXTENSION = "_AST.txt";
     public static final String KEYMAERAX_EXTENSION = ".kyx";
     public static final String SMT_EXTENSION = ".smt2";
+    public static final String REL_DL_TWO_FILE_COMBINING_EXTENSION = "COMBINING_";
 
     public static final String INPUT_FILE = "input.file";
+    public static final String INPUT_FILE1 = "input.file1";
+    public static final String INPUT_FILE2 = "input.file2";
+    public static final String CONSTANT_VALUE = "constant.value";
     public static final String OUTPUT_FILE = "output.file";
     public static final String JOB_NAME = "job.name";
 
-    public static final String ERROR_MESSAGE_FOR_MISSING_JOB_PARAMETERS = "Missing required job parameters. " +
-            "Use --job.name=<jobName> and --input.file=<inputFile>";
+    public static final String ERROR_MESSAGE_FOR_MISSING_JOB_PARAMETERS = "Missing required job parameter. " +
+            "Use --job.name=<jobName>";
+    public static final String ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETER = "Missing required input parameter. " +
+            "Use --input.file=<inputFile>";
+    public static final String ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETERS = "Missing required input parameters. " +
+            "Use --input.file1=<inputFile>, --input.file2=<inputFile> and --constant.value=<constantValue>";
 
     public static final String AST_NODE_DL_PROGRAM = "DLProgram";
     public static final String AST_NODE_DL_FORMULA = "Formula";
