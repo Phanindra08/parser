@@ -2,6 +2,7 @@ package edu.charlotte.parser.jobs.io;
 
 import edu.charlotte.parser.exceptions.FileReadingException;
 import edu.charlotte.parser.utils.Constants;
+import edu.charlotte.parser.utils.ParserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
@@ -11,9 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Objects;
 
 @Configuration
@@ -23,26 +22,8 @@ public class FileReader {
     @Bean
     @StepScope
     public SingleFileContentReader inputFileReader(@Value("#{jobParameters['" + Constants.INPUT_FILE + "']}") String inputFile) {
-        if (inputFile == null || inputFile.trim().isEmpty()) {
-            log.error("Input file path parameter is null or empty. Parameter value: {}", Constants.INPUT_FILE);
-            throw new IllegalArgumentException("Input file path cannot be null or empty.");
-        }
-
-        Path inputFilePath;
-        try {
-            inputFilePath = Paths.get(inputFile);
-            log.debug("Input file path ({}) is valid.", inputFilePath);
-        } catch (InvalidPathException e) {
-            log.error("Invalid input file path: {}", inputFile, e);
-            throw new IllegalArgumentException("Invalid input file path: " + inputFile, e);
-        }
-
-
-        if (!Files.exists(inputFilePath)) {
-            log.error("Input file does not exist or is not a file: {}", inputFile);
-            throw new IllegalArgumentException("Input file does not exist or is not a file: " + inputFile);
-        }
-
+        Path inputFilePath = ParserUtils.getFilePath(inputFile);
+        ParserUtils.checkingInputFileValidity(inputFilePath);
         log.debug("Reading the input file: {}", inputFile);
         return new SingleFileContentReader(inputFilePath);
     }
