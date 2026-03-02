@@ -30,7 +30,8 @@ public class BatchConfig implements ApplicationRunner {
     private final Job loadDlToKeYmaeraXConversionJob;
     private final Job loadRelDlToKeYmaeraXConversionJob;
     private final Job loadDlToDRealConversionJob;
-    private final Job loadRelDlCombiningTwoFilesJob;
+    //    private final Job loadRelDlCombiningTwoFilesJob;
+    private final Job loadDlCombiningTwoFilesJob;
     private final JobLauncher jobLauncher;
     private final String outputFilePath;
 
@@ -42,7 +43,8 @@ public class BatchConfig implements ApplicationRunner {
             Job loadDlToKeYmaeraXConversionJob,
             Job loadRelDlToKeYmaeraXConversionJob,
             Job loadDlToDRealConversionJob,
-            Job loadRelDlCombiningTwoFilesJob,
+//            Job loadRelDlCombiningTwoFilesJob,
+            Job loadDlCombiningTwoFilesJob,
             JobLauncher jobLauncher,
             @Value("${dl-output}") String outputFilePath) {
         this.loadDlAstGenerationJob = loadDlAstGenerationJob;
@@ -51,7 +53,9 @@ public class BatchConfig implements ApplicationRunner {
         this.loadDlToKeYmaeraXConversionJob = loadDlToKeYmaeraXConversionJob;
         this.loadRelDlToKeYmaeraXConversionJob = loadRelDlToKeYmaeraXConversionJob;
         this.loadDlToDRealConversionJob = loadDlToDRealConversionJob;
-        this.loadRelDlCombiningTwoFilesJob = loadRelDlCombiningTwoFilesJob;
+//        this.loadRelDlCombiningTwoFilesJob = loadRelDlCombiningTwoFilesJob;
+        this.loadDlCombiningTwoFilesJob = loadDlCombiningTwoFilesJob;
+
         this.jobLauncher = jobLauncher;
         this.outputFilePath = outputFilePath;
         log.debug("Batch Config is initialized.");
@@ -68,16 +72,19 @@ public class BatchConfig implements ApplicationRunner {
         try {
             JobType type = JobType.getJobType(jobName);
 
-            if (jobName.equals(Constants.JOBNAME_REL_DL_TWO_FILES_COMBINING)) {
-                containsArgument((args.containsOption(Constants.INPUT_FILE1) && args.containsOption(Constants.INPUT_FILE2) &&
+            if (jobName.equals(Constants.JOBNAME_REL_DL_TWO_FILES_COMBINING) || jobName.equals(Constants.JOBNAME_DL_TWO_FILES_COMBINING)) {
+                containsArgument((args.containsOption(Constants.PRE_AND_POST_CONDITION_INPUT_FILE) && args.containsOption(Constants.INPUT_FILE1) && args.containsOption(Constants.INPUT_FILE2) &&
                         args.containsOption(Constants.CONSTANT_VALUE)), Constants.ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETERS);
+                String conditionsInputFile = args.getOptionValues(Constants.PRE_AND_POST_CONDITION_INPUT_FILE).getFirst();
                 String inputFile1 = args.getOptionValues(Constants.INPUT_FILE1).getFirst();
                 String inputFile2 = args.getOptionValues(Constants.INPUT_FILE2).getFirst();
                 int constantValue = Integer.parseInt(args.getOptionValues(Constants.CONSTANT_VALUE).getFirst());
+                ParserUtils.validateInputFilePathIsNotNull(conditionsInputFile);
                 ParserUtils.validateInputFilePathIsNotNull(inputFile1);
                 ParserUtils.validateInputFilePathIsNotNull(inputFile2);
-                log.info("Job Name to be parsed: {}, Input Files to be parsed are: {}, {}, Constant value is: {}", jobName, inputFile1, inputFile2, constantValue);
-                JobParameters jobParameters = createJobParams(jobName, inputFile1, inputFile2, constantValue, type.getFileExtension());
+                log.info("Job Name to be parsed: {}, Input Files to be parsed are: {}, {}, {}, Constant value is: {}", jobName, conditionsInputFile,
+                        inputFile1, inputFile2, constantValue);
+                JobParameters jobParameters = createJobParams(jobName, conditionsInputFile, inputFile1, inputFile2, constantValue, type.getFileExtension());
                 executeJob(type, jobParameters);
             } else {
                 containsArgument(args.containsOption(Constants.INPUT_FILE), Constants.ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETER);
@@ -130,7 +137,7 @@ public class BatchConfig implements ApplicationRunner {
         return params;
     }
 
-    private JobParameters createJobParams(String jobName, String inputFile1, String inputFile2, int constantValue, String fileExtension) {
+    private JobParameters createJobParams(String jobName, String conditionsInputFile, String inputFile1, String inputFile2, int constantValue, String fileExtension) {
         File input1 = ParserUtils.checkingInputFileValidity(inputFile1);
         File input2 = ParserUtils.checkingInputFileValidity(inputFile2);
 
@@ -143,6 +150,7 @@ public class BatchConfig implements ApplicationRunner {
         JobParameters params = new JobParametersBuilder()
                 .addString(Constants.JOB_NAME, jobName)
                 .addString(Constants.INPUT_FILE1, inputFile1)
+                .addString(Constants.PRE_AND_POST_CONDITION_INPUT_FILE, conditionsInputFile)
                 .addString(Constants.INPUT_FILE2, inputFile2)
                 .addLong(Constants.CONSTANT_VALUE, (long) constantValue)
                 .addString(Constants.OUTPUT_FILE, outputPath)
@@ -167,7 +175,8 @@ public class BatchConfig implements ApplicationRunner {
                     jobLauncher.run(loadRelDlToKeYmaeraXConversionJob, jobParameters);
             case D_REAL_AST_GENERATION -> jobLauncher.run(loadDRealAstGenerationJob, jobParameters);
             case REL_DL_TO_D_REAL_OUTPUT_CONVERSION -> jobLauncher.run(loadDlToDRealConversionJob, jobParameters);
-            case REL_DL_TWO_FILES_COMBINING -> jobLauncher.run(loadRelDlCombiningTwoFilesJob, jobParameters);
+//            case REL_DL_TWO_FILES_COMBINING -> jobLauncher.run(loadRelDlCombiningTwoFilesJob, jobParameters);
+            case DL_TWO_FILES_COMBINING -> jobLauncher.run(loadDlCombiningTwoFilesJob, jobParameters);
         }
     }
 }
