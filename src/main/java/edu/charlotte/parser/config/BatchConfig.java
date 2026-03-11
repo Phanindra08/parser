@@ -43,7 +43,6 @@ public class BatchConfig implements ApplicationRunner {
             Job loadDlToKeYmaeraXConversionJob,
             Job loadRelDlToKeYmaeraXConversionJob,
             Job loadDlToDRealConversionJob,
-//            Job loadRelDlCombiningTwoFilesJob,
             Job loadDlCombiningTwoFilesJob,
             JobLauncher jobLauncher,
             @Value("${dl-output}") String outputFilePath) {
@@ -53,7 +52,6 @@ public class BatchConfig implements ApplicationRunner {
         this.loadDlToKeYmaeraXConversionJob = loadDlToKeYmaeraXConversionJob;
         this.loadRelDlToKeYmaeraXConversionJob = loadRelDlToKeYmaeraXConversionJob;
         this.loadDlToDRealConversionJob = loadDlToDRealConversionJob;
-//        this.loadRelDlCombiningTwoFilesJob = loadRelDlCombiningTwoFilesJob;
         this.loadDlCombiningTwoFilesJob = loadDlCombiningTwoFilesJob;
 
         this.jobLauncher = jobLauncher;
@@ -137,20 +135,21 @@ public class BatchConfig implements ApplicationRunner {
         return params;
     }
 
-    private JobParameters createJobParams(String jobName, String conditionsInputFile, String inputFile1, String inputFile2, int constantValue, String fileExtension) {
+    private JobParameters createJobParams(String jobName, String conditionsInputFile, String inputFile1, String inputFile2, int constantValue, String outputFilePrefix) {
+        ParserUtils.checkingInputFileValidity(conditionsInputFile);
         File input1 = ParserUtils.checkingInputFileValidity(inputFile1);
         File input2 = ParserUtils.checkingInputFileValidity(inputFile2);
 
         // Use Paths.get for robust path handling and joining.
-        String outputFileName = fileExtension + input1.getName() + "_" + input2.getName();
+        String outputFileName = outputFilePrefix + input1.getName() + "_" + input2.getName();
         String outputPath = Paths.get(this.outputFilePath, outputFileName).toString();
         log.info("Output file set to: {}", outputPath);
 
         // Add a unique run.id parameter to ensure job parameters are always unique which helps in preventing JobInstanceAlreadyCompleteException on subsequent runs with same file.
         JobParameters params = new JobParametersBuilder()
                 .addString(Constants.JOB_NAME, jobName)
-                .addString(Constants.INPUT_FILE1, inputFile1)
                 .addString(Constants.PRE_AND_POST_CONDITION_INPUT_FILE, conditionsInputFile)
+                .addString(Constants.INPUT_FILE1, inputFile1)
                 .addString(Constants.INPUT_FILE2, inputFile2)
                 .addLong(Constants.CONSTANT_VALUE, (long) constantValue)
                 .addString(Constants.OUTPUT_FILE, outputPath)
@@ -175,7 +174,6 @@ public class BatchConfig implements ApplicationRunner {
                     jobLauncher.run(loadRelDlToKeYmaeraXConversionJob, jobParameters);
             case D_REAL_AST_GENERATION -> jobLauncher.run(loadDRealAstGenerationJob, jobParameters);
             case REL_DL_TO_D_REAL_OUTPUT_CONVERSION -> jobLauncher.run(loadDlToDRealConversionJob, jobParameters);
-//            case REL_DL_TWO_FILES_COMBINING -> jobLauncher.run(loadRelDlCombiningTwoFilesJob, jobParameters);
             case DL_TWO_FILES_COMBINING -> jobLauncher.run(loadDlCombiningTwoFilesJob, jobParameters);
         }
     }
