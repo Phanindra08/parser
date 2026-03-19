@@ -25,7 +25,8 @@ public class MultipleInputFileReader {
     public ItemReader<MultipleFileContentDTO> multipleFileReader(
             @Value("#{jobParameters['" + Constants.PRE_AND_POST_CONDITION_INPUT_FILE + "']}") String inputConditionsFile,
             @Value("#{jobParameters['" + Constants.INPUT_FILE1 + "']}") String inputFile1,
-            @Value("#{jobParameters['" + Constants.INPUT_FILE2 + "']}") String inputFile2) {
+            @Value("#{jobParameters['" + Constants.INPUT_FILE2 + "']}") String inputFile2,
+            @Value("#{jobParameters['" + Constants.CONSTANT_VALUE + "']}") int constantValue) {
         Path inputConditionsFilePath = ParserUtils.getFilePath(inputConditionsFile);
         Path inputFilePath1 = ParserUtils.getFilePath(inputFile1);
         Path inputFilePath2 = ParserUtils.getFilePath(inputFile2);
@@ -35,19 +36,21 @@ public class MultipleInputFileReader {
         ParserUtils.checkingInputFileValidity(inputFilePath2);
 
         log.debug("Reading the input files: {}, {}, {}", inputConditionsFile, inputFile1, inputFile2);
-        return new MultipleFileContentReader(inputConditionsFilePath, inputFilePath1, inputFilePath2);
+        return new MultipleFileContentReader(inputConditionsFilePath, inputFilePath1, inputFilePath2, constantValue);
     }
 
     private static class MultipleFileContentReader implements ItemReader<MultipleFileContentDTO> {
         private final Path inputConditionsFilePath;
         private final Path inputFilePath1;
         private final Path inputFilePath2;
+        private final int constantValue;
         private boolean hasFileReadingCompleted;
 
-        public MultipleFileContentReader(Path inputConditionsFilePath, Path inputFilePath1, Path inputFilePath2) {
+        public MultipleFileContentReader(Path inputConditionsFilePath, Path inputFilePath1, Path inputFilePath2, int constantValue) {
             this.inputConditionsFilePath = Objects.requireNonNull(inputConditionsFilePath, "Input file path for MultipleFileContentReader cannot be null.");
             this.inputFilePath1 = Objects.requireNonNull(inputFilePath1, "Input file path for MultipleFileContentReader cannot be null.");
             this.inputFilePath2 = Objects.requireNonNull(inputFilePath2, "Input file path for MultipleFileContentReader cannot be null.");
+            this.constantValue = constantValue;
             this.hasFileReadingCompleted = false;
             log.debug("MultipleFileContentReader initialized for the files: '{}', '{}', '{}'.",
                     inputConditionsFilePath, inputFilePath1, inputFilePath2);
@@ -68,7 +71,7 @@ public class MultipleInputFileReader {
                 hasFileReadingCompleted = true;
                 log.info("Successfully read the contents from the files: {}, {}, {}", inputConditionsFilePath, inputFilePath1, inputFilePath2);
                 log.debug("Content of the files are: {}, {}, {}", contentOfConditionsFile, contentOfFile1, contentOfFile2);
-                return new MultipleFileContentDTO(contentOfConditionsFile, contentOfFile1, contentOfFile2);
+                return new MultipleFileContentDTO(contentOfConditionsFile, contentOfFile1, contentOfFile2, constantValue);
             } catch (IOException e) {
                 log.error("Error reading one of the files {}, {}, {}", inputConditionsFilePath, inputFilePath1, inputFilePath2, e);
                 throw new FileReadingException("Failed to read one of the files: " + inputConditionsFilePath + inputFilePath1 + inputFilePath2, e);
