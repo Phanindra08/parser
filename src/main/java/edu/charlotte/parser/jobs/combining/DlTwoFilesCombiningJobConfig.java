@@ -7,7 +7,6 @@ import edu.charlotte.parser.dto.MultipleFileContentDTO;
 import edu.charlotte.parser.grammars.GenerateAstForDl;
 import edu.charlotte.parser.listeners.common.ExecutionStepListener;
 import edu.charlotte.parser.listeners.common.JobLoggingListener;
-import edu.charlotte.parser.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -29,17 +28,14 @@ public class DlTwoFilesCombiningJobConfig {
     private final PlatformTransactionManager transactionManager;
     private final JobRepository jobRepository;
     private final int chunkSize;
-    private final int constantValue;
 
     public DlTwoFilesCombiningJobConfig(
             PlatformTransactionManager transactionManager,
             JobRepository jobRepository,
-            @Value("${chunk-size:10}") int chunkSize, @Value("#{jobParameters['" + Constants.CONSTANT_VALUE + "']}") int constantValue) {
+            @Value("${chunk-size:10}") int chunkSize) {
         this.transactionManager = transactionManager;
         this.jobRepository = jobRepository;
         this.chunkSize = chunkSize;
-        this.constantValue = constantValue;
-        log.info("The constant value used to combine two DL input file is: {}", this.constantValue);
         log.info("DlTwoFilesCombiningJobConfig is initialized with chunk size: {}", this.chunkSize);
     }
 
@@ -50,7 +46,7 @@ public class DlTwoFilesCombiningJobConfig {
                                                                  GenerateCombinedOutput generateCombinedDlOutput, DlTwoFileCombining dlTwoFileCombining) {
         log.debug("Creating step-scoped dlTwoFilesCombiningProcess bean.");
         return new DlTwoFilesCombiningProcess(generateAstForDlPreConditionInput, generateAstForDlPostConditionInput, generateAstForDlInput1,
-                generateAstForDlInput2, generateCombinedDlOutput, dlTwoFileCombining, this.constantValue);
+                generateAstForDlInput2, generateCombinedDlOutput, dlTwoFileCombining);
     }
 
     @Bean
