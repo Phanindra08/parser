@@ -41,9 +41,10 @@ public class DlToKeYmaeraXConversionJobConfig {
 
     @Bean
     @StepScope
-    public DlToKeYmaeraXConversionProcess dlToKeYmaeraXConversionProcess(GenerateAstForDl generateAstForDl, GenerateKeYmaeraXOutput generateKeYmaeraXOutput,
+    public DlToKeYmaeraXConversionProcess dlToKeYmaeraXConversionProcess(GenerateKeYmaeraXOutput generateKeYmaeraXOutput,
                                                                          DlToKeYmaeraXConverter dlToKeYmaeraXConverter) {
         log.debug("Creating step-scoped DlToKeYmaeraXConversionProcess bean.");
+        GenerateAstForDl generateAstForDl = new GenerateAstForDl();
         return new DlToKeYmaeraXConversionProcess(generateAstForDl, generateKeYmaeraXOutput, dlToKeYmaeraXConverter);
     }
 

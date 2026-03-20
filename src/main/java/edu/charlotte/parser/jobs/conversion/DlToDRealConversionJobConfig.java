@@ -40,10 +40,9 @@ public class DlToDRealConversionJobConfig {
 
     @Bean
     @StepScope
-    public DlToDRealConversionProcess dlToDRealConversionProcess(GenerateAstForDl generateAstForDl,
-                                                                                                           GenerateDRealOutput generateDRealOutput,
-                                                                                                           DlToDRealConverter dlToDRealConverter) {
+    public DlToDRealConversionProcess dlToDRealConversionProcess(GenerateDRealOutput generateDRealOutput, DlToDRealConverter dlToDRealConverter) {
         log.debug("Creating step-scoped dlToDRealConversionProcess bean.");
+        GenerateAstForDl generateAstForDl = new GenerateAstForDl();
         return new DlToDRealConversionProcess(generateAstForDl, generateDRealOutput, dlToDRealConverter);
     }
 
