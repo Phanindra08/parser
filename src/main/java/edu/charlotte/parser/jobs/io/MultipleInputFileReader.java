@@ -26,7 +26,7 @@ public class MultipleInputFileReader {
             @Value("#{jobParameters['" + Constants.PRE_AND_POST_CONDITION_INPUT_FILE + "']}") String inputConditionsFile,
             @Value("#{jobParameters['" + Constants.INPUT_FILE1 + "']}") String inputFile1,
             @Value("#{jobParameters['" + Constants.INPUT_FILE2 + "']}") String inputFile2,
-            @Value("#{jobParameters['" + Constants.CONSTANT_VALUE + "']}") int constantValue) {
+            @Value("#{jobParameters['" + Constants.CONSTANT_VALUE + "']}") float constantValue) {
         Path inputConditionsFilePath = ParserUtils.getFilePath(inputConditionsFile);
         Path inputFilePath1 = ParserUtils.getFilePath(inputFile1);
         Path inputFilePath2 = ParserUtils.getFilePath(inputFile2);
@@ -43,10 +43,10 @@ public class MultipleInputFileReader {
         private final Path inputConditionsFilePath;
         private final Path inputFilePath1;
         private final Path inputFilePath2;
-        private final int constantValue;
+        private final float constantValue;
         private boolean hasFileReadingCompleted;
 
-        public MultipleFileContentReader(Path inputConditionsFilePath, Path inputFilePath1, Path inputFilePath2, int constantValue) {
+        public MultipleFileContentReader(Path inputConditionsFilePath, Path inputFilePath1, Path inputFilePath2, float constantValue) {
             this.inputConditionsFilePath = Objects.requireNonNull(inputConditionsFilePath, "Input file path for MultipleFileContentReader cannot be null.");
             this.inputFilePath1 = Objects.requireNonNull(inputFilePath1, "Input file path for MultipleFileContentReader cannot be null.");
             this.inputFilePath2 = Objects.requireNonNull(inputFilePath2, "Input file path for MultipleFileContentReader cannot be null.");

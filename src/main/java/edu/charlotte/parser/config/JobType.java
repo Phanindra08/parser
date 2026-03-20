@@ -2,8 +2,10 @@ package edu.charlotte.parser.config;
 
 import edu.charlotte.parser.utils.Constants;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
+@Slf4j
 public enum JobType {
     DL_AST_GENERATION(Constants.JOBNAME_DL_AST_GENERATION, Constants.AST_GENERATION_EXTENSION),
     DL_TO_KEYMAERAX_OUTPUT_CONVERSION(Constants.JOBNAME_DL_TO_KEYMAERAX_OUTPUT_CONVERSION, Constants.KEYMAERAX_EXTENSION),
@@ -24,6 +26,7 @@ public enum JobType {
 
     // Helper method to get JobType from the Job Name identifier string
     public static JobType getJobType(String name) {
+        log.info("The job name is {}", name);
         for (JobType type : JobType.values()) {
             if (type.getJobNameIdentifier().equalsIgnoreCase(name))
                 return type;
