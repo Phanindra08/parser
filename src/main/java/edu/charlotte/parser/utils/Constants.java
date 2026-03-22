@@ -16,7 +16,7 @@ public final class Constants {
     public static final String AST_GENERATION_EXTENSION = "_AST.txt";
     public static final String KEYMAERAX_EXTENSION = ".kyx";
     public static final String SMT_EXTENSION = ".smt2";
-    public static final String TWO_FILE_COMBINING_PREFIX = "COMBINING_";
+    public static final String TWO_FILE_COMBINING_PREFIX = "Combining_";
 
     public static final String INPUT_FILE = "input.file";
     public static final String INPUT_FILE1 = "input.file1";
@@ -63,10 +63,13 @@ public final class Constants {
 
     public static final String DL_OPEN_BRACKETS = "(";
     public static final String DL_CLOSE_BRACKETS = ")";
+    public static final String DL_AND_OPERATOR = "&&";
     public static final String DL_BOX_MODALITY_OPENING_BRACKET = "[";
+    public static final String DL_BOX_MODALITY_CLOSING_BRACKET = "]";
     public static final String DL_ANGULAR_MODALITY_OPENING_BRACKET = "<<";
     public static final String DL_ANGULAR_MODALITY_CLOSING_BRACKET = ">>";
     public static final String DL_ASSIGNMENT_OPERATOR = ":=";
+    public static final String DL_COMMA = ",";
     public static final String DL_GREATER_THAN_OPERATOR = ">";
     public static final String DL_LESS_THAN_AND_EQUAL_TO_OPERATOR = "<=";
     public static final String DL_DIFFERENTIAL_EQUATION_ASSIGNMENT_OPERATOR = "=";
@@ -74,7 +77,9 @@ public final class Constants {
     public static final String DL_SEQUENTIAL_COMPOSITION = ";";
     public static final String DL_NOT_EQUAL_OPERATOR = "!=";
     public static final String DL_NOT_OPERATOR = "!";
+    public static final String DL_MULTIPLICATION_OPERATOR = "*";
     public static final String DL_TERNARY_OPERATOR = "?";
+    public static final String DL_IMPLICATION_OPERATOR = "->";
     public static final String DL_IDENTIFIERS_REGEX = "[a-zA-Z][a-zA-Z0-9]*";
     public static final int DL_NOT_FORMULA_SIZE = 4;
 
@@ -100,4 +105,8 @@ public final class Constants {
     public static final String LOG_MESSAGE_FOR_APPENDING_NODE_VALUE_TO_D_REAL_OUTPUT = "Appended the node value '{}' to dReal output.";
     public static final String VERIFICATION_FAILED = "failed";
     public static final String VERIFICATION_FALSE = "false";
+
+    public static final String POST_CONDITION = "Post-Condition:";
+    public static final String EOF = "<EOF>";
+    public static final Character SEMI_COLON = ':';
 }

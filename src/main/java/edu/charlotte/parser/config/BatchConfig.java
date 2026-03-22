@@ -76,7 +76,7 @@ public class BatchConfig implements ApplicationRunner {
                 String conditionsInputFile = args.getOptionValues(Constants.PRE_AND_POST_CONDITION_INPUT_FILE).getFirst();
                 String inputFile1 = args.getOptionValues(Constants.INPUT_FILE1).getFirst();
                 String inputFile2 = args.getOptionValues(Constants.INPUT_FILE2).getFirst();
-                int constantValue = Integer.parseInt(args.getOptionValues(Constants.CONSTANT_VALUE).getFirst());
+                float constantValue = Float.parseFloat(args.getOptionValues(Constants.CONSTANT_VALUE).getFirst());
                 ParserUtils.validateInputFilePathIsNotNull(conditionsInputFile);
                 ParserUtils.validateInputFilePathIsNotNull(inputFile1);
                 ParserUtils.validateInputFilePathIsNotNull(inputFile2);
@@ -135,7 +135,7 @@ public class BatchConfig implements ApplicationRunner {
         return params;
     }
 
-    private JobParameters createJobParams(String jobName, String conditionsInputFile, String inputFile1, String inputFile2, int constantValue, String outputFilePrefix) {
+    private JobParameters createJobParams(String jobName, String conditionsInputFile, String inputFile1, String inputFile2, float constantValue, String outputFilePrefix) {
         ParserUtils.checkingInputFileValidity(conditionsInputFile);
         File input1 = ParserUtils.checkingInputFileValidity(inputFile1);
         File input2 = ParserUtils.checkingInputFileValidity(inputFile2);
