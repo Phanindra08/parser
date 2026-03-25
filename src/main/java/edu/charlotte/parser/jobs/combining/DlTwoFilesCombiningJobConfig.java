@@ -41,12 +41,10 @@ public class DlTwoFilesCombiningJobConfig {
 
     @Bean
     @StepScope
-    public DlTwoFilesCombiningProcess dlTwoFilesCombiningProcess(GenerateAstForDl generateAstForDlPreConditionInput, GenerateAstForDl generateAstForDlPostConditionInput,
-                                                                 GenerateAstForDl generateAstForDlInput1, GenerateAstForDl generateAstForDlInput2,
-                                                                 GenerateCombinedOutput generateCombinedDlOutput, DlTwoFileCombining dlTwoFileCombining) {
+    public DlTwoFilesCombiningProcess dlTwoFilesCombiningProcess(GenerateCombinedOutput generateCombinedDlOutput, DlTwoFileCombining dlTwoFileCombining) {
         log.debug("Creating step-scoped dlTwoFilesCombiningProcess bean.");
-        return new DlTwoFilesCombiningProcess(generateAstForDlPreConditionInput, generateAstForDlPostConditionInput, generateAstForDlInput1,
-                generateAstForDlInput2, generateCombinedDlOutput, dlTwoFileCombining);
+        return new DlTwoFilesCombiningProcess(new GenerateAstForDl(), new GenerateAstForDl(), new GenerateAstForDl(),
+                new GenerateAstForDl(), generateCombinedDlOutput, dlTwoFileCombining);
     }
 
     @Bean
