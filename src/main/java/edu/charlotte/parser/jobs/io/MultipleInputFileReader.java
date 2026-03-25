@@ -64,12 +64,12 @@ public class MultipleInputFileReader {
                 // Read entire file into a single string
                 String contentOfFile1 = Files.readString(this.inputFilePath1);
                 String contentOfFile2 = Files.readString(this.inputFilePath2);
-                String contentOfConstantValueFile = Files.readString(this.constantValuePath);
+                float constantValue = Float.parseFloat(Files.readString(this.constantValuePath));
 
                 hasFileReadingCompleted = true;
                 log.info("Successfully read the contents from the files: {}, {}, {}", this.inputFilePath1, this.inputFilePath2, this.constantValuePath);
-                log.debug("Content of the files are: {}, {}, {}", contentOfFile1, contentOfFile2, contentOfConstantValueFile);
-                return new MultipleFileContentDTO(contentOfFile1, contentOfFile2, contentOfConstantValueFile);
+                log.debug("Content of the files are: {}, {}, {}", contentOfFile1, contentOfFile2, constantValue);
+                return new MultipleFileContentDTO(contentOfFile1, contentOfFile2, constantValue);
             } catch (IOException e) {
                 log.error("Error reading one of the files {}, {}, {}", this.inputFilePath1, this.inputFilePath2, this.constantValuePath, e);
                 throw new FileReadingException("Failed to read one of the files: " + this.inputFilePath1 + this.inputFilePath2 + this.constantValuePath, e);
