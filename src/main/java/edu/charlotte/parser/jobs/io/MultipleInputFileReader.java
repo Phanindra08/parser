@@ -23,37 +23,35 @@ public class MultipleInputFileReader {
     @Bean
     @StepScope
     public ItemReader<MultipleFileContentDTO> multipleFileReader(
-            @Value("#{jobParameters['" + Constants.PRE_AND_POST_CONDITION_INPUT_FILE + "']}") String inputConditionsFile,
             @Value("#{jobParameters['" + Constants.INPUT_FILE1 + "']}") String inputFile1,
             @Value("#{jobParameters['" + Constants.INPUT_FILE2 + "']}") String inputFile2,
-            @Value("#{jobParameters['" + Constants.CONSTANT_VALUE + "']}") float constantValue) {
-        Path inputConditionsFilePath = ParserUtils.getFilePath(inputConditionsFile);
+            @Value("#{jobParameters['" + Constants.CONSTANT_VALUE_FILE + "']}") String constantValueFile) {
         Path inputFilePath1 = ParserUtils.getFilePath(inputFile1);
         Path inputFilePath2 = ParserUtils.getFilePath(inputFile2);
+        Path constantValueFilePath = ParserUtils.getFilePath(constantValueFile);
 
-        ParserUtils.checkingInputFileValidity(inputConditionsFilePath);
         ParserUtils.checkingInputFileValidity(inputFilePath1);
         ParserUtils.checkingInputFileValidity(inputFilePath2);
+        ParserUtils.checkingInputFileValidity(constantValueFilePath);
 
-        log.debug("Reading the input files: {}, {}, {}", inputConditionsFile, inputFile1, inputFile2);
-        return new MultipleFileContentReader(inputConditionsFilePath, inputFilePath1, inputFilePath2, constantValue);
+        log.debug("Reading the input files: {}, {}, {}", inputFile1, inputFile2, constantValueFilePath);
+        return new MultipleFileContentReader(inputFilePath1, inputFilePath2, constantValueFilePath);
     }
 
     private static class MultipleFileContentReader implements ItemReader<MultipleFileContentDTO> {
-        private final Path inputConditionsFilePath;
         private final Path inputFilePath1;
         private final Path inputFilePath2;
-        private final float constantValue;
+        private final Path constantValuePath;
         private boolean hasFileReadingCompleted;
 
-        public MultipleFileContentReader(Path inputConditionsFilePath, Path inputFilePath1, Path inputFilePath2, float constantValue) {
-            this.inputConditionsFilePath = Objects.requireNonNull(inputConditionsFilePath, "Input file path for MultipleFileContentReader cannot be null.");
+        public MultipleFileContentReader(Path inputFilePath1, Path inputFilePath2, Path constantValuePath) {
             this.inputFilePath1 = Objects.requireNonNull(inputFilePath1, "Input file path for MultipleFileContentReader cannot be null.");
             this.inputFilePath2 = Objects.requireNonNull(inputFilePath2, "Input file path for MultipleFileContentReader cannot be null.");
-            this.constantValue = constantValue;
+            this.constantValuePath = constantValuePath;
+
             this.hasFileReadingCompleted = false;
             log.debug("MultipleFileContentReader initialized for the files: '{}', '{}', '{}'.",
-                    inputConditionsFilePath, inputFilePath1, inputFilePath2);
+                    this.inputFilePath1, this.inputFilePath2, this.constantValuePath);
         }
 
         @Override
@@ -64,17 +62,17 @@ public class MultipleInputFileReader {
             }
             try {
                 // Read entire file into a single string
-                String contentOfConditionsFile = Files.readString(inputConditionsFilePath);
-                String contentOfFile1 = Files.readString(inputFilePath1);
-                String contentOfFile2 = Files.readString(inputFilePath2);
+                String contentOfFile1 = Files.readString(this.inputFilePath1);
+                String contentOfFile2 = Files.readString(this.inputFilePath2);
+                String contentOfConstantValueFile = Files.readString(this.constantValuePath);
 
                 hasFileReadingCompleted = true;
-                log.info("Successfully read the contents from the files: {}, {}, {}", inputConditionsFilePath, inputFilePath1, inputFilePath2);
-                log.debug("Content of the files are: {}, {}, {}", contentOfConditionsFile, contentOfFile1, contentOfFile2);
-                return new MultipleFileContentDTO(contentOfConditionsFile, contentOfFile1, contentOfFile2, constantValue);
+                log.info("Successfully read the contents from the files: {}, {}, {}", this.inputFilePath1, this.inputFilePath2, this.constantValuePath);
+                log.debug("Content of the files are: {}, {}, {}", contentOfFile1, contentOfFile2, contentOfConstantValueFile);
+                return new MultipleFileContentDTO(contentOfFile1, contentOfFile2, contentOfConstantValueFile);
             } catch (IOException e) {
-                log.error("Error reading one of the files {}, {}, {}", inputConditionsFilePath, inputFilePath1, inputFilePath2, e);
-                throw new FileReadingException("Failed to read one of the files: " + inputConditionsFilePath + inputFilePath1 + inputFilePath2, e);
+                log.error("Error reading one of the files {}, {}, {}", this.inputFilePath1, this.inputFilePath2, this.constantValuePath, e);
+                throw new FileReadingException("Failed to read one of the files: " + this.inputFilePath1 + this.inputFilePath2 + this.constantValuePath, e);
             }
         }
     }

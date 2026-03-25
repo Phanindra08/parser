@@ -1,3 +1,3 @@
 package edu.charlotte.parser.dto;
 
-public record MultipleFileContentDTO(String conditionsInputFileContent, String firstFileContent, String secondFileContent, float constantValue) {}
+public record MultipleFileContentDTO(String firstFileContent, String secondFileContent, String constantValueContent) {}
