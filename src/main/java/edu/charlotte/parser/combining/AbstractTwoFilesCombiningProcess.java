@@ -50,7 +50,7 @@ public abstract class AbstractTwoFilesCombiningProcess<
     protected abstract AstNode getAstRootFromListener(TListener listener);
 
     protected abstract String performCombiningTwoInputs(AstNode astRootForPreConditionInput, AstNode astRootForPostConditionInput, AstNode astRootForInput1,
-                                                        AstNode astRootForInput2, int constantValue);
+                                                        AstNode astRootForInput2, float constantValue);
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
