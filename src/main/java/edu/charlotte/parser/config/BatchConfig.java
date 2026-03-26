@@ -71,18 +71,17 @@ public class BatchConfig implements ApplicationRunner {
             JobType type = JobType.getJobType(jobName);
 
             if (jobName.equals(Constants.JOBNAME_REL_DL_TWO_FILES_COMBINING) || jobName.equals(Constants.JOBNAME_DL_TWO_FILES_COMBINING)) {
-                containsArgument((args.containsOption(Constants.PRE_AND_POST_CONDITION_INPUT_FILE) && args.containsOption(Constants.INPUT_FILE1) && args.containsOption(Constants.INPUT_FILE2) &&
-                        args.containsOption(Constants.CONSTANT_VALUE)), Constants.ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETERS);
-                String conditionsInputFile = args.getOptionValues(Constants.PRE_AND_POST_CONDITION_INPUT_FILE).getFirst();
+                containsArgument((args.containsOption(Constants.INPUT_FILE1) && args.containsOption(Constants.INPUT_FILE2) &&
+                        args.containsOption(Constants.CONSTANT_VALUE_FILE)), Constants.ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETERS);
                 String inputFile1 = args.getOptionValues(Constants.INPUT_FILE1).getFirst();
                 String inputFile2 = args.getOptionValues(Constants.INPUT_FILE2).getFirst();
-                float constantValue = Float.parseFloat(args.getOptionValues(Constants.CONSTANT_VALUE).getFirst());
-                ParserUtils.validateInputFilePathIsNotNull(conditionsInputFile);
+                String constantValueFile = args.getOptionValues(Constants.CONSTANT_VALUE_FILE).getFirst();
                 ParserUtils.validateInputFilePathIsNotNull(inputFile1);
                 ParserUtils.validateInputFilePathIsNotNull(inputFile2);
-                log.info("Job Name to be parsed: {}, Input Files to be parsed are: {}, {}, {}, Constant value is: {}", jobName, conditionsInputFile,
-                        inputFile1, inputFile2, constantValue);
-                JobParameters jobParameters = createJobParams(jobName, conditionsInputFile, inputFile1, inputFile2, constantValue, type.getFileExtension());
+                ParserUtils.validateInputFilePathIsNotNull(constantValueFile);
+                log.info("Job Name to be parsed: {}, Input Files to be parsed are: {}, {}, {}", jobName,
+                        inputFile1, inputFile2, constantValueFile);
+                JobParameters jobParameters = createJobParams(jobName, inputFile1, inputFile2, constantValueFile, type.getFileExtension());
                 executeJob(type, jobParameters);
             } else {
                 containsArgument(args.containsOption(Constants.INPUT_FILE), Constants.ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETER);
@@ -135,23 +134,22 @@ public class BatchConfig implements ApplicationRunner {
         return params;
     }
 
-    private JobParameters createJobParams(String jobName, String conditionsInputFile, String inputFile1, String inputFile2, float constantValue, String outputFilePrefix) {
-        ParserUtils.checkingInputFileValidity(conditionsInputFile);
+    private JobParameters createJobParams(String jobName, String inputFile1, String inputFile2, String constantValueFile, String fileExtension) {
         File input1 = ParserUtils.checkingInputFileValidity(inputFile1);
         File input2 = ParserUtils.checkingInputFileValidity(inputFile2);
+        ParserUtils.checkingInputFileValidity(constantValueFile);
 
         // Use Paths.get for robust path handling and joining.
-        String outputFileName = outputFilePrefix + input1.getName() + "_" + input2.getName();
+        String outputFileName = input1.getName() + "_" + input2.getName() + fileExtension;
         String outputPath = Paths.get(this.outputFilePath, outputFileName).toString();
         log.info("Output file set to: {}", outputPath);
 
         // Add a unique run.id parameter to ensure job parameters are always unique which helps in preventing JobInstanceAlreadyCompleteException on subsequent runs with same file.
         JobParameters params = new JobParametersBuilder()
                 .addString(Constants.JOB_NAME, jobName)
-                .addString(Constants.PRE_AND_POST_CONDITION_INPUT_FILE, conditionsInputFile)
                 .addString(Constants.INPUT_FILE1, inputFile1)
                 .addString(Constants.INPUT_FILE2, inputFile2)
-                .addLong(Constants.CONSTANT_VALUE, (long) constantValue)
+                .addString(Constants.CONSTANT_VALUE_FILE, constantValueFile)
                 .addString(Constants.OUTPUT_FILE, outputPath)
                 .addLong("run.id", System.currentTimeMillis())
                 .toJobParameters();
