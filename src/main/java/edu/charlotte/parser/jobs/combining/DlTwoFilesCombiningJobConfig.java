@@ -3,6 +3,7 @@ package edu.charlotte.parser.jobs.combining;
 import edu.charlotte.parser.combining.GenerateCombinedOutput;
 import edu.charlotte.parser.combining.dl.DlTwoFileCombining;
 import edu.charlotte.parser.combining.dl.DlTwoFilesCombiningProcess;
+import edu.charlotte.parser.conversions.dl.keymaerax.DlToKeYmaeraXConverter;
 import edu.charlotte.parser.dto.MultipleFileContentDTO;
 import edu.charlotte.parser.grammars.GenerateAstForDl;
 import edu.charlotte.parser.listeners.common.ExecutionStepListener;
@@ -41,10 +42,10 @@ public class DlTwoFilesCombiningJobConfig {
 
     @Bean
     @StepScope
-    public DlTwoFilesCombiningProcess dlTwoFilesCombiningProcess(GenerateCombinedOutput generateCombinedDlOutput, DlTwoFileCombining dlTwoFileCombining) {
+    public DlTwoFilesCombiningProcess dlTwoFilesCombiningProcess(GenerateCombinedOutput generateCombinedDlOutput, DlTwoFileCombining dlTwoFileCombining,
+                                                                 DlToKeYmaeraXConverter dlToKeYmaeraXConverter) {
         log.debug("Creating step-scoped dlTwoFilesCombiningProcess bean.");
-        return new DlTwoFilesCombiningProcess(new GenerateAstForDl(), new GenerateAstForDl(), new GenerateAstForDl(),
-                new GenerateAstForDl(), generateCombinedDlOutput, dlTwoFileCombining);
+        return new DlTwoFilesCombiningProcess(new GenerateAstForDl(), new GenerateAstForDl(), generateCombinedDlOutput, dlTwoFileCombining, dlToKeYmaeraXConverter);
     }
 
     @Bean
@@ -65,12 +66,14 @@ public class DlTwoFilesCombiningJobConfig {
     @Bean
     public Job loadDlCombiningTwoFilesJob(JobRepository jobRepository,
                                           JobLoggingListener jobLoggingListener,
-                                          Step dlCombiningTwoFilesStep) {
+                                          Step dlCombiningTwoFilesStep,
+                                          Step verifyWithKeYMaeraXStep) {
         log.debug("Configuring loadDlCombiningTwoFilesJob.");
         return new JobBuilder("loadDlCombiningTwoFilesJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .listener(jobLoggingListener)
                 .start(dlCombiningTwoFilesStep)
+                .next(verifyWithKeYMaeraXStep)
                 .build();
     }
 }
