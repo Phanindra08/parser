@@ -21,8 +21,7 @@ public final class Constants {
     public static final String INPUT_FILE = "input.file";
     public static final String INPUT_FILE1 = "input.file1";
     public static final String INPUT_FILE2 = "input.file2";
-    public static final String PRE_AND_POST_CONDITION_INPUT_FILE = "input.file.for.conditions";
-    public static final String CONSTANT_VALUE = "constant.value";
+    public static final String CONSTANT_VALUE_FILE = "constant.value";
     public static final String OUTPUT_FILE = "output.file";
     public static final String JOB_NAME = "job.name";
 
@@ -63,16 +62,16 @@ public final class Constants {
 
     public static final String DL_OPEN_BRACKETS = "(";
     public static final String DL_CLOSE_BRACKETS = ")";
+    public static final String DL_OPEN_CURLY_BRACKETS = "{";
+    public static final String DL_CLOSE_CURLY_BRACKETS = "}";
     public static final String DL_AND_OPERATOR = "&&";
     public static final String DL_BOX_MODALITY_OPENING_BRACKET = "[";
-    public static final String DL_BOX_MODALITY_CLOSING_BRACKET = "]";
     public static final String DL_ANGULAR_MODALITY_OPENING_BRACKET = "<<";
     public static final String DL_ANGULAR_MODALITY_CLOSING_BRACKET = ">>";
     public static final String DL_ASSIGNMENT_OPERATOR = ":=";
     public static final String DL_COMMA = ",";
     public static final String DL_GREATER_THAN_OPERATOR = ">";
     public static final String DL_LESS_THAN_AND_EQUAL_TO_OPERATOR = "<=";
-    public static final String DL_DIFFERENTIAL_EQUATION_ASSIGNMENT_OPERATOR = "=";
     public static final String DL_SEMI_COLON = ";";
     public static final String DL_SEQUENTIAL_COMPOSITION = ";";
     public static final String DL_NOT_EQUAL_OPERATOR = "!=";
@@ -106,7 +105,7 @@ public final class Constants {
     public static final String VERIFICATION_FAILED = "failed";
     public static final String VERIFICATION_FALSE = "false";
 
-    public static final String POST_CONDITION = "Post-Condition:";
     public static final String EOF = "<EOF>";
-    public static final Character SEMI_COLON = ':';
+    public static final Character DASH = '\'';
+    public static final String REG_EXP_FOR_NUMBERS_AT_END = "^(.*?)(\\d+)$";
 }
