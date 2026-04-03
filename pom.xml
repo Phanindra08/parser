@@ -104,7 +104,7 @@
                 <version>${maven.jar.plugin.version}</version>
                 <configuration>
                     <excludes>
-                        <exclude>**/*.properties</exclude>
+                        <exclude>**/*.yml</exclude>
                     </excludes>
                 </configuration>
             </plugin>
