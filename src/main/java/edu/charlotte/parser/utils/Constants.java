@@ -4,6 +4,10 @@ public final class Constants {
     private Constants() {
     }
 
+    static {
+        
+    }
+
     public static final String JOBNAME_DL_AST_GENERATION = "DL_AST_GENERATION";
     public static final String JOBNAME_DL_TO_KEYMAERAX_OUTPUT_CONVERSION = "DL_TO_KEYMAERAX_OUTPUT";
     public static final String JOBNAME_REL_DL_AST_GENERATION = "REL_DL_AST_GENERATION";

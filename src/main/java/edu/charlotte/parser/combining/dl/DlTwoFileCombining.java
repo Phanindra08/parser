@@ -114,40 +114,6 @@ public class DlTwoFileCombining {
             formula3.addChildren(childListForFormula3);
             childListForFormula1.add(formula3);
             formula1.addChildren(childListForFormula1);
-//            childListForFormula1.add(new AstNode(Constants.DL_BOX_MODALITY_OPENING_BRACKET));
-//            AstNode astRootForInput1Program = astRootForInput1Formula.getChildren().get(1);
-//            AstNode astRootForInput2Program = astRootForInput2.getChildren().getFirst().getChildren().get(1);
-//            AstNode astRootForInput2DifferentialEquation = astRootForInput2Program.getChildren().get(1);
-//
-//            if (!astRootForInput1Program.getValue().equals(Constants.AST_NODE_DL_PROGRAM_CONTEXT))
-//                throw new InvalidInputException("The Input 1 provided does not contain DL program.");
-//
-//            if (!astRootForInput2Program.getValue().equals(Constants.AST_NODE_DL_PROGRAM_CONTEXT))
-//                throw new InvalidInputException("The Input 2 provided does not contain DL program.");
-//
-//            childListForFormula1.add(astRootForInput1Program);
-//            if (!astRootForInput2DifferentialEquation.getValue().equals(Constants.AST_NODE_DL_DIFFERENTIAL_EQUATION))
-//                throw new InvalidInputException("The Input 2 provided does not contain any Differential Equation in DL program.");
-//
-//            AstNode newBinaryExpressionForInput2 = new AstNode(Constants.AST_NODE_DL_BINARY_EXPRESSION);
-//            newBinaryExpressionForInput2.getChildren().add(new AstNode(Float.toString(constantValue)));
-//            newBinaryExpressionForInput2.getChildren().add(new AstNode(Constants.DL_MULTIPLICATION_OPERATOR));
-//            AstNode astRootForInput2TermWithParentheses = new AstNode(Constants.AST_NODE_DL_TERM_WITH_PARENTHESES);
-//            newBinaryExpressionForInput2.getChildren().add(astRootForInput2TermWithParentheses);
-//            List<AstNode> childrenForTermWithParenthesesForInput2 = astRootForInput2TermWithParentheses.getChildren();
-//            childrenForTermWithParenthesesForInput2.add(new AstNode(Constants.DL_OPEN_BRACKETS));
-//            childrenForTermWithParenthesesForInput2.add(astRootForInput2DifferentialEquation.getChildren().get(2));
-//            childrenForTermWithParenthesesForInput2.add(new AstNode(Constants.DL_CLOSE_BRACKETS));
-//            astRootForInput2DifferentialEquation.getChildren().set(2, newBinaryExpressionForInput2);
-//
-//            astRootForInput1Program.getChildren().add(2, new AstNode(Constants.DL_COMMA));
-//            astRootForInput1Program.getChildren().add(3, astRootForInput2Program.getChildren().get(1));
-//            astRootForInput1Program.getChildren().add(6, new AstNode(Constants.DL_AND_OPERATOR));
-//            astRootForInput1Program.getChildren().add(7, astRootForInput2Program.getChildren().get(3));
-//
-//            childListForFormula1.add(new AstNode(Constants.DL_BOX_MODALITY_CLOSING_BRACKET));
-//            childListForFormula1.add(astRootForPostConditionInput.getChildren().getFirst());
-//            formula1.addChildren(childListForFormula1);
             return root;
         } catch (InvalidInputException e) {
             log.error("{}", e.getMessage());
