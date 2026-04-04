@@ -1,12 +1,14 @@
 package edu.charlotte.parser.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public final class Constants {
     private Constants() {
     }
 
-    static {
-        
-    }
+    public static final Map<String, Integer> NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS = new HashMap<>();
+    public static final Map<String, Integer> DL_SYNTAX_POSITIONS_AFTER_CONVERSION = new HashMap<>();
 
     public static final String JOBNAME_DL_AST_GENERATION = "DL_AST_GENERATION";
     public static final String JOBNAME_DL_TO_KEYMAERAX_OUTPUT_CONVERSION = "DL_TO_KEYMAERAX_OUTPUT";
@@ -68,23 +70,37 @@ public final class Constants {
     public static final String DL_CLOSE_BRACKETS = ")";
     public static final String DL_OPEN_CURLY_BRACKETS = "{";
     public static final String DL_CLOSE_CURLY_BRACKETS = "}";
+    public static final String DL_EQUAL_OPERATOR = "==";
     public static final String DL_AND_OPERATOR = "&&";
+    public static final String DL_OR_OPERATOR = "||";
     public static final String DL_BOX_MODALITY_OPENING_BRACKET = "[";
-    public static final String DL_ANGULAR_MODALITY_OPENING_BRACKET = "<<";
-    public static final String DL_ANGULAR_MODALITY_CLOSING_BRACKET = ">>";
+    public static final String DL_BOX_MODALITY_CLOSING_BRACKET = "]";
+    public static final String DL_DIAMOND_MODALITY_OPENING_BRACKET = "<<";
+    public static final String DL_DIAMOND_MODALITY_CLOSING_BRACKET = ">>";
     public static final String DL_ASSIGNMENT_OPERATOR = ":=";
     public static final String DL_COMMA = ",";
     public static final String DL_GREATER_THAN_OPERATOR = ">";
+    public static final String DL_GREATER_THAN_AND_EQUAL_TO_OPERATOR = ">=";
+    public static final String DL_LESS_THAN_OPERATOR = "<";
     public static final String DL_LESS_THAN_AND_EQUAL_TO_OPERATOR = "<=";
     public static final String DL_SEMI_COLON = ";";
     public static final String DL_SEQUENTIAL_COMPOSITION = ";";
     public static final String DL_NOT_EQUAL_OPERATOR = "!=";
     public static final String DL_NOT_OPERATOR = "!";
     public static final String DL_MULTIPLICATION_OPERATOR = "*";
+    public static final String DL_ADDITION_OPERATOR = "+";
+    public static final String DL_SUBTRACTION_OPERATOR = "-";
+    public static final String DL_DIVISION_OPERATOR = "/";
     public static final String DL_TERNARY_OPERATOR = "?";
     public static final String DL_IMPLICATION_OPERATOR = "->";
+    public static final String DL_BI_IMPLICATION_OPERATOR = "<->";
     public static final String DL_IDENTIFIERS_REGEX = "[a-zA-Z][a-zA-Z0-9]*";
     public static final int DL_NOT_FORMULA_SIZE = 4;
+
+    public static final String DL_OPERATORS_POSITION_WITH_TWO_OPERANDS = "DL_OPERATORS_WITH_TWO_OPERANDS";
+    public static final String DL_PROGRAM_POSITION_IN_MODALITY_OPERATOR = "DL_PROGRAM_POSITION_IN_MODALITY_OPERATOR";
+    public static final String DL_FORMULA_POSITION_IN_MODALITY_OPERATOR = "DL_FORMULA_POSITION_IN_MODALITY_OPERATOR";
+    public static final String DL_FORMULA_POSITION_IN_NOT_OPERATOR = "DL_FORMULA_POSITION_IN_NOT_OPERATOR";
 
     public static final String AST_GENERATION_PROCESS_SUFFIX = " Ast Generation Process";
     public static final String KEYMAERAX_OUTPUT_CONVERSION_SUFFIX = " to KeYmaeraX Output Conversion Process";
@@ -102,6 +118,8 @@ public final class Constants {
     public static final String IMPLICATION_OPERATOR_FOR_D_REAL = "=>";
     public static final String PROGRAM_IN_D_REAL = "Program_In_DReal";
     public static final String FORMULA_IN_D_REAL = "Formula_In_DReal";
+    public static final String D_REAL_OPENING_BRACKET = "(";
+    public static final String D_REAL_CLOSING_BRACKET = ")";
     public static final String TIME = "time";
     public static final String DIFFERENTIAL_EQUATION = "flow_1";
 
@@ -110,6 +128,28 @@ public final class Constants {
     public static final String VERIFICATION_FALSE = "false";
 
     public static final String EOF = "<EOF>";
+    public static final String EMPTY_STRING = "";
+    public static final String NEXT_LINE = "\n";
+    public static final String TAB = "\t";
+    public static final String SPACE = " ";
     public static final Character DASH = '\'';
     public static final String REG_EXP_FOR_NUMBERS_AT_END = "^(.*?)(\\d+)$";
+
+    static {
+        NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.put(Constants.IMPLICATION_OPERATOR_FOR_D_REAL, 3);
+        NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.put(Constants.DL_OPERATORS_POSITION_WITH_TWO_OPERANDS, 3);
+        NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.put(Constants.NOT_FOR_D_REAL, 4);
+        NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.put(Constants.DL_DIAMOND_MODALITY_OPENING_BRACKET, 4);
+        NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.put(Constants.DL_BOX_MODALITY_OPENING_BRACKET, 4);
+
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.NOT_FOR_D_REAL, 0);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_OPERATORS_POSITION_WITH_TWO_OPERANDS, 1);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.IMPLICATION_OPERATOR_FOR_D_REAL, 1);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_DIAMOND_MODALITY_OPENING_BRACKET, 0);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_DIAMOND_MODALITY_CLOSING_BRACKET, 3);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_PROGRAM_POSITION_IN_MODALITY_OPERATOR, 1);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_FORMULA_POSITION_IN_MODALITY_OPERATOR, 3);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_FORMULA_POSITION_IN_NOT_OPERATOR, 2);
+
+    }
 }
