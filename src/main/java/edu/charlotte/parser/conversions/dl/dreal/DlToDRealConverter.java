@@ -13,8 +13,8 @@ import static edu.charlotte.parser.utils.Constants.*;
 @Component
 public class DlToDRealConverter {
     private static final Map<String, String> DL_TO_D_REAL_VALUES_MAPPING = new HashMap<>();
-    private static final List<String> DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION = new ArrayList<>();
-    private static final Map<String, String> DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_CONVERSION = new HashMap<>();
+    private static final List<String> DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION = new ArrayList<>();
+    private static final Map<String, String> DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_INITIAL_CONVERSION = new HashMap<>();
     private final Map<String, Integer> variablesMapping;
     private int numberOfSpaces = 1;
     private boolean isChildOfFirstParentNode = true;
@@ -33,24 +33,24 @@ public class DlToDRealConverter {
         DL_TO_D_REAL_VALUES_MAPPING.put(Constants.EOF, Constants.EMPTY_STRING);
         log.info("DlToDRealConverter static map for operand conversion initialized with {} entries.", DL_TO_D_REAL_VALUES_MAPPING.size());
 
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.EQUAL_OPERATOR_FOR_D_REAL);
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.DL_LESS_THAN_OPERATOR);
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.DL_LESS_THAN_AND_EQUAL_TO_OPERATOR);
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.DL_GREATER_THAN_OPERATOR);
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.DL_GREATER_THAN_AND_EQUAL_TO_OPERATOR);
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.DL_NOT_EQUAL_OPERATOR);
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.AND_FOR_D_REAL);
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.OR_FOR_D_REAL);
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.DL_ADDITION_OPERATOR);
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.DL_SUBTRACTION_OPERATOR);
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.DL_MULTIPLICATION_OPERATOR);
-        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.add(Constants.DL_DIVISION_OPERATOR);
-        log.info("DlToDRealConverter static operators with two operands list initialized with {} entries.", DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.size());
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.EQUAL_OPERATOR_FOR_D_REAL);
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.DL_LESS_THAN_OPERATOR);
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.DL_LESS_THAN_AND_EQUAL_TO_OPERATOR);
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.DL_GREATER_THAN_OPERATOR);
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.DL_GREATER_THAN_AND_EQUAL_TO_OPERATOR);
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.DL_NOT_EQUAL_OPERATOR);
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.AND_FOR_D_REAL);
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.OR_FOR_D_REAL);
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.DL_ADDITION_OPERATOR);
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.DL_SUBTRACTION_OPERATOR);
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.DL_MULTIPLICATION_OPERATOR);
+        DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.add(Constants.DL_DIVISION_OPERATOR);
+        log.info("DlToDRealConverter static operators with two operands list initialized with {} entries.", DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.size());
 
-        DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_CONVERSION.put(Constants.OR_FOR_D_REAL, Constants.AND_FOR_D_REAL);
-        DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_CONVERSION.put(Constants.AND_FOR_D_REAL, Constants.OR_FOR_D_REAL);
-        DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_CONVERSION.put(Constants.IMPLICATION_OPERATOR_FOR_D_REAL, Constants.AND_FOR_D_REAL);
-        log.info("DlToDRealConverter static map for logical operand conversion initialized with {} entries.", DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_CONVERSION.size());
+        DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_INITIAL_CONVERSION.put(Constants.OR_FOR_D_REAL, Constants.AND_FOR_D_REAL);
+        DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_INITIAL_CONVERSION.put(Constants.AND_FOR_D_REAL, Constants.OR_FOR_D_REAL);
+        DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_INITIAL_CONVERSION.put(Constants.IMPLICATION_OPERATOR_FOR_D_REAL, Constants.AND_FOR_D_REAL);
+        log.info("DlToDRealConverter static map for logical operand conversion initialized with {} entries.", DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_INITIAL_CONVERSION.size());
     }
 
     public DlToDRealConverter() {
@@ -100,10 +100,10 @@ public class DlToDRealConverter {
                 childNodes.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.NOT_FOR_D_REAL)).getValue().equals(Constants.NOT_FOR_D_REAL))) {
             this.convertToDRealOutputForNotOperand(dRealOutputBuilder, childNodes);
         } else if (childNodes.size() == NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.get(Constants.DL_OPERATORS_WITH_TWO_OPERANDS_LENGTH) &&
-                DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_CONVERSION.contains(childNodes.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_OPERATORS_POSITION_WITH_TWO_OPERANDS)).getValue()))
+                DL_OPERATORS_WITH_TWO_OPERANDS_AFTER_INITIAL_CONVERSION.contains(childNodes.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_OPERATORS_POSITION_WITH_TWO_OPERANDS)).getValue()))
             this.convertToDRealOutputForTwoOperands(dRealOutputBuilder, childNodes);
         else if (childNodes.size() == NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.get(Constants.LOGICAL_OPERATOR_FOR_DL_LENGTH) &&
-                Constants.IMPLICATION_OPERATOR_FOR_D_REAL.equals(childNodes.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.IMPLICATION_OPERATOR_FOR_D_REAL)).getValue()))
+                Constants.IMPLICATION_OPERATOR_FOR_D_REAL.equals(childNodes.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.LOGICAL_OPERATOR_POSITION_FOR_DL)).getValue()))
             this.convertToDRealOutputForImplicationOperand(dRealOutputBuilder, childNodes);
         else if (childNodes.size() == NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.get(Constants.DL_DIAMOND_MODALITY_LENGTH) &&
                 childNodes.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_DIAMOND_MODALITY_OPENING_BRACKET)).getValue().equals(Constants.DL_DIAMOND_MODALITY_OPENING_BRACKET)) {
@@ -146,7 +146,7 @@ public class DlToDRealConverter {
     }
 
     private void convertToDRealOutputForImplicationOperand(StringBuilder dRealOutputBuilder, List<AstNode> childNodes) {
-        int operatorPosition = DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.IMPLICATION_OPERATOR_FOR_D_REAL);
+        int operatorPosition = DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.LOGICAL_OPERATOR_POSITION_FOR_DL);
         dRealOutputBuilder.append(NEXT_LINE).append(TAB.repeat(Math.max(0, this.numberOfSpaces)));
         this.numberOfSpaces++;
         dRealOutputBuilder.append(D_REAL_OPENING_BRACKET).append(Constants.OR_FOR_D_REAL);
@@ -174,15 +174,23 @@ public class DlToDRealConverter {
         } else
             node = childNodes.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_FORMULA_POSITION_IN_NOT_OPERATOR));
         List<AstNode> childNodesOfOperator = node.getChildren();
-        if (childNodesOfOperator.size() == 3 && DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_CONVERSION.containsKey(childNodesOfOperator.get(1).getValue())) {
-            if (!childNodesOfOperator.get(1).getValue().equals(Constants.IMPLICATION_OPERATOR_FOR_D_REAL))
-                childNodesOfOperator.set(0, formNewAstNode(childNodesOfOperator.get(0)));
-            childNodesOfOperator.get(1).setValue(DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_CONVERSION.get(childNodesOfOperator.get(1).getValue()));
-            childNodesOfOperator.set(2, formNewAstNode(childNodesOfOperator.get(2)));
+        int dlOperatorPositionWithTwoOperands = DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_OPERATORS_POSITION_WITH_TWO_OPERANDS);
+        if (childNodesOfOperator.size() == NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.get(Constants.LOGICAL_OPERATOR_FOR_DL_LENGTH) &&
+                DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_INITIAL_CONVERSION.containsKey(childNodesOfOperator.get(dlOperatorPositionWithTwoOperands).getValue())) {
+            if (!childNodesOfOperator.get(dlOperatorPositionWithTwoOperands).getValue().equals(Constants.IMPLICATION_OPERATOR_FOR_D_REAL))
+                childNodesOfOperator.set(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA1_POSITION),
+                        formNewAstNode(childNodesOfOperator.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA1_POSITION)))); // Try with Implication Operand Method after everything is working fine
+            childNodesOfOperator.get(dlOperatorPositionWithTwoOperands).setValue(
+                    DL_OPERATORS_WITH_NOT_LOGICAL_OPERANDS_AFTER_INITIAL_CONVERSION.get(childNodesOfOperator.get(dlOperatorPositionWithTwoOperands).getValue()));
+            childNodesOfOperator.set(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA2_POSITION),
+                    formNewAstNode(childNodesOfOperator.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA2_POSITION))));
             dRealOutputBuilder.append(this.convertToDRealOutput(node));
-        } else if (childNodesOfOperator.size() == 4 && childNodesOfOperator.get(0).getValue().equals(Constants.NOT_FOR_D_REAL)) {
-            if (childNodesOfOperator.get(2).getChildren().size() == 4 &&
-                    childNodesOfOperator.get(2).getChildren().getFirst().getValue().equals(Constants.DL_BOX_MODALITY_OPENING_BRACKET)) {
+        } else if (childNodesOfOperator.size() == NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.get(Constants.NOT_FOR_D_REAL_LENGTH) &&
+                childNodesOfOperator.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.NOT_FOR_D_REAL)).getValue().equals(Constants.NOT_FOR_D_REAL)) {
+            if (childNodesOfOperator.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_FORMULA_POSITION_IN_NOT_OPERATOR)).getChildren().size() ==
+                    NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.get(Constants.DL_BOX_MODALITY_LENGTH) &&
+                    childNodesOfOperator.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_FORMULA_POSITION_IN_NOT_OPERATOR)).getChildren().
+                            get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_BOX_MODALITY_OPENING_BRACKET)).getValue().equals(Constants.DL_BOX_MODALITY_OPENING_BRACKET)) {
                 dRealOutputBuilder.append(NEXT_LINE).append(TAB.repeat(Math.max(0, this.numberOfSpaces)));
                 this.numberOfSpaces++;
                 dRealOutputBuilder.append(D_REAL_OPENING_BRACKET).append(Constants.NOT_FOR_D_REAL);
@@ -192,8 +200,9 @@ public class DlToDRealConverter {
                     dRealOutputBuilder.append(NEXT_LINE).append(TAB.repeat(Math.max(0, this.numberOfSpaces)));
                 dRealOutputBuilder.append(D_REAL_CLOSING_BRACKET);
             } else
-                dRealOutputBuilder.append(this.convertToDRealOutput(childNodesOfOperator.get(2)));
-        } else if (childNodesOfOperator.size() == 4 && childNodesOfOperator.getFirst().getValue().equals(Constants.DL_BOX_MODALITY_OPENING_BRACKET)) {
+                dRealOutputBuilder.append(this.convertToDRealOutput(childNodesOfOperator.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_FORMULA_POSITION_IN_NOT_OPERATOR))));
+        } else if (childNodesOfOperator.size() == NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.get(Constants.DL_BOX_MODALITY_LENGTH) &&
+                childNodesOfOperator.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_BOX_MODALITY_OPENING_BRACKET)).getValue().equals(Constants.DL_BOX_MODALITY_OPENING_BRACKET)) {
             this.convertToDRealAstNodesForBoxModalityOperator(node);
             dRealOutputBuilder.append(this.convertToDRealOutput(node));
         } else {
@@ -291,11 +300,11 @@ public class DlToDRealConverter {
     }
 
     private void convertToDRealOutputForFormula(AstNode node, Set<String> variablesTransformed, boolean canTheVariableBeTransformed) {
-        if (node.getChildren().get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA1)).getValue().equals(Constants.AST_NODE_DL_FORMULA) ||
-                node.getChildren().get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA2)).getValue().equals(Constants.NOT_FOR_D_REAL)) {
+        if (node.getChildren().get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA1_POSITION)).getValue().equals(Constants.AST_NODE_DL_FORMULA) ||
+                node.getChildren().get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA2_POSITION)).getValue().equals(Constants.NOT_FOR_D_REAL)) {
             if (node.getChildren().size() == NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.get(Constants.LOGICAL_OPERATOR_FOR_DL_LENGTH)) {
-                this.convertToDRealOutputForTernaryOperands(node.getChildren().get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA1)));
-                this.convertToDRealOutputForTernaryOperands(node.getChildren().get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA2)));
+                this.convertToDRealOutputForTernaryOperands(node.getChildren().get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA1_POSITION)));
+                this.convertToDRealOutputForTernaryOperands(node.getChildren().get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_LOGICAL_OPERATOR_FORMULA2_POSITION)));
             } else if (node.getChildren().size() == NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.get(Constants.NOT_FOR_D_REAL_LENGTH))
                 this.convertToDRealOutputForTernaryOperands(node.getChildren().get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_FORMULA_POSITION_IN_NOT_OPERATOR)));
         } else {
@@ -306,30 +315,47 @@ public class DlToDRealConverter {
 
     private void convertToDRealOutputForDifferentialEquation(List<AstNode> programNodes, List<AstNode> childNodes) {
         Set<String> variablesTransformed = new HashSet<>();
-        this.convertToDRealOutputForFormula(childNodes.get(childNodes.size() - DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
+        int sizeOfChildNodes = childNodes.size();
+        this.convertToDRealOutputForFormula(childNodes.get(sizeOfChildNodes - DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
                 Constants.DL_POSITION_OF_FORMULA_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST)), variablesTransformed, false);
-        programNodes.add(childNodes.get(childNodes.size() - DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
+        programNodes.add(childNodes.get(sizeOfChildNodes - DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
                 Constants.DL_POSITION_OF_FORMULA_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST)));
+        List<AstNode> childNodesForDifferentialEquation;
+        StringBuilder finalDRealValue = new StringBuilder(Constants.OPEN_SQUARE_BRACKETS);
+        StringBuilder integrationValue = new StringBuilder(Constants.START_VALUE_FOR_INTEGRATION);
+        differentialEquation.append(Constants.DEFINING_DIFFERENTIAL_EQUATION_START).append(FLOW).append(SPACE).append(Constants.OPEN_BRACKETS);
 
-        int differentialEquationStartPosition = DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_START_POSITION_OF_DIFFERENTIAL_EQUATION_IN_PROGRAM);
-        String differentialEquationVariable = childNodes.get(1).getValue().substring(0, childNodes.get(1).getValue().length() - 1);
+        for (int differentialEquationPosition = DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_START_POSITION_OF_DIFFERENTIAL_EQUATION_IN_PROGRAM);
+             differentialEquationPosition < sizeOfChildNodes - DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
+                     Constants.DL_POSITION_OF_AND_OPERATOR_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST) &&
+                     childNodes.get(differentialEquationPosition).getValue().equals(Constants.AST_NODE_DL_DIFFERENTIAL_EQUATION); differentialEquationPosition += 2) {
+            childNodesForDifferentialEquation = childNodes.get(differentialEquationPosition).getChildren();
+            int identifierPositionForDifferentialEquationInProgram = DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
+                    Constants.DL_IDENTIFIER_POSITION_FOR_DIFFERENTIAL_EQUATION_IN_PROGRAM);
+            String differentialEquationVariable = childNodesForDifferentialEquation.get(identifierPositionForDifferentialEquationInProgram).getValue().
+                    substring(0, childNodesForDifferentialEquation.get(identifierPositionForDifferentialEquationInProgram).getValue().length() - 1);
+
+            childNodesForDifferentialEquation.get(identifierPositionForDifferentialEquationInProgram).setValue(differentialEquationVariable);
+            this.transformVariables(childNodesForDifferentialEquation.get(identifierPositionForDifferentialEquationInProgram), variablesTransformed, true);
+            finalDRealValue.append(childNodesForDifferentialEquation.get(identifierPositionForDifferentialEquationInProgram).getValue());
+            integrationValue.append(differentialEquationVariable).append(this.variablesMapping.get(differentialEquationVariable) - 1);
+
+            this.transformVariables(childNodesForDifferentialEquation.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
+                    Constants.DL_TERM_POSITION_FOR_DIFFERENTIAL_EQUATION_IN_PROGRAM)), variablesTransformed, false);
+            differentialEquation.append(Constants.DIFFERENTIAL_EQUATION).append(differentialEquationVariable).append(Constants.CLOSE_SQUARE_BRACKETS)
+                    .append(SPACE).append(childNodesForDifferentialEquation.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
+                            Constants.DL_TERM_POSITION_FOR_DIFFERENTIAL_EQUATION_IN_PROGRAM)).getValue()).append(Constants.CLOSE_BRACKETS).append(NEXT_LINE);
+            this.identifiers.add(differentialEquationVariable);
+        }
+        finalDRealValue.append(CLOSE_SQUARE_BRACKETS);
         AstNode node = new AstNode(Constants.PROGRAM_IN_D_REAL);
-        AstNode firstChildNode = new AstNode(differentialEquationVariable);
-        this.transformVariables(firstChildNode, variablesTransformed, true);
-        firstChildNode.setValue("[" + firstChildNode.getValue() + "]");
-        node.getChildren().add(firstChildNode);
+        node.getChildren().add(new AstNode(finalDRealValue.toString()));
         node.getChildren().add(new AstNode(Constants.EQUAL_OPERATOR_FOR_D_REAL));
-        String integrationValue = "(integral 0. " + Constants.TIME +
-                " [" + differentialEquationVariable +
-                (this.variablesMapping.get(differentialEquationVariable) - 1) + "] " + Constants.DIFFERENTIAL_EQUATION + D_REAL_CLOSING_BRACKET;
-        node.getChildren().add(new AstNode(integrationValue));
+        integrationValue.append(CLOSE_SQUARE_BRACKETS).append(SPACE).append(Constants.FLOW).append(D_REAL_CLOSING_BRACKET);
+        node.getChildren().add(new AstNode(integrationValue.toString()));
         programNodes.add(node);
 
-        this.transformVariables(childNodes.get(3), variablesTransformed, false);
-        differentialEquation.append("(define-ode ").append(Constants.DIFFERENTIAL_EQUATION)
-                .append(" (\n\t(= d/dt[").append(differentialEquationVariable).append("] ")
-                .append(childNodes.get(3).getValue()).append(")\n))\n\n");
-        this.identifiers.add(differentialEquationVariable);
+        differentialEquation.append(Constants.DEFINING_DIFFERENTIAL_EQUATION_END);
     }
 
     private StringBuilder transformVariables(AstNode node, Set<String> variablesTransformed,

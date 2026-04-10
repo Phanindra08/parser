@@ -104,17 +104,18 @@ public final class Constants {
     public static final String DL_ASSIGNMENT_OPERATOR_TERM = "DLAssignmentOperatorTerm";
     public static final String DL_COMPARISON_OPERATOR_TERM1 = "DLComparisonOperatorTerm1";
     public static final String DL_COMPARISON_OPERATOR_TERM2 = "DLComparisonOperatorTerm2";
-    public static final String DL_LOGICAL_OPERATOR_FORMULA1 = "DLLogicalOperatorFormula1";
-    public static final String DL_LOGICAL_OPERATOR_FORMULA2 = "DLLogicalOperatorFormula2";
+    public static final String DL_LOGICAL_OPERATOR_FORMULA1_POSITION = "DLLogicalOperatorFormula1";
+    public static final String DL_LOGICAL_OPERATOR_FORMULA2_POSITION = "DLLogicalOperatorFormula2";
     public static final String DL_START_POSITION_OF_DIFFERENTIAL_EQUATION_IN_PROGRAM = "DLDifferentialEquationStartPositionInProgram";
     public static final String DL_POSITION_OF_AND_OPERATOR_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST = "DLAndOperatorInDifferentialEquationProgramFromLast";
-    public static final String DL_POSITION_OF_FORMULA_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST = "DFormulaInDifferentialEquationProgramFromLast";
-
-    public static final String DL_OPERATORS_POSITION_WITH_TWO_OPERANDS = "DL_OPERATORS_WITH_TWO_OPERANDS";
-    public static final String DL_PROGRAM_POSITION_IN_MODALITY_OPERATOR = "DL_PROGRAM_POSITION_IN_MODALITY_OPERATOR";
-    public static final String DL_FORMULA_POSITION_IN_MODALITY_OPERATOR = "DL_FORMULA_POSITION_IN_MODALITY_OPERATOR";
-    public static final String DL_FORMULA_POSITION_IN_NOT_OPERATOR = "DL_FORMULA_POSITION_IN_NOT_OPERATOR";
-
+    public static final String DL_POSITION_OF_FORMULA_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST = "DLFormulaInDifferentialEquationProgramFromLast";
+    public static final String DL_IDENTIFIER_POSITION_FOR_DIFFERENTIAL_EQUATION_IN_PROGRAM = "DLIdentifierPositionForDifferentialEquationInProgram";
+    public static final String DL_TERM_POSITION_FOR_DIFFERENTIAL_EQUATION_IN_PROGRAM = "DLTermPositionForDifferentialEquationInProgram";
+    public static final String DL_OPERATORS_POSITION_WITH_TWO_OPERANDS = "DLOperatorPositionWithTwoOperands";
+    public static final String LOGICAL_OPERATOR_POSITION_FOR_DL = "DLOperatorPositionWithLogicalOperand";
+    public static final String DL_PROGRAM_POSITION_IN_MODALITY_OPERATOR = "DLProgramPositionInModalityOperator";
+    public static final String DL_FORMULA_POSITION_IN_MODALITY_OPERATOR = "DLFormulaPositionInModalityOperator";
+    public static final String DL_FORMULA_POSITION_IN_NOT_OPERATOR = "DLFormulaPositionInNotOperator";
     public static final String AST_GENERATION_PROCESS_SUFFIX = " Ast Generation Process";
     public static final String KEYMAERAX_OUTPUT_CONVERSION_SUFFIX = " to KeYmaeraX Output Conversion Process";
     public static final String MESSAGE_TO_COMBINE_TWO_INPUTS = "Combining two %s inputs into a single file";
@@ -134,7 +135,11 @@ public final class Constants {
     public static final String D_REAL_OPENING_BRACKET = "(";
     public static final String D_REAL_CLOSING_BRACKET = ")";
     public static final String TIME = "time";
-    public static final String DIFFERENTIAL_EQUATION = "flow_1";
+    public static final String DEFINING_DIFFERENTIAL_EQUATION_START = "(define-ode ";
+    public static final String FLOW = "flow_1";
+    public static final String DEFINING_DIFFERENTIAL_EQUATION_END = "))\n\n";
+    public static final String DIFFERENTIAL_EQUATION = "\n\t(= d/dt[";
+    public static final String START_VALUE_FOR_INTEGRATION = "(integral 0. time [";
 
     public static final String LOGICAL_OPERATOR_FOR_DL_LENGTH = "Length of dReal with Logical Operator";
     public static final String DL_OPERATORS_WITH_TWO_OPERANDS_LENGTH = "Length of DL Program with two Operands";
@@ -153,7 +158,12 @@ public final class Constants {
     public static final String TAB = "\t";
     public static final String SPACE = " ";
     public static final Character DASH = '\'';
+    public static final String OPEN_SQUARE_BRACKETS = "[";
+    public static final String CLOSE_SQUARE_BRACKETS = "]";
+    public static final String CLOSE_BRACKETS = ")";
+    public static final String OPEN_BRACKETS = "(";
     public static final String REG_EXP_FOR_NUMBERS_AT_END = "^(.*?)(\\d+)$";
+
 
     static {
         NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.put(Constants.LOGICAL_OPERATOR_FOR_DL_LENGTH, 3);
@@ -166,9 +176,9 @@ public final class Constants {
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.NOT_FOR_D_REAL, 0);
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_FORMULA_POSITION_IN_NOT_OPERATOR, 2);
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_OPERATORS_POSITION_WITH_TWO_OPERANDS, 1);
-        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_LOGICAL_OPERATOR_FORMULA1, 0);
-        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_LOGICAL_OPERATOR_FORMULA2, 2);
-        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.IMPLICATION_OPERATOR_FOR_D_REAL, 1);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_LOGICAL_OPERATOR_FORMULA1_POSITION, 0);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_LOGICAL_OPERATOR_FORMULA2_POSITION, 2);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.LOGICAL_OPERATOR_POSITION_FOR_DL, 1);
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_BOX_MODALITY_OPENING_BRACKET, 0);
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_BOX_MODALITY_CLOSING_BRACKET, 2);
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_DIAMOND_MODALITY_OPENING_BRACKET, 0);
@@ -184,6 +194,8 @@ public final class Constants {
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_START_POSITION_OF_DIFFERENTIAL_EQUATION_IN_PROGRAM, 1);
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_POSITION_OF_AND_OPERATOR_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST, 3);
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_POSITION_OF_FORMULA_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST, 2);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_IDENTIFIER_POSITION_FOR_DIFFERENTIAL_EQUATION_IN_PROGRAM, 0);
+        DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_TERM_POSITION_FOR_DIFFERENTIAL_EQUATION_IN_PROGRAM, 2);
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_ASSIGNMENT_OPERATOR_IDENTIFIER, 0);
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_ASSIGNMENT_OPERATOR_TERM, 2);
         DL_SYNTAX_POSITIONS_AFTER_CONVERSION.put(Constants.DL_COMPARISON_OPERATOR_TERM1, 0);
