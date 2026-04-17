@@ -180,7 +180,7 @@ public class BatchConfig implements ApplicationRunner {
         JobParameters params = new JobParametersBuilder()
                 .addString(Constants.JOB_NAME, jobName)
                 .addString(Constants.INPUT_FILE1, inputFile1)
-                .addString(Constants.CONSTANT_VALUE_FILE, integrationUpperLimitFile)
+                .addString(Constants.INTEGRATION_UPPER_LIMIT_FILE, integrationUpperLimitFile)
                 .addString(Constants.OUTPUT_FILE, outputPath)
                 .addLong("run.id", System.currentTimeMillis())
                 .toJobParameters();
@@ -199,10 +199,9 @@ public class BatchConfig implements ApplicationRunner {
             case DL_AST_GENERATION -> jobLauncher.run(loadDlAstGenerationJob, jobParameters);
             case DL_TO_KEYMAERAX_OUTPUT_CONVERSION -> jobLauncher.run(loadDlToKeYmaeraXConversionJob, jobParameters);
             case REL_DL_AST_GENERATION -> jobLauncher.run(loadRelDlAstGenerationJob, jobParameters);
-            case REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION ->
-                    jobLauncher.run(loadRelDlToKeYmaeraXConversionJob, jobParameters);
+            case REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION -> jobLauncher.run(loadRelDlToKeYmaeraXConversionJob, jobParameters);
             case D_REAL_AST_GENERATION -> jobLauncher.run(loadDRealAstGenerationJob, jobParameters);
-            case REL_DL_TO_D_REAL_OUTPUT_CONVERSION -> jobLauncher.run(loadDlToDRealConversionJob, jobParameters);
+            case DL_TO_D_REAL_OUTPUT_CONVERSION -> jobLauncher.run(loadDlToDRealConversionJob, jobParameters);
             case DL_TWO_FILES_COMBINING -> jobLauncher.run(loadDlCombiningTwoFilesJob, jobParameters);
         }
     }
