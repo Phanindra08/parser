@@ -84,13 +84,16 @@ public class BatchConfig implements ApplicationRunner {
                 JobParameters jobParameters = createJobParams(jobName, inputFile1, inputFile2, constantValueFile, type.getFileExtension());
                 executeJob(type, jobParameters);
             } else if (jobName.equals(Constants.JOBNAME_DL_TO_D_REAL_OUTPUT_CONVERSION)) {
-                containsArgument((args.containsOption(Constants.INPUT_FILE) && args.containsOption(Constants.INTEGRATION_UPPER_LIMIT_FILE)),
+                containsArgument(args.containsOption(Constants.INPUT_FILE),
                         Constants.ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETER_FOR_DL_TO_DREAL_CONVERSION);
                 String inputFile = args.getOptionValues(Constants.INPUT_FILE).getFirst();
-                String integrationUpperLimitFile = args.getOptionValues(Constants.INTEGRATION_UPPER_LIMIT_FILE).getFirst();
                 ParserUtils.validateInputFilePathIsNotNull(inputFile);
-                ParserUtils.validateInputFilePathIsNotNull(integrationUpperLimitFile);
-                log.info("Job Name to be parsed: {}, Input File to be parsed: {}, {}", jobName, inputFile, integrationUpperLimitFile);
+                String integrationUpperLimitFile = null;
+                if (args.containsOption(Constants.INTEGRATION_UPPER_LIMIT_FILE)) {
+                    integrationUpperLimitFile = args.getOptionValues(Constants.INTEGRATION_UPPER_LIMIT_FILE).getFirst();
+                    ParserUtils.validateInputFilePathIsNotNull(integrationUpperLimitFile);
+                }
+                log.info("Job Name to be parsed: {}, Input Files to be parsed are: {}, {}", jobName, inputFile, integrationUpperLimitFile);
                 JobParameters jobParameters = createJobParams(jobName, inputFile, integrationUpperLimitFile, type.getFileExtension());
                 executeJob(type, jobParameters);
             } else {
@@ -167,23 +170,27 @@ public class BatchConfig implements ApplicationRunner {
         return params;
     }
 
-    private JobParameters createJobParams(String jobName, String inputFile1, String integrationUpperLimitFile, String fileExtension) {
-        File input1 = ParserUtils.checkingInputFileValidity(inputFile1);
-        ParserUtils.checkingInputFileValidity(integrationUpperLimitFile);
+    private JobParameters createJobParams(String jobName, String inputFile, String integrationUpperLimitFile, String fileExtension) {
+        File inputFileAfterValidation = ParserUtils.checkingInputFileValidity(inputFile);
 
         // Use Paths.get for robust path handling and joining.
-        String outputFileName = input1.getName() + fileExtension;
+        String outputFileName = inputFileAfterValidation.getName() + fileExtension;
         String outputPath = Paths.get(this.outputFilePath, outputFileName).toString();
         log.info("Output file set to: {}", outputPath);
 
         // Add a unique run.id parameter to ensure job parameters are always unique which helps in preventing JobInstanceAlreadyCompleteException on subsequent runs with same file.
-        JobParameters params = new JobParametersBuilder()
+        JobParametersBuilder jobParametersBuilder = new JobParametersBuilder()
                 .addString(Constants.JOB_NAME, jobName)
-                .addString(Constants.INPUT_FILE1, inputFile1)
-                .addString(Constants.INTEGRATION_UPPER_LIMIT_FILE, integrationUpperLimitFile)
+                .addString(Constants.INPUT_FILE, inputFile)
                 .addString(Constants.OUTPUT_FILE, outputPath)
-                .addLong("run.id", System.currentTimeMillis())
-                .toJobParameters();
+                .addLong("run.id", System.currentTimeMillis());
+
+        if (integrationUpperLimitFile != null && !integrationUpperLimitFile.trim().isEmpty()) {
+            ParserUtils.checkingInputFileValidity(integrationUpperLimitFile);
+            jobParametersBuilder.addString(Constants.INTEGRATION_UPPER_LIMIT_FILE, integrationUpperLimitFile);
+        }
+
+        JobParameters params = jobParametersBuilder.toJobParameters();
         log.debug("Job Parameters created: {}", params);
         return params;
     }
@@ -199,7 +206,8 @@ public class BatchConfig implements ApplicationRunner {
             case DL_AST_GENERATION -> jobLauncher.run(loadDlAstGenerationJob, jobParameters);
             case DL_TO_KEYMAERAX_OUTPUT_CONVERSION -> jobLauncher.run(loadDlToKeYmaeraXConversionJob, jobParameters);
             case REL_DL_AST_GENERATION -> jobLauncher.run(loadRelDlAstGenerationJob, jobParameters);
-            case REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION -> jobLauncher.run(loadRelDlToKeYmaeraXConversionJob, jobParameters);
+            case REL_DL_TO_KEYMAERAX_OUTPUT_CONVERSION ->
+                    jobLauncher.run(loadRelDlToKeYmaeraXConversionJob, jobParameters);
             case D_REAL_AST_GENERATION -> jobLauncher.run(loadDRealAstGenerationJob, jobParameters);
             case DL_TO_D_REAL_OUTPUT_CONVERSION -> jobLauncher.run(loadDlToDRealConversionJob, jobParameters);
             case DL_TWO_FILES_COMBINING -> jobLauncher.run(loadDlCombiningTwoFilesJob, jobParameters);
