@@ -34,7 +34,7 @@ public class MultipleInputFileReader {
         ParserUtils.checkingInputFileValidity(inputFilePath2);
         ParserUtils.checkingInputFileValidity(constantValueFilePath);
 
-        log.debug("Reading the input files: {}, {}, {}", inputFile1, inputFile2, constantValueFilePath);
+        log.debug("Reading the input files: '{}', '{}', '{}'", inputFile1, inputFile2, constantValueFilePath);
         return new MultipleFileContentReader(inputFilePath1, inputFilePath2, constantValueFilePath);
     }
 
@@ -57,7 +57,7 @@ public class MultipleInputFileReader {
         @Override
         public MultipleFileContentDTO read() {
             if (hasFileReadingCompleted) {
-                log.debug("Content of the input file is already read.");
+                log.debug("Content of the input files and constant file are already read.");
                 return null; // Return null to indicate no more items
             }
             try {
@@ -67,12 +67,13 @@ public class MultipleInputFileReader {
                 float constantValue = Float.parseFloat(Files.readString(this.constantValuePath));
 
                 hasFileReadingCompleted = true;
-                log.info("Successfully read the contents from the files: {}, {}, {}", this.inputFilePath1, this.inputFilePath2, this.constantValuePath);
-                log.debug("Content of the files are: {}, {}, {}", contentOfFile1, contentOfFile2, constantValue);
+                log.info("Successfully read the contents from the files: '{}', '{}', '{}'", this.inputFilePath1, this.inputFilePath2, this.constantValuePath);
+                log.debug("Content of the files are: '{}', '{}', '{}'", contentOfFile1, contentOfFile2, constantValue);
                 return new MultipleFileContentDTO(contentOfFile1, contentOfFile2, constantValue);
             } catch (IOException e) {
                 log.error("Error reading one of the files {}, {}, {}", this.inputFilePath1, this.inputFilePath2, this.constantValuePath, e);
-                throw new FileReadingException("Failed to read one of the files: " + this.inputFilePath1 + this.inputFilePath2 + this.constantValuePath, e);
+                throw new FileReadingException("Failed to read one of the files: " + this.inputFilePath1 + ", " + this.inputFilePath2 + ", "
+                        + this.constantValuePath, e);
             }
         }
     }

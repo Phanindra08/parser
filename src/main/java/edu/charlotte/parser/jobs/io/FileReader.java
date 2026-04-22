@@ -24,7 +24,7 @@ public class FileReader {
     public SingleFileContentReader inputFileReader(@Value("#{jobParameters['" + Constants.INPUT_FILE + "']}") String inputFile) {
         Path inputFilePath = ParserUtils.getFilePath(inputFile);
         ParserUtils.checkingInputFileValidity(inputFilePath);
-        log.debug("Reading the input file: {}", inputFile);
+        log.debug("Reading the input file: '{}'", inputFile);
         return new SingleFileContentReader(inputFilePath);
     }
 
@@ -49,10 +49,10 @@ public class FileReader {
                 String content = Files.readString(inputFilePath);
                 hasFileReadingCompleted = true;
                 log.info("Successfully read the contents from the file: {}", inputFilePath);
-                log.debug("Content of the file: {}", content);
+                log.debug("Content of the file: '{}'", content);
                 return content;
             } catch (IOException e) {
-                log.error("Error reading the file: {}", inputFilePath, e);
+                log.error("Error reading the file: '{}'", inputFilePath, e);
                 throw new FileReadingException("Failed to read the file: " + inputFilePath, e);
             }
         }
