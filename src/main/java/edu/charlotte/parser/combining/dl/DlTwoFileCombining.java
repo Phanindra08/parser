@@ -167,10 +167,5 @@ public class DlTwoFileCombining {
         AstNode astRoot = combineNodeValues(astRootForInput1, astRootForInput2, constantValue, identifiersConversionMappingForInput2);
         log.debug("DL AST node values are combined into one DL AST.");
         return astRoot;
-
-//        StringBuilder combinedDLProgram = new StringBuilder();
-//        appendCombinedDlOutput(astRoot, combinedDLProgram);
-//        log.info("Combined DL output string is generated.");
-//        return combinedDLProgram.toString().trim();
     }
 }

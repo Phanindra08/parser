@@ -66,7 +66,7 @@ public abstract class AbstractTwoFilesCombiningProcess<
 
     @Override
     public String process(@NonNull MultipleFileContentDTO multipleFileContentDTO) {
-        log.debug("Processing the input item for '{}': {}, {}.", this.getDisplayName(), ParserUtils.formatInputForLogging(multipleFileContentDTO.firstFileContent()),
+        log.debug("Processing the input item for '{}': '{}', '{}'.", this.getDisplayName(), ParserUtils.formatInputForLogging(multipleFileContentDTO.firstFileContent()),
                 ParserUtils.formatInputForLogging(multipleFileContentDTO.secondFileContent()));
         try {
             String errorMessageForInput1 = this.astGeneratorForInput1.generateAstFromInput(multipleFileContentDTO.firstFileContent());
