@@ -12,7 +12,9 @@ import java.nio.file.Paths;
 public final class ParserUtils {
 
     private static final int DEFAULT_TRUNCATION_LENGTH = 50;
-    private ParserUtils() {}
+
+    private ParserUtils() {
+    }
 
     public static String formatInputForLogging(String input, int maxLength) {
         if (input == null)
@@ -69,12 +71,25 @@ public final class ParserUtils {
     }
 
     public static boolean checkingArrayInputIsNotEmpty(String[] inputs, int length) {
-        if(inputs.length < length)
+        if (inputs.length < length)
             return false;
-        for(String input: inputs) {
-            if(input == null || input.isEmpty())
+        for (String input : inputs) {
+            if (input == null || input.isEmpty())
                 return false;
         }
         return true;
+    }
+
+    public static void validateNumericValue(String value, String fieldName) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("Integration upper limit file is empty.");
+        }
+
+        try {
+            Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            log.error("Invalid {}. Expected a numeric value but found: '{}'.", fieldName, value);
+            throw new IllegalArgumentException("Invalid integration upper limit. Expected a numeric value but found: " + value, e);
+        }
     }
 }

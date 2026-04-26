@@ -3,6 +3,7 @@ package edu.charlotte.parser.jobs.conversion;
 import edu.charlotte.parser.conversions.common.GenerateDRealOutput;
 import edu.charlotte.parser.conversions.dl.dreal.DlToDRealConversionProcess;
 import edu.charlotte.parser.conversions.dl.dreal.DlToDRealConverter;
+import edu.charlotte.parser.dto.DlToDRealFileContentDTO;
 import edu.charlotte.parser.grammars.GenerateAstForDl;
 import edu.charlotte.parser.listeners.common.JobLoggingListener;
 import lombok.extern.slf4j.Slf4j;
@@ -46,13 +47,13 @@ public class DlToDRealConversionJobConfig {
     }
 
     @Bean
-    public Step dlToDRealConversionStep(ItemReader<String> inputFileReader,
+    public Step dlToDRealConversionStep(ItemReader<DlToDRealFileContentDTO> dlToDRealFileReader,
                                         DlToDRealConversionProcess dlToDRealConversionProcess,
                                         FlatFileItemWriter<String> outputFileWriter) {
         log.info("Configuring dlToDRealConversionStep with chunk size: {}", this.chunkSize);
         return new StepBuilder("dlToDRealConversionStep", jobRepository)
-                .<String, String>chunk(chunkSize, transactionManager)
-                .reader(inputFileReader)
+                .<DlToDRealFileContentDTO, String>chunk(chunkSize, transactionManager)
+                .reader(dlToDRealFileReader)
                 .processor(dlToDRealConversionProcess)
                 .writer(outputFileWriter)
                 .build();
@@ -61,12 +62,14 @@ public class DlToDRealConversionJobConfig {
     @Bean
     public Job loadDlToDRealConversionJob(JobRepository jobRepository,
                                           JobLoggingListener jobLoggingListener,
-                                          Step dlToDRealConversionStep) {
+                                          Step dlToDRealConversionStep,
+                                          Step verifyWithDRealStep) {
         log.debug("Configuring loadDlToDRealConversionJob.");
         return new JobBuilder("loadDlToDRealConversionJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .listener(jobLoggingListener)
                 .start(dlToDRealConversionStep)
+                .next(verifyWithDRealStep)
                 .build();
     }
 }
