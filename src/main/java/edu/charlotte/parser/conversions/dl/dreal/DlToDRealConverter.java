@@ -90,15 +90,19 @@ public class DlToDRealConverter {
         StringBuilder dRealOutputBuilder = new StringBuilder();
         List<AstNode> childNodes = node.getChildren();
         if (childNodes.isEmpty() && node.getValue() != null && !node.getValue().trim().isEmpty()) {
-            if (this.variablesMapping.containsKey(node.getValue())) {
+            if (this.variablesMapping.containsKey(node.getValue()))
                 dRealOutputBuilder.append(node.getValue()).append(this.variablesMapping.get(node.getValue()));
-                log.debug(Constants.LOG_MESSAGE_FOR_APPENDING_NODE_VALUE_TO_D_REAL_OUTPUT, node.getValue() + this.variablesMapping.get(node.getValue()));
+            else if (!node.getValue().equals(TIME)) {
+                this.transformVariables(node, new HashSet<>(), false);
+                dRealOutputBuilder.append(node.getValue());
+                if (node.getValue().matches(Constants.DL_IDENTIFIERS_REGEX))
+                    this.identifiers.add(node.getValue());
             } else {
                 dRealOutputBuilder.append(node.getValue());
-                log.debug(Constants.LOG_MESSAGE_FOR_APPENDING_NODE_VALUE_TO_D_REAL_OUTPUT, node.getValue());
                 if (node.getValue().matches(Constants.DL_IDENTIFIERS_REGEX))
                     this.identifiers.add(node.getValue());
             }
+            log.debug(Constants.LOG_MESSAGE_FOR_APPENDING_NODE_VALUE_TO_D_REAL_OUTPUT, node.getValue());
         } else if (isChildOfFirstParentNode || (childNodes.size() == NUMBER_OF_CHILD_NODES_FOR_DL_OPERATORS.get(Constants.NOT_FOR_D_REAL_LENGTH) &&
                 childNodes.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.NOT_FOR_D_REAL)).getValue().equals(Constants.NOT_FOR_D_REAL))) {
             this.convertToDRealOutputForNotOperand(dRealOutputBuilder, childNodes);
