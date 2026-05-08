@@ -20,6 +20,8 @@ public class DlToDRealConverter {
     private boolean isChildOfFirstParentNode = true;
     private final Set<String> identifiers;
     private final StringBuilder differentialEquation;
+    private String integrationUpperLimit;
+    private boolean isIndividualInputsConversionProcess;
 
     static {
         DL_TO_D_REAL_VALUES_MAPPING.put(Constants.DL_NOT_OPERATOR, Constants.NOT_FOR_D_REAL);
@@ -57,6 +59,7 @@ public class DlToDRealConverter {
         this.identifiers = new HashSet<>();
         this.variablesMapping = new HashMap<>();
         this.differentialEquation = new StringBuilder();
+        this.integrationUpperLimit = null;
         log.info("DlToDRealConverter instance is created.");
     }
 
@@ -272,7 +275,12 @@ public class DlToDRealConverter {
                 childNodes.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(Constants.DL_START_POSITION_OF_DIFFERENTIAL_EQUATION_IN_PROGRAM)).getValue().equals(
                         Constants.AST_NODE_DL_DIFFERENTIAL_EQUATION)) {
             programNodes.add(this.createTimeNodeForIntegrationLimit(Constants.DL_GREATER_THAN_OPERATOR, "0.0"));
-            programNodes.add(this.createTimeNodeForIntegrationLimit(Constants.DL_LESS_THAN_AND_EQUAL_TO_OPERATOR, "5.0"));
+            if (this.integrationUpperLimit != null)
+                programNodes.add(this.createTimeNodeForIntegrationLimit(Constants.DL_LESS_THAN_AND_EQUAL_TO_OPERATOR, this.integrationUpperLimit));
+            else {
+                log.error("Upper Integration Limit cannot be null or empty.");
+                throw new IllegalArgumentException("Upper Integration Limit cannot be null or empty.");
+            }
             this.convertToDRealOutputForDifferentialEquation(programNodes, childNodes);
         }
     }
@@ -316,10 +324,15 @@ public class DlToDRealConverter {
     private void convertToDRealOutputForDifferentialEquation(List<AstNode> programNodes, List<AstNode> childNodes) {
         Set<String> variablesTransformed = new HashSet<>();
         int sizeOfChildNodes = childNodes.size();
-        this.convertToDRealOutputForFormula(childNodes.get(sizeOfChildNodes - DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
-                Constants.DL_POSITION_OF_FORMULA_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST)), variablesTransformed, false);
-        programNodes.add(childNodes.get(sizeOfChildNodes - DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
-                Constants.DL_POSITION_OF_FORMULA_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST)));
+
+        if (isIndividualInputsConversionProcess)
+            removeFormulaFromDifferentialEquation(childNodes);
+        else {
+            this.convertToDRealOutputForFormula(childNodes.get(sizeOfChildNodes - DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
+                    Constants.DL_POSITION_OF_FORMULA_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST)), variablesTransformed, false);
+            programNodes.add(childNodes.get(sizeOfChildNodes - DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
+                    Constants.DL_POSITION_OF_FORMULA_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST)));
+        }
         List<AstNode> childNodesForDifferentialEquation;
         StringBuilder finalDRealValue = new StringBuilder(Constants.OPEN_SQUARE_BRACKETS);
         StringBuilder integrationValue = new StringBuilder(Constants.START_VALUE_FOR_INTEGRATION);
@@ -356,6 +369,13 @@ public class DlToDRealConverter {
         programNodes.add(node);
 
         differentialEquation.append(Constants.DEFINING_DIFFERENTIAL_EQUATION_END);
+    }
+
+    private void removeFormulaFromDifferentialEquation(List<AstNode> childNodes) {
+        childNodes.remove(childNodes.size() - DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
+                Constants.DL_POSITION_OF_FORMULA_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST));
+        childNodes.remove(childNodes.size() - DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
+                Constants.DL_POSITION_OF_FORMULA_IN_DIFFERENTIAL_EQUATION_PROGRAM_FROM_LAST));
     }
 
     private StringBuilder transformVariables(AstNode node, Set<String> variablesTransformed,
@@ -399,12 +419,14 @@ public class DlToDRealConverter {
         return newNode;
     }
 
-    public String convertDlToDReal(AstNode astRoot) {
+    public String convertDlToDReal(AstNode astRoot, String integrationUpperLimit, boolean isIndividualInputsConversionProcess) {
         Objects.requireNonNull(astRoot, "Ast root node cannot be null for conversion.");
         log.info("Starting the conversion of AST from DL to dReal format.");
+        this.isIndividualInputsConversionProcess = isIndividualInputsConversionProcess;
 
         convertNodeValues(astRoot);
         log.debug("AST node values are converted to dReal values.");
+        this.integrationUpperLimit = integrationUpperLimit;
 
         String outputBuilder = "(assert" + convertToDRealOutput(astRoot) + "\n)";
         log.info("dReal output string is generated.");
