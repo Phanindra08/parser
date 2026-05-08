@@ -356,6 +356,7 @@ public class DlToDRealConverter {
             this.transformVariables(childNodesForDifferentialEquation.get(identifierPositionForDifferentialEquationInProgram), variablesTransformed, true);
             finalDRealValue.append(childNodesForDifferentialEquation.get(identifierPositionForDifferentialEquationInProgram).getValue());
             integrationValue.append(differentialEquationVariable).append(this.variablesMapping.get(differentialEquationVariable) - 1);
+            this.identifiers.add(differentialEquationVariable + (this.variablesMapping.get(differentialEquationVariable) - 1));
 
             this.transformVariables(childNodesForDifferentialEquation.get(DL_SYNTAX_POSITIONS_AFTER_CONVERSION.get(
                     Constants.DL_TERM_POSITION_FOR_DIFFERENTIAL_EQUATION_IN_PROGRAM)), variablesTransformed, false);
