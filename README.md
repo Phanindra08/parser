@@ -80,14 +80,51 @@ docker run --rm dreal/dreal3 dReal --version
   output location for the generated files.
 - After placing the JAR package in the Package folder. You can run the application using this command:
 
+Running the Application for the job names `DL_AST_GENERATION`, `DL_TO_KEYMAERAX_OUTPUT`, `REL_DL_AST_GENERATION`,
+`REL_DL_TO_KEYMAERAX_OUTPUT` and `DL_TO_D_REAL_OUTPUT`:
+
 ```sh
-java -jar parser-*.jar --spring.config.location=application.yml --input.file=<Input File path> --job.name=<Any Job Name from the below list>
+java -jar parser-*.jar --spring.config.location=application.yml --input.file=<Input File path> --upper.limit=<Upper Limit File Path> --job.name=<Any Job Name from the below list>
+```
+
+- The `upper.limit` is an optional input and is a required input when the job name is  `DL_TO_D_REAL_OUTPUT` and
+  contains a differential equation in the program.
+
+Running the Application for the job name `DL_TO_D_REAL_OUTPUT_FOR_INDIVIDUAL_INPUTS`:
+
+```sh
+java -jar parser-*.jar --spring.config.location=application.yml --pre.post.condition.file=<Input Conditions File Path> --program.file=<Input Program File Path> --upper.limit=<Upper Limit File Path> --job.name=DL_TO_D_REAL_OUTPUT_FOR_INDIVIDUAL_INPUTS
+```
+
+Running the Application for the job name `DL_TWO_FILES_COMBINING`:
+
+```sh
+java -jar parser-*.jar --spring.config.location=application.yml --input.file1=<DL Input File 1 Path> --input.file2=<DL Input File 2 Path> --constant.value=<Constant File Path> --job.name=DL_TWO_FILES_COMBINING
 ```
 
 Example command for running the application:
 
 ```sh
 java -jar parser-0.0.1-SNAPSHOT.jar --spring.config.location=application.yml --input.file=C:\Users\skothur1\Downloads\Parser_Inputs\Inputs\RelDL_Inputs\RelDlExample1 --job.name=REL_DL_AST_GENERATION
+```
+
+Example command for running the application when the job name is `DL_TO_D_REAL_OUTPUT` and contains a differential
+equation in the program:
+
+```sh
+java -jar parser-0.0.1-SNAPSHOT.jar --spring.config.location=application.yml --input.file=C:\Users\kothu\Downloads\Parser_Inputs\Inputs\DL_Inputs_To_Convert_To_D_Real\DlExample8 --upper.limit=D:\RA\Combining\DlExample8_UpperLimit --job.name=DL_TO_D_REAL_OUTPUT
+```
+
+Example command for running the application when the job name is `DL_TO_D_REAL_OUTPUT_FOR_INDIVIDUAL_INPUTS`:
+
+```sh
+java -jar parser-0.0.1-SNAPSHOT.jar --spring.config.location=application.yml --pre.post.condition.file=C:\Users\kothu\Downloads\Parser_Inputs\Inputs\Combining_Individual_DL_Inputs_To_Convert_To_D_Real\Conditions --program.file=C:\Users\kothu\Downloads\Parser_Inputs\Inputs\Combining_Individual_DL_Inputs_To_Convert_To_D_Real\Program --upper.limit=C:\Users\kothu\Downloads\Parser_Inputs\Inputs\Combining_Individual_DL_Inputs_To_Convert_To_D_Real\UpperLimit --job.name=DL_TO_D_REAL_OUTPUT_FOR_INDIVIDUAL_INPUTS
+```
+
+Example command for running the application when the job name is `DL_TWO_FILES_COMBINING`:
+
+```sh
+java -jar parser-0.0.1-SNAPSHOT.jar --spring.config.location=application.yml --input.file1=C:\Users\kothu\Downloads\Parser_Inputs\Inputs\DL_Two_Files_Combining\DlExample1 --input.file2=C:\Users\kothu\Downloads\Parser_Inputs\Inputs\DL_Two_Files_Combining\DlExample2 --constant.value=C:\Users\kothu\Downloads\Parser_Inputs\Inputs\DL_Two_Files_Combining\Constant --job.name=DL_TWO_FILES_COMBINING
 ```
 
 ## Available Job Names:
