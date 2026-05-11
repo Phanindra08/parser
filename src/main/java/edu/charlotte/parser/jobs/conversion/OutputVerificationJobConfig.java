@@ -99,7 +99,7 @@ public class OutputVerificationJobConfig {
     public Tasklet taskletToVerifyWithDReal(
             @Value("#{jobParameters['" + Constants.OUTPUT_FILE + "']}") String outputFilePath,
             @Value("${d-real.docker.image:dreal/dreal3}") String dRealDockerImage,
-            @Value("${mounted-file-path:/data/}") String mountedFilePath) {
+            @Value("${d-real.mounted-file-path:/data/}") String mountedFilePath) {
 
         return (contribution, chunkContext) -> {
             log.info("Starting dReal Verification for the file: {}", outputFilePath);
@@ -145,7 +145,6 @@ public class OutputVerificationJobConfig {
             throw new RuntimeException("Parent directory does not exist for the file: " + outputFilePath);
 
         String fileName = outputFile.getName();
-//        String absolutePath = parentDir.getAbsolutePath().replace(':');
 
         ProcessBuilder processBuilder = new ProcessBuilder(
                 Constants.DOCKER,
