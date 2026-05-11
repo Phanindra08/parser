@@ -21,5 +21,14 @@ logging:
   level:
     root: INFO
 
-dl-output: C:\\Users\\skothur1\\Downloads\\KeYMaeraXOutput\\
+dl-output: D:\\RA\\Combining\\Outputs\\
 chunk-size: 5
+
+d-real:
+  docker:
+    image: dreal/dreal3
+  mounted-file-path: /data/
+
+keymaerax:
+  jar:
+    path: libs/keymaerax.jar

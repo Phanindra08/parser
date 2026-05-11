@@ -54,12 +54,12 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
     public void exitRelProgram(RelationalDynamicLogicParser.RelProgramContext ctx) {
         log.debug("Exiting Relational program context rule: {}", ctx.getText());
         List<AstNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
-        if(hasKeYmaeraXConversion) {
-            if(ctx.REL_DL_TERNARY_OPERATOR() != null) {
+        if (hasKeYmaeraXConversion) {
+            if (ctx.REL_DL_TERNARY_OPERATOR() != null) {
                 log.info("The Relational program context contains a ternary operator. " +
                         "Adding the ';' symbol as a child node to the AST Node List for Converting to KeYmaeraX.");
                 childNodes.add(new AstNode(";"));
-            } else if(ctx.REL_DL_ASSIGNMENT_OPERATOR() != null) {
+            } else if (ctx.REL_DL_ASSIGNMENT_OPERATOR() != null) {
                 log.info("The Relational program context contains a assignment operator. " +
                         "Expanding the relational assignment operator into equivalent DL assignment nodes for Converting to KeYmaeraX.");
                 childNodes = expandRelationalAssignmentOperator(childNodes);
@@ -83,10 +83,23 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
     }
 
     @Override
+    public void enterRelDifferentialEquation(RelationalDynamicLogicParser.RelDifferentialEquationContext ctx) {
+        log.debug("Entering Relational differential equation rule '{}' within Relational DL.", ctx.getText());
+        stack.push(new AstNode(Constants.AST_NODE_DL_DIFFERENTIAL_EQUATION));
+    }
+
+    @Override
+    public void exitRelDifferentialEquation(RelationalDynamicLogicParser.RelDifferentialEquationContext ctx) {
+        log.debug("Exiting Relational differential equation rule '{}' within Relational DL.", ctx.getText());
+        List<AstNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
+        AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_DL_PROGRAM_CONTEXT, ctx.getText(), stack);
+    }
+
+    @Override
     public void enterRelTerm(RelationalDynamicLogicParser.RelTermContext ctx) {
         log.debug("Entering Relational term rule: {}", ctx.getText());
         stack.push(new AstNode(Constants.AST_NODE_REL_DL_TERM));
-        if(ctx.PROGRAM_CONSIDERED() != null) {
+        if (ctx.PROGRAM_CONSIDERED() != null) {
             if (ctx.PROGRAM_CONSIDERED().getText().equals(Constants.LEFT_PROGRAM))
                 this.programConsidered = Constants.PROGRAM_CONSIDERED_L;
             else if (ctx.PROGRAM_CONSIDERED().getText().equals(Constants.RIGHT_PROGRAM))
@@ -127,20 +140,9 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
     public void enterProgram(RelationalDynamicLogicParser.ProgramContext ctx) {
         log.debug("Entering DL program rule '{}' within Relational DL.", ctx.getText());
         stack.push(new AstNode(Constants.AST_NODE_DL_PROGRAM_CONTEXT));
-        if(ctx.IDENTIFIER() != null) {
+        if (ctx.IDENTIFIER() != null) {
             this.addIdentifierToSet(ctx.IDENTIFIER().getText());
             log.debug("Found identifier '{}' in the nested program context.", ctx.IDENTIFIER().getText());
-        }
-        if(ctx.IDENTIFIER_PRIME() != null) {
-            String identifierPrime = ctx.IDENTIFIER_PRIME().getText();
-            if (identifierPrime.endsWith("'")) {
-                String identifier = identifierPrime.substring(0, identifierPrime.length() - 1);
-                this.addIdentifierToSet(identifier);
-                log.debug("Found primed identifier '{}' in the nested program context.", identifierPrime);
-            } else {
-                log.warn("Identifier prime '{}' does not end with a prime(') character as expected. Adding full text to the identifiers array.", identifierPrime);
-                this.addIdentifierToSet(identifierPrime);
-            }
         }
     }
 
@@ -152,9 +154,33 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
     }
 
     @Override
+    public void enterDifferentialEquation(RelationalDynamicLogicParser.DifferentialEquationContext ctx) {
+        log.debug("Entering differential equation rule '{}' within Relational DL.", ctx.getText());
+        stack.push(new AstNode(Constants.AST_NODE_DL_DIFFERENTIAL_EQUATION));
+        if (ctx.IDENTIFIER_PRIME() != null) {
+            String identifierPrime = ctx.IDENTIFIER_PRIME().getText();
+            if (identifierPrime.endsWith("'")) {
+                String identifier = identifierPrime.substring(0, identifierPrime.length() - 1);
+                this.addIdentifierToSet(identifier);
+                log.debug("Found primed identifier '{}' in the program context.", identifierPrime);
+            } else {
+                log.warn("Identifier prime '{}' does not end with a prime(') character as expected. Adding full text to the Array.", identifierPrime);
+                this.addIdentifierToSet(identifierPrime);
+            }
+        }
+    }
+
+    @Override
+    public void exitDifferentialEquation(RelationalDynamicLogicParser.DifferentialEquationContext ctx) {
+        log.debug("Exiting differential equation rule '{}' within Relational DL.", ctx.getText());
+        List<AstNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
+        AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_DL_PROGRAM_CONTEXT, ctx.getText(), stack);
+    }
+
+    @Override
     public void enterAssignmentIdentifier(RelationalDynamicLogicParser.AssignmentIdentifierContext ctx) {
         log.debug("Entering Assignment Identifier rule '{}' within Relational DL.", ctx.getText());
-        if(ctx.IDENTIFIER() != null) {
+        if (ctx.IDENTIFIER() != null) {
             String identifier = ctx.IDENTIFIER().getText();
             this.addIdentifierToSet(identifier);
             log.debug("Found the identifier '{}' in the Assignment Identifier rule.", identifier);
@@ -255,7 +281,7 @@ public class RelDlAstListener extends RelationalDynamicLogicBaseListener {
 
     // Return the final Ast root node
     public AstNode getAst() {
-        if(stack.size() > 1)
+        if (stack.size() > 1)
             log.warn("Stack contains more than one element after AST generation. There might be a possible issue in listener logic. " +
                     "Stack size is: {} and the contents are: {}", stack.size(), stack);
         return stack.isEmpty() ? null : stack.pop();

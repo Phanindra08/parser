@@ -54,11 +54,24 @@ public class DlAstListener extends DynamicDifferentialLogicBaseListener {
     public void enterProgram(DynamicDifferentialLogicParser.ProgramContext ctx) {
         log.debug("Entering program rule: {}.", ctx.getText());
         stack.push(new AstNode(Constants.AST_NODE_DL_PROGRAM_CONTEXT));
-        if(ctx.IDENTIFIER() != null) {
+        if (ctx.IDENTIFIER() != null) {
             this.addIdentifierToSet(ctx.IDENTIFIER().getText());
             log.debug("Found identifier '{}' in the program context.", ctx.IDENTIFIER().getText());
         }
-        if(ctx.IDENTIFIER_PRIME() != null) {
+    }
+
+    @Override
+    public void exitProgram(DynamicDifferentialLogicParser.ProgramContext ctx) {
+        log.debug("Exiting program rule: {}", ctx.getText());
+        List<AstNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
+        AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_DL_PROGRAM_CONTEXT, ctx.getText(), stack);
+    }
+
+    @Override
+    public void enterDifferentialEquation(DynamicDifferentialLogicParser.DifferentialEquationContext ctx) {
+        log.debug("Entering differential equation rule: {}", ctx.getText());
+        stack.push(new AstNode(Constants.AST_NODE_DL_DIFFERENTIAL_EQUATION));
+        if (ctx.IDENTIFIER_PRIME() != null) {
             String identifierPrime = ctx.IDENTIFIER_PRIME().getText();
             if (identifierPrime.endsWith("'")) {
                 String identifier = identifierPrime.substring(0, identifierPrime.length() - 1);
@@ -72,8 +85,8 @@ public class DlAstListener extends DynamicDifferentialLogicBaseListener {
     }
 
     @Override
-    public void exitProgram(DynamicDifferentialLogicParser.ProgramContext ctx) {
-        log.debug("Exiting program rule: {}", ctx.getText());
+    public void exitDifferentialEquation(DynamicDifferentialLogicParser.DifferentialEquationContext ctx) {
+        log.debug("Exiting differential equation rule: {}", ctx.getText());
         List<AstNode> childNodes = AstListenerUtils.exitGrammarRule(ctx, stack);
         AstListenerUtils.addChildrenToLastNodeInStack(childNodes, Constants.AST_NODE_DL_PROGRAM_CONTEXT, ctx.getText(), stack);
     }
@@ -81,7 +94,7 @@ public class DlAstListener extends DynamicDifferentialLogicBaseListener {
     @Override
     public void enterAssignmentIdentifier(DynamicDifferentialLogicParser.AssignmentIdentifierContext ctx) {
         log.debug("Entering Assignment Identifier rule: {}", ctx.getText());
-        if(ctx.IDENTIFIER() != null) {
+        if (ctx.IDENTIFIER() != null) {
             String identifier = ctx.IDENTIFIER().getText();
             this.addIdentifierToSet(identifier);
             log.debug("Found the identifier in the Assignment Identifier rule: {}", identifier);
@@ -132,7 +145,7 @@ public class DlAstListener extends DynamicDifferentialLogicBaseListener {
 
     // Return the final Ast root node
     public AstNode getAst() {
-        if(stack.size() > 1)
+        if (stack.size() > 1)
             log.warn("Stack contains more than one element after AST generation. There might be a possible issue in listener logic. " +
                     "Stack size is: {} and the contents are: {}", stack.size(), stack);
         return stack.isEmpty() ? null : stack.pop();

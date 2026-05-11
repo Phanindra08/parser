@@ -1,0 +1,2 @@
+pre-condition: x >= 0.0
+post-condition: x <= 10.0

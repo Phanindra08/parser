@@ -2,6 +2,7 @@ package edu.charlotte.parser.conversions.dl.dreal;
 
 import edu.charlotte.parser.ast.nodes.AstNode;
 import edu.charlotte.parser.conversions.common.GenerateDRealOutput;
+import edu.charlotte.parser.dto.DlToDRealFileContentDTO;
 import edu.charlotte.parser.grammars.GenerateAstForDl;
 import edu.charlotte.parser.listeners.ast.DlAstListener;
 import edu.charlotte.parser.utils.Constants;
@@ -18,24 +19,27 @@ import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
-public class DlToDRealConversionProcess implements ItemProcessor<String, String>, StepExecutionListener {
+public class DlToDRealConversionProcess implements ItemProcessor<DlToDRealFileContentDTO, String>, StepExecutionListener {
 
     private final DlToDRealConverter dlToDRealConverter;
     private final GenerateAstForDl generateAstForDl;
     private final String processorName;
     private final GenerateDRealOutput generateDRealOutput;
     protected final Set<String> identifiers;
+    private final boolean isIndividualInputsConversionProcess;
 
     public DlToDRealConversionProcess(GenerateAstForDl generateAstForDl, GenerateDRealOutput generateDRealOutput,
-                                      DlToDRealConverter dlToDRealConverter) {
+                                      DlToDRealConverter dlToDRealConverter, boolean isIndividualInputsConversionProcess) {
         this.generateAstForDl = Objects.requireNonNull(generateAstForDl, "AST Generator cannot be null");
         this.processorName = Constants.DIFFERENTIAL_DYNAMIC_LOGIC;
         this.dlToDRealConverter = dlToDRealConverter;
         this.generateDRealOutput = Objects.requireNonNull(generateDRealOutput, "DReal Output generator cannot be null");
         this.identifiers = new HashSet<>();
+        this.isIndividualInputsConversionProcess = isIndividualInputsConversionProcess;
         log.debug("DlToDRealConversionProcess is initialized.");
     }
 
+    @Override
     public void beforeStep(StepExecution stepExecution) {
         this.identifiers.clear();
         log.debug("Before step for the '{}'. Step Name: '{}'. Identifiers have been cleared.", getDisplayName(), stepExecution.getStepName());
@@ -49,10 +53,10 @@ public class DlToDRealConversionProcess implements ItemProcessor<String, String>
     }
 
     @Override
-    public String process(@NonNull String item) {
-        log.debug("Processing the input item for '{}': {}.", this.getDisplayName(), ParserUtils.formatInputForLogging(item));
+    public String process(@NonNull DlToDRealFileContentDTO dlToDRealFileContentDTO) {
+        log.debug("Processing the input item for '{}': '{}'.", this.getDisplayName(), ParserUtils.formatInputForLogging(dlToDRealFileContentDTO.inputFileContent()));
         try {
-            String errorMessage = this.generateAstForDl.generateAstFromInput(item);
+            String errorMessage = this.generateAstForDl.generateAstFromInput(dlToDRealFileContentDTO.inputFileContent());
             if (errorMessage == null) {
                 DlAstListener listener = this.generateAstForDl.getListener();
                 AstNode astRoot = getAstRootFromListener(listener);
@@ -62,26 +66,28 @@ public class DlToDRealConversionProcess implements ItemProcessor<String, String>
                     log.error("{}", nullAstError);
                     return nullAstError;
                 }
-                String dRealOutput = performDRealConversion(astRoot, getIdentifiersDataFromListener(listener));
+                String dRealOutput = performDRealConversion(astRoot, dlToDRealFileContentDTO.integrationUpperLimit());
+
                 this.identifiers.addAll(this.dlToDRealConverter.getIdentifiers());
 
                 if (dRealOutput == null) {
-                    log.warn("dReal conversion returned null output for the item: {}. Skipping the item.",
-                            ParserUtils.formatInputForLogging(item));
+                    log.warn("dReal conversion returned null output for the item: '{}'. Skipping the item.",
+                            ParserUtils.formatInputForLogging(dlToDRealFileContentDTO.inputFileContent()));
                     return null;
                 }
 
                 log.debug("dReal Output is: {}", dRealOutput);
-                return this.generateDRealOutput.createFileContent(this.generateAstForDl.getTypeName(),
-                        this.identifiers, dRealOutput);
+                return this.generateDRealOutput.createFileContent(this.generateAstForDl.getTypeName(), this.identifiers, dRealOutput);
             } else {
                 log.warn("AST generation failed for item: '{}' due to Error: {}. Skipping the item.",
-                        ParserUtils.formatInputForLogging(item), errorMessage);
+                        ParserUtils.formatInputForLogging(dlToDRealFileContentDTO.inputFileContent()), errorMessage);
                 return null;
             }
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e);
         } catch (Exception e) {
             log.error("Error during dReal conversion process for the item: {}. The Error is: {}",
-                    ParserUtils.formatInputForLogging(item), e.getMessage(), e);
+                    ParserUtils.formatInputForLogging(dlToDRealFileContentDTO.inputFileContent()), e.getMessage(), e);
             throw new RuntimeException("Error during dReal conversion due to internal error.", e);
         }
     }
@@ -96,10 +102,9 @@ public class DlToDRealConversionProcess implements ItemProcessor<String, String>
         return listener.getIdentifiers();
     }
 
-    protected String performDRealConversion(AstNode astRoot, Set<String> identifierData) {
+    protected String performDRealConversion(AstNode astRoot, String integrationUpperLimit) {
         Objects.requireNonNull(astRoot, "Ast root cannot be null for DL to DReal conversion.");
-        Objects.requireNonNull(identifierData, "Identifiers data cannot be null for DL to DReal conversion.");
-        return this.dlToDRealConverter.convertDlToDReal(astRoot);
+        return this.dlToDRealConverter.convertDlToDReal(astRoot, integrationUpperLimit, this.isIndividualInputsConversionProcess);
     }
 
     protected String getDisplayName() {

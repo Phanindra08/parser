@@ -1,0 +1,14 @@
+ArchiveEntry "Converted Relational Dynamic Logic to KeYmaeraX format with Id as 58f3d970-e9dd-4eec-8f1d-2ca474083034"
+	Description "Converted Relational Dynamic Logic to KeYmaeraX format with Id as 58f3d970-e9dd-4eec-8f1d-2ca474083034".
+ 	Title "Converted Relational Dynamic Logic to KeYmaeraX format with Id as 58f3d970-e9dd-4eec-8f1d-2ca474083034".
+
+ProgramVariables
+	Real v;
+	Real x;
+End.
+
+Problem
+	x = 0.0 & v = 1.0 -> [ { x' = v , v' = 0.0 & x >= 0.0 } ] x <= 0.0
+End.
+
+End.

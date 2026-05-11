@@ -23,3 +23,12 @@ logging:
 
 dl-output: .\\KeYMaeraXOutput\\
 chunk-size: 5
+
+d-real:
+  docker:
+    image: dreal/dreal3
+  mounted-file-path: /data/
+
+keymaerax:
+  jar:
+    path: libs/keymaerax.jar

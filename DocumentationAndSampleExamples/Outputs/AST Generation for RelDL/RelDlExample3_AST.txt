@@ -12,13 +12,15 @@ Generated AST is:
     │   ├── ||#
     │   └── Relational Formula
     │       ├── !#
-    │       └── Relational Formula
-    │           ├── Relational Term
-    │           │   ├── 0.567
-    │           │   └── @L
-    │           ├── >#
-    │           └── Relational Term
-    │               ├── 0.656
-    │               └── @R
+    │       ├── (#
+    │       ├── Relational Formula
+    │       │   ├── Relational Term
+    │       │   │   ├── 0.567
+    │       │   │   └── @L
+    │       │   ├── >#
+    │       │   └── Relational Term
+    │       │       ├── 0.656
+    │       │       └── @R
+    │       └── )#
     └── <EOF>
 

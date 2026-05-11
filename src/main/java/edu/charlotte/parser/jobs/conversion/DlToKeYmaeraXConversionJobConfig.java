@@ -1,10 +1,11 @@
 package edu.charlotte.parser.jobs.conversion;
 
-import edu.charlotte.parser.listeners.common.JobLoggingListener;
-import edu.charlotte.parser.conversions.dl.keymaerax.DlToKeYmaeraXConverter;
-import edu.charlotte.parser.conversions.dl.keymaerax.DlToKeYmaeraXConversionProcess;
 import edu.charlotte.parser.conversions.common.GenerateKeYmaeraXOutput;
+import edu.charlotte.parser.conversions.dl.keymaerax.DlToKeYmaeraXConversionProcess;
+import edu.charlotte.parser.conversions.dl.keymaerax.DlToKeYmaeraXConverter;
 import edu.charlotte.parser.grammars.GenerateAstForDl;
+import edu.charlotte.parser.listeners.common.ExecutionStepListener;
+import edu.charlotte.parser.listeners.common.JobLoggingListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -40,34 +41,44 @@ public class DlToKeYmaeraXConversionJobConfig {
 
     @Bean
     @StepScope
-    public DlToKeYmaeraXConversionProcess dlToKeYmaeraXConversionProcess(GenerateAstForDl generateAstForDl, GenerateKeYmaeraXOutput generateKeYmaeraXOutput,
+    public DlToKeYmaeraXConversionProcess dlToKeYmaeraXConversionProcess(GenerateKeYmaeraXOutput generateKeYmaeraXOutput,
                                                                          DlToKeYmaeraXConverter dlToKeYmaeraXConverter) {
         log.debug("Creating step-scoped DlToKeYmaeraXConversionProcess bean.");
+        GenerateAstForDl generateAstForDl = new GenerateAstForDl();
         return new DlToKeYmaeraXConversionProcess(generateAstForDl, generateKeYmaeraXOutput, dlToKeYmaeraXConverter);
+    }
+
+    @Bean
+    public ExecutionStepListener executionStepListener() {
+        return new ExecutionStepListener();
     }
 
     @Bean
     public Step dlToKeYmaeraXConversionStep(ItemReader<String> inputFileReader,
                                             DlToKeYmaeraXConversionProcess dlToKeYmaeraXConversionProcess,
-                                            FlatFileItemWriter<String> outputFileWriter) {
+                                            FlatFileItemWriter<String> outputFileWriter,
+                                            ExecutionStepListener executionStepListener) {
         log.info("Configuring dlToKeYmaeraXConversionStep with chunk size: {}", this.chunkSize);
         return new StepBuilder("dlToKeYmaeraXConversionStep", jobRepository)
                 .<String, String>chunk(chunkSize, transactionManager)
                 .reader(inputFileReader)
                 .processor(dlToKeYmaeraXConversionProcess)
                 .writer(outputFileWriter)
+                .listener(executionStepListener)
                 .build();
     }
 
     @Bean
     public Job loadDlToKeYmaeraXConversionJob(JobRepository jobRepository,
                                               JobLoggingListener jobLoggingListener,
-                                              Step dlToKeYmaeraXConversionStep) {
+                                              Step dlToKeYmaeraXConversionStep,
+                                              Step verifyWithKeYMaeraXStep) {
         log.debug("Configuring loadDlToKeYmaeraXConversionJob.");
         return new JobBuilder("loadDlToKeYmaeraXConversionJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .listener(jobLoggingListener)
                 .start(dlToKeYmaeraXConversionStep)
+                .next(verifyWithKeYMaeraXStep)
                 .build();
     }
 }
