@@ -16,6 +16,7 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,18 +44,38 @@ public class DlToDRealConversionJobConfig {
     @StepScope
     public DlToDRealConversionProcess dlToDRealConversionProcess(GenerateDRealOutput generateDRealOutput, DlToDRealConverter dlToDRealConverter) {
         log.debug("Creating step-scoped dlToDRealConversionProcess bean.");
-        return new DlToDRealConversionProcess(new GenerateAstForDl(), generateDRealOutput, dlToDRealConverter);
+        return new DlToDRealConversionProcess(new GenerateAstForDl(), generateDRealOutput, dlToDRealConverter, false);
     }
 
     @Bean
-    public Step dlToDRealConversionStep(ItemReader<DlToDRealFileContentDTO> dlToDRealFileReader,
-                                        DlToDRealConversionProcess dlToDRealConversionProcess,
+    @StepScope
+    public DlToDRealConversionProcess dlToDRealIndividualInputsConversionProcess(GenerateDRealOutput generateDRealOutput, DlToDRealConverter dlToDRealConverter) {
+        log.debug("Creating step-scoped dlToDRealIndividualInputsConversionProcess bean.");
+        return new DlToDRealConversionProcess(new GenerateAstForDl(), generateDRealOutput, dlToDRealConverter, true);
+    }
+
+    @Bean
+    public Step dlToDRealConversionStep(@Qualifier("dlToDRealFileReader") ItemReader<DlToDRealFileContentDTO> dlToDRealFileReader,
+                                        @Qualifier("dlToDRealConversionProcess") DlToDRealConversionProcess dlToDRealConversionProcess,
                                         FlatFileItemWriter<String> outputFileWriter) {
         log.info("Configuring dlToDRealConversionStep with chunk size: {}", this.chunkSize);
         return new StepBuilder("dlToDRealConversionStep", jobRepository)
                 .<DlToDRealFileContentDTO, String>chunk(chunkSize, transactionManager)
                 .reader(dlToDRealFileReader)
                 .processor(dlToDRealConversionProcess)
+                .writer(outputFileWriter)
+                .build();
+    }
+
+    @Bean
+    public Step dlToDRealIndividualInputsConversionStep(@Qualifier("dlToDRealIndividualInputsItemReader") ItemReader<DlToDRealFileContentDTO> dlToDRealIndividualInputsItemReader,
+                                                        @Qualifier("dlToDRealIndividualInputsConversionProcess") DlToDRealConversionProcess dlToDRealIndividualInputsConversionProcess,
+                                                        FlatFileItemWriter<String> outputFileWriter) {
+
+        return new StepBuilder("dlToDRealIndividualInputsConversionStep", jobRepository)
+                .<DlToDRealFileContentDTO, String>chunk(chunkSize, transactionManager)
+                .reader(dlToDRealIndividualInputsItemReader)
+                .processor(dlToDRealIndividualInputsConversionProcess)
                 .writer(outputFileWriter)
                 .build();
     }
@@ -69,6 +90,20 @@ public class DlToDRealConversionJobConfig {
                 .incrementer(new RunIdIncrementer())
                 .listener(jobLoggingListener)
                 .start(dlToDRealConversionStep)
+                .next(verifyWithDRealStep)
+                .build();
+    }
+
+    @Bean
+    public Job loadDlToDRealIndividualInputsConversionJob(JobRepository jobRepository,
+                                                          JobLoggingListener jobLoggingListener,
+                                                          Step dlToDRealIndividualInputsConversionStep,
+                                                          Step verifyWithDRealStep) {
+        log.debug("Configuring loadDlToDRealIndividualInputsConversionJob.");
+        return new JobBuilder("loadDlToDRealIndividualInputsConversionJob", jobRepository)
+                .incrementer(new RunIdIncrementer())
+                .listener(jobLoggingListener)
+                .start(dlToDRealIndividualInputsConversionStep)
                 .next(verifyWithDRealStep)
                 .build();
     }

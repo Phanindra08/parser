@@ -40,7 +40,7 @@ public final class Constants {
     public static final String ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETER = "Missing required input parameter. " +
             "Use --input.file=<inputFile>";
     public static final String ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETERS = "Missing required input parameters. " +
-            "Use --input.file.for.condition=<inputFileForCondition> --input.file1=<inputFile> --input.file2=<inputFile> and --constant.value=<constantValue>";
+            "Use --input.file1=<inputFile> --input.file2=<inputFile> and --constant.value=<constantValue>";
     public static final String ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETER_FOR_DL_TO_DREAL_CONVERSION = "Missing required input parameter. " +
             "Use --input.file=<inputFile> and --upper.limit=<integrationUpperLimit>. Here --upper.limit parameter is optional.";
     public static final String ERROR_MESSAGE_FOR_MISSING_INPUT_PARAMETERS_FOR_INDIVIDUAL_INPUTS =
