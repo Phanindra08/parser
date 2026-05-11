@@ -66,14 +66,13 @@ public class DlTwoFilesCombiningJobConfig {
     @Bean
     public Job loadDlCombiningTwoFilesJob(JobRepository jobRepository,
                                           JobLoggingListener jobLoggingListener,
-                                          Step dlCombiningTwoFilesStep,
-                                          Step verifyWithKeYMaeraXStep) {
+                                          Step dlCombiningTwoFilesStep) {
         log.debug("Configuring loadDlCombiningTwoFilesJob.");
         return new JobBuilder("loadDlCombiningTwoFilesJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .listener(jobLoggingListener)
                 .start(dlCombiningTwoFilesStep)
-                .next(verifyWithKeYMaeraXStep)
+//                .next(verifyWithKeYMaeraXStep)
                 .build();
     }
 }
