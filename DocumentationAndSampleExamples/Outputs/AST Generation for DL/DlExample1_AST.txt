@@ -4,9 +4,10 @@ Generated AST is:
     │   ├── [
     │   ├── Program
     │   │   ├── {
-    │   │   ├── value10'
-    │   │   ├── =
-    │   │   ├── testing1Variable
+    │   │   ├── DifferentialEquation
+    │   │   │   ├── value10'
+    │   │   │   ├── =
+    │   │   │   └── testing1Variable
     │   │   ├── &&
     │   │   ├── Formula
     │   │   │   ├── value1

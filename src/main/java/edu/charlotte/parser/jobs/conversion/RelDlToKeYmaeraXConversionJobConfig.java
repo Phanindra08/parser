@@ -1,10 +1,11 @@
 package edu.charlotte.parser.jobs.conversion;
 
-import edu.charlotte.parser.listeners.common.JobLoggingListener;
-import edu.charlotte.parser.conversions.dl.keymaerax.DlToKeYmaeraXConverter;
 import edu.charlotte.parser.conversions.common.GenerateKeYmaeraXOutput;
+import edu.charlotte.parser.conversions.dl.keymaerax.DlToKeYmaeraXConverter;
 import edu.charlotte.parser.conversions.reldl.keymaerax.RelDlToKeYmaeraXConversionProcess;
 import edu.charlotte.parser.grammars.GenerateAstForRelDl;
+import edu.charlotte.parser.listeners.common.ExecutionStepListener;
+import edu.charlotte.parser.listeners.common.JobLoggingListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -49,25 +50,29 @@ public class RelDlToKeYmaeraXConversionJobConfig {
     @Bean
     public Step relDlToKeYmaeraXConversionStep(ItemReader<String> inputFileReader,
                                                RelDlToKeYmaeraXConversionProcess relDlToKeYmaeraXConversionProcess,
-                                               FlatFileItemWriter<String> outputFileWriter) {
+                                               FlatFileItemWriter<String> outputFileWriter,
+                                               ExecutionStepListener executionStepListener) {
         log.info("Configuring relDlToKeYmaeraXConversionStep with chunk size: {}", this.chunkSize);
         return new StepBuilder("relDlToKeYmaeraXConversionStep", jobRepository)
                 .<String, String>chunk(chunkSize, transactionManager)
                 .reader(inputFileReader)
                 .processor(relDlToKeYmaeraXConversionProcess)
                 .writer(outputFileWriter)
+                .listener(executionStepListener)
                 .build();
     }
 
     @Bean
     public Job loadRelDlToKeYmaeraXConversionJob(JobRepository jobRepository,
                                                  JobLoggingListener jobLoggingListener,
-                                                 Step relDlToKeYmaeraXConversionStep) {
+                                                 Step relDlToKeYmaeraXConversionStep,
+                                                 Step verifyWithKeYMaeraXStep) {
         log.debug("Configuring loadRelDlToKeYmaeraXConversionJob.");
         return new JobBuilder("loadRelDlToKeYmaeraXConversionJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .listener(jobLoggingListener)
                 .start(relDlToKeYmaeraXConversionStep)
+                .next(verifyWithKeYMaeraXStep)
                 .build();
     }
 }

@@ -1,8 +1,8 @@
 package edu.charlotte.parser.jobs.generation;
 
-import edu.charlotte.parser.listeners.common.JobLoggingListener;
 import edu.charlotte.parser.ast.generation.DlAstGenerationProcess;
 import edu.charlotte.parser.grammars.GenerateAstForDl;
+import edu.charlotte.parser.listeners.common.JobLoggingListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -38,15 +38,9 @@ public class DlAstGenerationJobConfig {
 
     @Bean
     @StepScope
-    public GenerateAstForDl generateAstForDl() {
-        log.debug("Creating step-scoped GenerateAstForDl bean.");
-        return new GenerateAstForDl();
-    }
-
-    @Bean
-    @StepScope
-    public DlAstGenerationProcess dlAstGenerationProcessor(GenerateAstForDl generateAstForDl) {
+    public DlAstGenerationProcess dlAstGenerationProcessor() {
         log.debug("Creating step-scoped DlAstGenerationProcess bean.");
+        GenerateAstForDl generateAstForDl = new GenerateAstForDl();
         return new DlAstGenerationProcess(generateAstForDl);
     }
 

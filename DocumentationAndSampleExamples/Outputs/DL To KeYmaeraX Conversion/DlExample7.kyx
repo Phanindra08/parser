@@ -1,0 +1,14 @@
+ArchiveEntry "Converted Differential Dynamic Logic to KeYmaeraX format with Id as 1a3c3490-178b-4efa-a726-06512e210812"
+	Description "Converted Differential Dynamic Logic to KeYmaeraX format with Id as 1a3c3490-178b-4efa-a726-06512e210812".
+ 	Title "Converted Differential Dynamic Logic to KeYmaeraX format with Id as 1a3c3490-178b-4efa-a726-06512e210812".
+
+ProgramVariables
+	Real v;
+	Real x;
+End.
+
+Problem
+	x = 0.0 & v = 5.0 -> [ { x' = v , v' = -1.0 & v >= 0.0 } ] x >= 0.0
+End.
+
+End.
